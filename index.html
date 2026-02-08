@@ -1,122 +1,374 @@
-<!-- index.html - Landing Page with New Design System -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GrantApp AI - JAMB Excellence Platform</title>
+    <title>Choose Your Stream - GrantApp AI</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <div class="bg-particle" style="width: 300px; height: 300px; top: 10%; left: 5%; animation-delay: 0s;"></div>
+        <div class="bg-particle" style="width: 200px; height: 200px; top: 60%; right: 10%; animation-delay: 2s;"></div>
+        <div class="bg-particle" style="width: 150px; height: 150px; bottom: 20%; left: 20%; animation-delay: 4s;"></div>
+    </div>
+
     <!-- Navigation -->
     <nav class="navbar">
-        <a href="#" class="navbar-brand">GrantApp AI</a>
+        <a href="#" class="navbar-brand">
+            <i class="fas fa-graduation-cap"></i> GrantApp
+        </a>
+        
         <div class="navbar-menu">
-            <a href="#" class="nav-link">Dashboard</a>
-            <a href="#" class="nav-link">Performance</a>
-            <a href="#" class="nav-link">Study Plans</a>
-            <button class="btn btn-primary btn-sm">Upgrade</button>
+            <div class="notification-dropdown">
+                <a href="#" class="nav-link tooltip">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                    <div class="tooltip-content">Notifications</div>
+                </a>
+                <div class="notification-menu">
+                    <div class="notification-item unread">
+                        <div class="text-sm font-semibold">New Practice Test Available</div>
+                        <div class="text-xs text-muted">Mathematics - 15 minutes</div>
+                    </div>
+                    <div class="notification-item unread">
+                        <div class="text-sm font-semibold">Study Plan Updated</div>
+                        <div class="text-xs text-muted">Check your progress</div>
+                    </div>
+                    <div class="notification-item">
+                        <div class="text-sm font-semibold">Weekly Leaderboard</div>
+                        <div class="text-xs text-muted">You're in top 10%</div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#" class="nav-link tooltip">
+                <i class="fas fa-chart-line"></i>
+                <div class="tooltip-content">Analytics Dashboard</div>
+            </a>
+            <a href="#" class="nav-link tooltip">
+                <i class="fas fa-user-graduate"></i>
+                <div class="tooltip-content">My Profile</div>
+            </a>
+            <button class="btn btn-accent">
+                <i class="fas fa-rocket"></i> Upgrade
+            </button>
         </div>
     </nav>
 
+    <!-- Breadcrumbs -->
+    <div class="container">
+        <div class="breadcrumbs">
+            <a href="#" class="breadcrumb-item">Home</a>
+            <span class="breadcrumb-separator">›</span>
+            <span class="breadcrumb-current">Choose Your Stream</span>
+        </div>
+    </div>
+
     <!-- Hero Section -->
-    <section class="container py-2xl">
-        <div class="text-center mb-2xl">
-            <h1 class="font-luxury text-5xl mb-lg">GrantApp AI</h1>
-            <p class="text-xl text-muted mb-xl">Intelligent JAMB Preparation Platform</p>
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero-title fade-in-up">Choose Your <span class="text-gradient">Academic Path</span></h1>
+            <p class="hero-subtitle fade-in-up delay-200">
+                Select your JAMB stream to unlock personalized practice tests, adaptive learning, 
+                and intelligent performance tracking. Each choice opens a unique path to excellence.
+            </p>
             
-            <div class="flex justify-center gap-md mb-xl">
-                <div class="text-center">
-                    <div class="text-3xl font-bold">15,000+</div>
-                    <div class="text-sm text-muted">Practice Questions</div>
+            <!-- Progress Steps -->
+            <div class="progress-steps">
+                <div class="progress-step active">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Choose Stream</div>
                 </div>
-                <div class="text-center">
-                    <div class="text-3xl font-bold">94%</div>
-                    <div class="text-sm text-muted">Success Rate</div>
+                <div class="progress-step">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Select Cluster</div>
                 </div>
-                <div class="text-center">
-                    <div class="text-3xl font-bold">24/7</div>
-                    <div class="text-sm text-muted">AI Tutoring</div>
+                <div class="progress-step">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Start Practice</div>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-fill" style="width: 33%"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Overview -->
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card scale-in delay-100">
+                <div class="stat-number">15,000+</div>
+                <div class="stat-label">Practice Questions</div>
+            </div>
+            <div class="stat-card scale-in delay-200">
+                <div class="stat-number">94%</div>
+                <div class="stat-label">Success Rate</div>
+            </div>
+            <div class="stat-card scale-in delay-300">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">AI Tutoring</div>
+            </div>
+            <div class="stat-card scale-in delay-400">
+                <div class="stat-number">15 min</div>
+                <div class="stat-label">Per Subject Test</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stream Selection -->
+    <section class="container py-3xl">
+        <h2 class="text-4xl text-center mb-2xl fade-in-up">Available Streams</h2>
+        
+        <div class="grid grid-3">
+            <!-- Science Stream -->
+            <div class="stream-card science scale-in delay-100" onclick="selectStream('science')">
+                <div class="card-body">
+                    <div class="flex items-center justify-between mb-lg">
+                        <div class="text-4xl">🔬</div>
+                        <span class="badge bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold">Most Popular</span>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-sm">Science</h3>
+                    <p class="text-muted mb-lg">
+                        For aspiring doctors, engineers, and scientists. Master core STEM subjects with advanced problem-solving techniques.
+                    </p>
+                    <div class="mb-lg">
+                        <div class="text-sm font-semibold mb-sm">Available Clusters:</div>
+                        <ul class="space-y-1">
+                            <li class="flex items-center gap-sm">
+                                <i class="fas fa-check text-success text-xs"></i>
+                                <span class="text-sm">Mathematics, English, Physics, Chemistry</span>
+                            </li>
+                            <li class="flex items-center gap-sm">
+                                <i class="fas fa-check text-success text-xs"></i>
+                                <span class="text-sm">Biology, English, Physics, Chemistry</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-science w-full">
+                        <i class="fas fa-flask"></i> Choose Science
+                    </button>
+                </div>
+            </div>
+
+            <!-- Arts Stream -->
+            <div class="stream-card art scale-in delay-200" onclick="selectStream('art')">
+                <div class="card-body">
+                    <div class="flex items-center justify-between mb-lg">
+                        <div class="text-4xl">🎨</div>
+                        <span class="badge bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-semibold">Creative Minds</span>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-sm">Arts & Humanities</h3>
+                    <p class="text-muted mb-lg">
+                        For future lawyers, writers, historians, and artists. Develop critical thinking and analytical skills.
+                    </p>
+                    <div class="mb-lg">
+                        <div class="text-sm font-semibold mb-sm">Available Clusters:</div>
+                        <ul class="space-y-1">
+                            <li class="flex items-center gap-sm">
+                                <i class="fas fa-check text-success text-xs"></i>
+                                <span class="text-sm">English, Literature, Government, CRS</span>
+                            </li>
+                            <li class="flex items-center gap-sm">
+                                <i class="fas fa-spinner text-warning text-xs"></i>
+                                <span class="text-sm">More clusters coming soon</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-art w-full">
+                        <i class="fas fa-palette"></i> Choose Arts
+                    </button>
+                </div>
+            </div>
+
+            <!-- Commercial Stream -->
+            <div class="stream-card commerce scale-in delay-300" onclick="selectStream('commercial')">
+                <div class="card-body">
+                    <div class="flex items-center justify-between mb-lg">
+                        <div class="text-4xl">📊</div>
+                        <span class="badge bg-teal-100 text-teal-700 px-3 py-1 rounded-full text-sm font-semibold">Business Focused</span>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-sm">Commercial</h3>
+                    <p class="text-muted mb-lg">
+                        For future accountants, economists, and business leaders. Master commerce, finance, and management principles.
+                    </p>
+                    <div class="mb-lg">
+                        <div class="text-sm font-semibold mb-sm">Available Clusters:</div>
+                        <ul class="space-y-1">
+                            <li class="flex items-center gap-sm">
+                                <i class="fas fa-check text-success text-xs"></i>
+                                <span class="text-sm">English, Accounting, Commerce, Economics</span>
+                            </li>
+                            <li class="flex items-center gap-sm">
+                                <i class="fas fa-check text-success text-xs"></i>
+                                <span class="text-sm">English, Mathematics, Economics, Government</span>
+                            </li>
+                            <li class="flex items-center gap-sm">
+                                <i class="fas fa-check text-success text-xs"></i>
+                                <span class="text-sm">English, Economics, Government, Commerce</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-commerce w-full">
+                        <i class="fas fa-chart-line"></i> Choose Commercial
+                    </button>
                 </div>
             </div>
         </div>
 
-        <!-- Stream Selection -->
-        <div class="mb-2xl">
-            <h2 class="text-3xl font-semibold text-center mb-lg">Select Your Academic Stream</h2>
-            <p class="text-center text-muted mb-xl">Choose your field of study to begin personalized practice</p>
-            
-            <div class="grid grid-3">
-                <!-- Science Stream -->
-                <div class="card">
-                    <div class="card-body text-center">
-                        <div class="text-4xl mb-md">🔬</div>
-                        <h3 class="text-2xl font-semibold mb-sm">Science</h3>
-                        <p class="text-muted mb-lg">Physics, Chemistry, Biology, Mathematics</p>
-                        <button class="btn btn-primary btn-full" onclick="selectStream('science')">
-                            Select Science
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Arts Stream -->
-                <div class="card">
-                    <div class="card-body text-center">
-                        <div class="text-4xl mb-md">🎨</div>
-                        <h3 class="text-2xl font-semibold mb-sm">Arts & Humanities</h3>
-                        <p class="text-muted mb-lg">Literature, Government, CRS/IRS, History</p>
-                        <button class="btn btn-primary btn-full" onclick="selectStream('art')">
-                            Select Arts
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Commercial Stream -->
-                <div class="card">
-                    <div class="card-body text-center">
-                        <div class="text-4xl mb-md">📊</div>
-                        <h3 class="text-2xl font-semibold mb-sm">Commercial</h3>
-                        <p class="text-muted mb-lg">Accounting, Commerce, Economics, Business</p>
-                        <button class="btn btn-primary btn-full" onclick="selectStream('commercial')">
-                            Select Commercial
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Quick Access -->
-        <div class="card">
-            <div class="card-header">
-                <h3 class="text-xl font-semibold">Quick Practice</h3>
-            </div>
+        <!-- Quick Stats -->
+        <div class="card mt-3xl">
             <div class="card-body">
-                <p class="text-muted mb-lg">Start immediately with core subjects:</p>
-                <div class="grid grid-4">
-                    <a href="math_test.html" class="card card-flush text-center p-lg">
-                        <div class="text-2xl mb-sm">📐</div>
-                        <div class="font-medium">Mathematics</div>
-                    </a>
-                    <a href="english_test.html" class="card card-flush text-center p-lg">
-                        <div class="text-2xl mb-sm">📖</div>
-                        <div class="font-medium">English</div>
-                    </a>
-                    <a href="physics_test.html" class="card card-flush text-center p-lg">
-                        <div class="text-2xl mb-sm">⚛️</div>
-                        <div class="font-medium">Physics</div>
-                    </a>
-                    <a href="chemistry_test.html" class="card card-flush text-center p-lg">
-                        <div class="text-2xl mb-sm">🧪</div>
-                        <div class="font-medium">Chemistry</div>
-                    </a>
+                <div class="grid grid-3">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-gradient">2,500+</div>
+                        <div class="text-sm text-muted">Science Students Active</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-gradient">1,800+</div>
+                        <div class="text-sm text-muted">Arts Students Active</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-gradient">2,100+</div>
+                        <div class="text-sm text-muted">Commercial Students Active</div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Dramatic Timer Widget -->
+    <div class="timer-container">
+        <div class="timer-widget">
+            <div class="timer-display">15:00</div>
+            <div class="timer-label">Practice Test Duration</div>
+            <div class="timer-progress">
+                <div class="timer-progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-2xl bg-neutral-900 text-white mt-3xl">
+        <div class="container">
+            <div class="grid grid-3">
+                <div>
+                    <h4 class="text-lg font-bold mb-md">GrantApp AI</h4>
+                    <p class="text-sm text-neutral-400">
+                        Intelligent exam preparation platform for Nigerian students.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-md">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-sm text-neutral-400 hover:text-accent transition">About Us</a></li>
+                        <li><a href="#" class="text-sm text-neutral-400 hover:text-accent transition">Contact</a></li>
+                        <li><a href="#" class="text-sm text-neutral-400 hover:text-accent transition">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-md">Need Help?</h4>
+                    <button class="btn btn-accent btn-sm">
+                        <i class="fas fa-headset"></i> Live Support
+                    </button>
+                </div>
+            </div>
+            <div class="text-center text-sm text-neutral-500 mt-2xl">
+                © 2024 GrantApp AI. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
     <script src="app.js"></script>
+    <script>
+        // Initialize animated background particles
+        function initParticles() {
+            const bg = document.querySelector('.animated-bg');
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'bg-particle';
+                const size = Math.random() * 100 + 50;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.animationDelay = `${Math.random() * 10}s`;
+                particle.style.opacity = Math.random() * 0.1 + 0.05;
+                bg.appendChild(particle);
+            }
+        }
+
+        // Timer animation
+        function animateTimer() {
+            const timerDisplay = document.querySelector('.timer-display');
+            const progressBar = document.querySelector('.timer-progress-bar');
+            let timeLeft = 15 * 60; // 15 minutes in seconds
+            
+            const timer = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    timerDisplay.textContent = '00:00';
+                    progressBar.style.width = '0%';
+                    return;
+                }
+                
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                const progress = (timeLeft / (15 * 60)) * 100;
+                progressBar.style.width = `${progress}%`;
+                
+                // Change color when less than 5 minutes
+                if (minutes < 5) {
+                    timerDisplay.style.color = 'var(--error)';
+                    timerDisplay.style.textShadow = '0 0 10px rgba(239, 68, 68, 0.5)';
+                }
+            }, 1000);
+        }
+
+        // Stream selection
+        function selectStream(stream) {
+            // Show loading skeleton
+            document.body.innerHTML = `
+                <div class="container py-3xl">
+                    <div class="skeleton skeleton-card mb-lg"></div>
+                    <div class="skeleton skeleton-text"></div>
+                    <div class="skeleton skeleton-text"></div>
+                    <div class="skeleton skeleton-button mt-lg"></div>
+                </div>
+            `;
+            
+            // Simulate loading delay
+            setTimeout(() => {
+                window.location.href = `${stream}_clusters.html`;
+            }, 1500);
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            initParticles();
+            animateTimer();
+            
+            // Add hover effects to cards
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-8px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        });
+    </script>
 </body>
 </html>
