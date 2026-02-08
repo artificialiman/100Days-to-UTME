@@ -1,150 +1,213 @@
-# 100Days-to-UTME
-By Grantapp.edu.ai
+# Complete GitHub Actions Workflow
 
-
-# GrantApp AI - Architecture & Design System
-
-## 🎯 Core Philosophy
-**"Mature design, teenage engagement, professional execution"** - A JAMB prep platform that respects users' intelligence while providing engaging, modern UX.
-
-## 📁 File Structure
-```
-grantapp_ai/
-├── styles.css          # Complete design system with all effects
-├── app.js              # Core JavaScript with proper error handling
-├── index.html          # Landing page (stream selection)
-├── [stream]_clusters.html      # Stream-specific cluster selection
-├── practice_[cluster].html     # Individual subject tests
-└── README.md           # This file
-```
-
-## 🎨 Design Principles
-
-### 1. Visual Language
-- **Color Palette**: Black/White/Gold (#D4AF37) as primary
-- **Typography**: Inter (primary) + Playfair Display (luxury accents)
-- **Elevation**: Layered shadows with depth perception
-- **Motion**: Subtle, purposeful animations (250-400ms durations)
-
-### 2. Interaction Patterns
-- **Timers**: Draggable on landing, fixed on quiz pages
-- **Loading**: Skeleton screens with shimmer effects
-- **Feedback**: Articulate CSS notifications (no "AI slop")
-- **Transitions**: Smooth state changes with proper choreography
-
-### 3. User Experience Flow
-```
-Landing → Stream Selection → Cluster Selection → Practice Test
-         (movable timer)     (progress tracking)  (fixed timer)
-```
-
-## ⚙️ Technical Architecture
-
-### Timer System
-- **Landing Page**: Draggable widget, position saved to localStorage
-- **Quiz Pages**: Fixed position in navigation, 15-minute countdown
-- **Visual States**: Green (>10m), Orange (5-10m), Red (<5m) with pulse
-
-### Data Management
-- **Placeholders**: Use `[COUNT]`, `[PERCENTAGE]` templates (NO hardcoded fake stats)
-- **State Persistence**: localStorage for positions/selections
-- **Offline First**: Hardcoded clusters for reliability
-
-### Error Handling
-- Graceful fallbacks for missing features
-- No breaking on back button navigation
-- Proper loading state management
-
-## 🚫 Anti-Patterns to Avoid
-1. **NO** "AI slop" generic designs
-2. **NO** hardcoded fake statistics
-3. **NO** broken back button behavior
-4. **NO** inaccessible color contrasts
-5. **NO** jarring transitions or excessive animations
-
-## ✅ What's Implemented
-
-### Core Components
-- [x] Draggable timer widget with localStorage persistence
-- [x] Professional footer with WhatsApp/contact/social
-- [x] Stream selection cards (Science/Art/Commerce)
-- [x] Cluster selection system
-- [x] Loading overlay with skeleton screens
-- [x] Responsive grid system
-- [x] Proper CSS custom properties
-- [x] Error-bound JavaScript
-
-### Visual Effects
-- [x] Card hover with elevation and accent borders
-- [x] Timer pulse animations for urgency
-- [x] Shimmer loading skeletons
-- [x] Gradient text effects for emphasis
-- [x] Smooth transitions (cubic-bezier timing)
-
-## 🚧 What Remains
-
-### Pages to Create
-1. `science_clusters.html` - Math/Eng/Phy/Chem + Bio/Eng/Phy/Chem
-2. `art_clusters.html` - Eng/Lit/Gov/CRS (with expansion markers)
-3. `commercial_clusters.html` - Three commercial combinations
-4. `practice_[cluster].html` - Individual test pages (15-minute timer)
-
-### Features to Implement
-- Quiz question logic (use original JAMB questions)
-- Score tracking and analytics
-- Progress persistence across sessions
-- Print styles for study materials
-
-## 🔧 Development Guidelines
-
-### CSS Rules
-- Use custom properties from `:root`
-- Mobile-first responsive design
-- BEM-like naming for complex components
-- Hardware-accelerated animations only
-
-### JavaScript Standards
-- Class-based architecture with proper `this` binding
-- Feature detection before usage
-- Error boundaries around critical operations
-- Clean event listener management
-
-### HTML Semantics
-- Proper ARIA labels for interactive elements
-- Semantic sectioning elements
-- Accessibility-first approach
-- Progressive enhancement
-
-## 🎯 Teenage Engagement Features
-1. **Visual Urgency**: Timer creates exam-pressure simulation
-2. **Interactive Elements**: Draggable components, hover effects
-3. **Progress Tracking**: Clear visual progress through steps
-4. **Achievement Markers**: Badges and status indicators planned
-5. **Modern Aesthetics**: Feels like premium apps they use daily
-
-## 📱 Responsive Behavior
-- **Mobile**: Single column, simplified interactions
-- **Tablet**: Two-column grids where appropriate
-- **Desktop**: Full three-column layouts with enhanced effects
-- **Touch**: Optimized for both mouse and touch interactions
-
-## 🔄 State Management
-```
-localStorage:
-  grantappTimerPosition: {x, y}
-  selectedStream: 'science'|'art'|'commercial'
-  selectedCluster: string
-  grantappLoading: boolean
-```
-
-## 🚀 Deployment Notes
-- Static files only (no CORS issues)
-- Works offline after initial load
-- Can be deployed to GitHub Pages, Netlify, Vercel
-- No build step required
+## Overview
+**Trigger:** Every 2 days at 3 AM OR when `.txt` file uploaded to Questt repo  
+**Start Date:** Feb 10, 2026  
+**Cycle:** 50 cycles (Day 1-2, Day 3-4, ... Day 99-100)
 
 ---
 
-**Maintained by**: GrantApp AI Team  
-**Philosophy**: "Professional tools shouldn't look amateurish"  
-**Target**: Nigerian JAMB candidates (teenagers needing serious prep)
+## Workflow Steps
+
+### 1. **Trigger Conditions**
+```yaml
+on:
+  schedule:
+    - cron: '0 3 */2 * *'  # 3 AM every 2 days
+  push:
+    branches: [main]
+    paths:
+      - '*.txt'  # Any .txt file upload
+  workflow_dispatch:  # Manual trigger option
+```
+
+### 2. **Calculate Current Day**
+```
+Current Date - Feb 10, 2026 = Days Elapsed
+Days Elapsed / 2 = Current Period (1-50)
+Example: Feb 14 = Day 4 = Period 2 (Day 3-4)
+```
+
+### 3. **Check If Already Generated**
+```
+Check if quiz files exist in 100Days-to-UTME with metadata:
+  <!-- Generated: Period 2, Day 3-4, 2026-02-12 -->
+
+If exists AND period matches:
+  → Skip generation (already done)
+Else:
+  → Proceed to generation
+```
+
+### 4. **Generate Quiz HTML Files**
+
+**Action: Fetch questions from Questt**
+```
+Fetch all .txt files:
+  - JAMB_Physics_Q1-35.txt
+  - JAMB_Mathematics_Q1-35.txt
+  - JAMB_English_Q1-35.txt
+  - JAMB_Chemistry_Q1-35.txt
+  - JAMB_Biology_Q1-35.txt (if exists)
+  - etc.
+```
+
+**Action: Parse and embed questions**
+```python
+for each subject_file:
+  parse questions → JSON array
+  embed into quiz-{subject}.html template
+  add metadata: <!-- Period X, Day Y-Z, Date -->
+```
+
+**Action: Generate cluster quizzes**
+```python
+# Science Cluster A
+combine: [Physics, Math, English, Chemistry] → quiz-science-cluster-a.html
+
+# Science Cluster B  
+combine: [Biology, Physics, English, Chemistry] → quiz-science-cluster-b.html
+
+# Arts Cluster A
+combine: [English, Literature, Government, CRS] → quiz-arts-cluster-a.html
+
+# Commercial Cluster A
+combine: [English, Accounting, Commerce, Economics] → quiz-commercial-cluster-a.html
+```
+
+### 5. **Deploy to 100Days-to-UTME**
+```
+Commit generated files:
+  - quiz-physics.html
+  - quiz-mathematics.html
+  - quiz-english.html
+  - quiz-chemistry.html
+  - quiz-science-cluster-a.html
+  - quiz-science-cluster-b.html
+  - quiz-arts-cluster-a.html
+  - quiz-commercial-cluster-a.html
+
+Commit message: "Generate quizzes for Day X-Y (Period Z)"
+Push to 100Days-to-UTME main branch
+```
+
+### 6. **Archive to Questt-resources**
+```
+Create folder structure:
+  questt-resources/
+    archive/
+      day-01-02/
+        JAMB_Physics_Q1-35.txt
+        JAMB_Mathematics_Q1-35.txt
+        JAMB_English_Q1-35.txt
+        JAMB_Chemistry_Q1-35.txt
+        metadata.json (date, period, subjects)
+
+Copy all .txt files from Questt → questt-resources/archive/day-XX-YY/
+Commit message: "Archive questions for Day X-Y"
+Push to Questt-resources main branch
+```
+
+### 7. **Clear Questt Repo**
+```
+Delete all .txt files from Questt repo
+Commit message: "Clear used questions (Day X-Y)"
+Push to Questt main branch
+
+Result: Questt repo is now empty, ready for manual upload of next batch
+```
+
+---
+
+## File Structure After One Cycle
+
+**Questt (empty, awaiting manual upload):**
+```
+questt/
+  README.md
+  (empty - you upload Day 3-4 questions here)
+```
+
+**100Days-to-UTME (live quizzes):**
+```
+100Days-to-UTME/
+  quiz-physics.html (Day 1-2 questions embedded)
+  quiz-mathematics.html (Day 1-2 questions embedded)
+  quiz-science-cluster-a.html (Day 1-2, 140 questions)
+  ...
+```
+
+**Questt-resources (archive):**
+```
+questt-resources/
+  archive/
+    day-01-02/
+      JAMB_Physics_Q1-35.txt
+      JAMB_Mathematics_Q1-35.txt
+      metadata.json
+```
+
+---
+
+## Your Workflow (Manual Part)
+
+**Every 2 days:**
+1. Get notification: "Questt repo cleared, upload Day 3-4 questions"
+2. Upload new `.txt` files to Questt via GitHub web
+3. Automation triggers immediately (or waits until 3 AM)
+4. New quizzes go live
+5. Old questions archived
+6. Repeat
+
+---
+
+## Automation Handles
+
+✅ Calculating current day/period  
+✅ Checking if already generated  
+✅ Fetching questions from Questt  
+✅ Parsing and embedding into HTML  
+✅ Generating individual + cluster quizzes  
+✅ Deploying to 100Days-to-UTME  
+✅ Archiving to Questt-resources  
+✅ Clearing Questt repo  
+✅ All git commits and pushes  
+
+---
+
+## You Handle
+
+📝 Uploading new question `.txt` files every 2 days  
+📝 Ensuring questions increase in difficulty  
+
+---
+
+## Failure Safeguards
+
+1. **Duplicate check:** Won't regenerate if period already done
+2. **Manual trigger:** Can run workflow manually if needed
+3. **Metadata tracking:** Each quiz file knows its period/date
+4. **Archive backup:** All questions preserved forever
+5. **GitHub Actions logs:** See exactly what happened each run
+
+---
+
+## Required Secrets (One-time Setup)
+
+Need GitHub Personal Access Token with permissions to:
+- Read from Questt repo
+- Write to 100Days-to-UTME repo
+- Write to Questt-resources repo
+
+Stored as: `GITHUB_TOKEN` (secret in 100Days-to-UTME repo settings)
+
+---
+
+## Cost
+
+**Free.** GitHub Actions: 2,000 minutes/month free
+This workflow uses ~2 minutes per run = 30 runs/month = 60 minutes/month
+
+---
+
+**Ready for me to generate the actual `.github/workflows/auto-quiz.yml` file?**
