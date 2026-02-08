@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commercial Clusters - GrantApp AI</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="text-center">
+            <div class="skeleton" style="width: 100px; height: 100px; border-radius: 50%; margin: 0 auto var(--space-md);"></div>
+            <div class="skeleton" style="width: 200px; height: 20px; margin: 0 auto var(--space-sm);"></div>
+            <div class="skeleton" style="width: 150px; height: 15px; margin: 0 auto;"></div>
+        </div>
+    </div>
+
+    <!-- Draggable Timer -->
+    <div class="timer-container" id="timer-container">
+        <div class="timer-widget" id="timer-widget">
+            <div class="timer-display">15:00</div>
+            <div class="timer-label">Practice Test</div>
+            <div class="timer-progress">
+                <div class="timer-progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">GrantApp AI</a>
+        <div class="navbar-menu">
+            <a href="#" class="nav-link tooltip" data-coming-soon="Analytics">
+                <i class="fas fa-chart-line"></i>
+                <span class="tooltip-content">Analytics Dashboard</span>
+            </a>
+            <a href="#" class="nav-link tooltip" data-coming-soon="Profile">
+                <i class="fas fa-user-graduate"></i>
+                <span class="tooltip-content">My Profile</span>
+            </a>
+            <button class="btn btn-accent" data-coming-soon="Upgrade">
+                <i class="fas fa-rocket"></i> Upgrade
+            </button>
+        </div>
+    </nav>
+
+    <!-- Breadcrumbs -->
+    <div class="container">
+        <div class="breadcrumbs">
+            <a href="index.html" class="breadcrumb-item">Home</a>
+            <span class="breadcrumb-separator">›</span>
+            <span class="breadcrumb-item">Commercial</span>
+            <span class="breadcrumb-separator">›</span>
+            <span class="breadcrumb-current">Choose Cluster</span>
+        </div>
+    </div>
+
+    <!-- Progress Steps -->
+    <div class="container">
+        <div class="progress-steps">
+            <div class="progress-step">
+                <div class="step-number">1</div>
+                <div class="step-label">Choose Stream</div>
+            </div>
+            <div class="progress-step active">
+                <div class="step-number">2</div>
+                <div class="step-label">Select Cluster</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-number">3</div>
+                <div class="step-label">Start Practice</div>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-fill" style="width: 66%"></div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container-narrow">
+            <h1 class="hero-title font-luxury">Commercial Clusters</h1>
+            <p class="hero-subtitle">
+                Build your business acumen. Choose the cluster that aligns with your career goals.
+            </p>
+        </div>
+    </section>
+
+    <!-- Cluster Selection -->
+    <section class="container-narrow py-xl">
+        <div class="cluster-grid">
+            <!-- Cluster 1: Eng/Acc/Com/Eco -->
+            <div class="card cluster-card" data-cluster="eace">
+                <div class="card-body">
+                    <div class="flex items-center justify-between mb-lg">
+                        <h3 class="text-xl font-semibold">Accounting & Finance</h3>
+                        <span class="badge bg-teal-100 text-teal-700 px-3 py-1 rounded-full text-sm font-semibold">
+                            <i class="fas fa-calculator"></i> EACE
+                        </span>
+                    </div>
+                    <div class="cluster-subjects">
+                        <span class="subject-tag">English Language</span>
+                        <span class="subject-tag">Accounting</span>
+                        <span class="subject-tag">Commerce</span>
+                        <span class="subject-tag">Economics</span>
+                    </div>
+                    <div class="mt-lg">
+                        <div class="text-sm font-semibold mb-sm">Perfect for:</div>
+                        <ul class="text-sm text-muted space-y-1">
+                            <li>• Accounting</li>
+                            <li>• Banking & Finance</li>
+                            <li>• Business Administration</li>
+                            <li>• Insurance</li>
+                            <li>• Taxation</li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-primary w-full mt-lg" data-cluster="eace">
+                        <i class="fas fa-play"></i> Start Practice Test
+                    </button>
+                </div>
+            </div>
+
+            <!-- Cluster 2: Eng/Math/Eco/Gov -->
+            <div class="card cluster-card" data-cluster="emeg">
+                <div class="card-body">
+                    <div class="flex items-center justify-between mb-lg">
+                        <h3 class="text-xl font-semibold">Economics & Policy</h3>
+                        <span class="badge bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold">
+                            <i class="fas fa-chart-line"></i> EMEG
+                        </span>
+                    </div>
+                    <div class="cluster-subjects">
+                        <span class="subject-tag">English Language</span>
+                        <span class="subject-tag">Mathematics</span>
+                        <span class="subject-tag">Economics</span>
+                        <span class="subject-tag">Government</span>
+                    </div>
+                    <div class="mt-lg">
+                        <div class="text-sm font-semibold mb-sm">Perfect for:</div>
+                        <ul class="text-sm text-muted space-y-1">
+                            <li>• Economics</li>
+                            <li>• Public Administration</li>
+                            <li>• Development Studies</li>
+                            <li>• Statistics (Commercial)</li>
+                            <li>• Actuarial Science</li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-primary w-full mt-lg" data-cluster="emeg">
+                        <i class="fas fa-play"></i> Start Practice Test
+                    </button>
+                </div>
+            </div>
+
+            <!-- Cluster 3: Eng/Eco/Gov/Com -->
+            <div class="card cluster-card" data-cluster="eegc">
+                <div class="card-body">
+                    <div class="flex items-center justify-between mb-lg">
+                        <h3 class="text-xl font-semibold">Business & Management</h3>
+                        <span class="badge bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-semibold">
+                            <i class="fas fa-briefcase"></i> EEGC
+                        </span>
+                    </div>
+                    <div class="cluster-subjects">
+                        <span class="subject-tag">English Language</span>
+                        <span class="subject-tag">Economics</span>
+                        <span class="subject-tag">Government</span>
+                        <span class="subject-tag">Commerce</span>
+                    </div>
+                    <div class="mt-lg">
+                        <div class="text-sm font-semibold mb-sm">Perfect for:</div>
+                        <ul class="text-sm text-muted space-y-1">
+                            <li>• Business Management</li>
+                            <li>• Marketing</li>
+                            <li>• Entrepreneurship</li>
+                            <li>• Industrial Relations</li>
+                            <li>• Cooperative Economics</li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-primary w-full mt-lg" data-cluster="eegc">
+                        <i class="fas fa-play"></i> Start Practice Test
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Info Card -->
+        <div class="card mt-3xl">
+            <div class="card-body">
+                <h3 class="text-lg font-semibold mb-md">
+                    <i class="fas fa-chart-pie text-success"></i> Commercial Stream Advantage
+                </h3>
+                <div class="grid grid-2">
+                    <div>
+                        <div class="text-sm font-semibold mb-sm">Core Competencies</div>
+                        <ul class="text-sm text-muted space-y-1">
+                            <li>• Financial literacy & analysis</li>
+                            <li>• Economic theory & application</li>
+                            <li>• Business strategy & planning</li>
+                            <li>• Quantitative reasoning</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="text-sm font-semibold mb-sm">Career Opportunities</div>
+                        <ul class="text-sm text-muted space-y-1">
+                            <li>• Financial services sector</li>
+                            <li>• Corporate management</li>
+                            <li>• Government & policy analysis</li>
+                            <li>• Entrepreneurship & startups</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subject Combo Guide -->
+        <div class="card mt-xl">
+            <div class="card-body">
+                <h3 class="text-lg font-semibold mb-md">
+                    <i class="fas fa-question-circle text-info"></i> Which Cluster Should I Choose?
+                </h3>
+                <div class="space-y-md">
+                    <div class="flex items-start gap-md">
+                        <div class="text-2xl">📊</div>
+                        <div>
+                            <div class="text-sm font-semibold">Choose EACE if...</div>
+                            <p class="text-sm text-muted">You're strong in calculations and want professional certifications (ICAN, ACCA). Perfect for future accountants and financial analysts.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-md">
+                        <div class="text-2xl">📈</div>
+                        <div>
+                            <div class="text-sm font-semibold">Choose EMEG if...</div>
+                            <p class="text-sm text-muted">You excel at mathematics and want to understand policy. Ideal for economists, statisticians, and policy researchers.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-md">
+                        <div class="text-2xl">💼</div>
+                        <div>
+                            <div class="text-sm font-semibold">Choose EEGC if...</div>
+                            <p class="text-sm text-muted">You're interested in broad business concepts and management. Great for aspiring entrepreneurs and business strategists.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Error Modal -->
+    <div id="error-modal" class="modal-overlay hidden">
+        <div class="modal modal-sm">
+            <div class="card">
+                <div class="card-header">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xl font-semibold">⚠️ Oops!</h3>
+                        <button class="btn btn-ghost btn-sm" data-close-modal="error-modal">×</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted" id="error-message">Something went wrong. Please try again.</p>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-primary w-full" data-close-modal="error-modal">Got it</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Coming Soon Modal -->
+    <div id="coming-soon-modal" class="modal-overlay hidden">
+        <div class="modal modal-sm">
+            <div class="card">
+                <div class="card-header">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xl font-semibold">🚀 Coming Soon</h3>
+                        <button class="btn btn-ghost btn-sm" data-close-modal="coming-soon-modal">×</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted" id="coming-soon-message">This feature is coming soon!</p>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-primary w-full" data-close-modal="coming-soon-modal">Got it</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>GrantApp AI</h4>
+                    <p class="text-sm">Intelligent exam preparation platform for Nigerian students.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <a href="https://wa.me/2348000000000" class="footer-contact" target="_blank" rel="noopener">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>WhatsApp Support</span>
+                    </a>
+                    <a href="mailto:support@grantapp.ai" class="footer-contact">
+                        <i class="fas fa-envelope"></i>
+                        <span>support@grantapp.ai</span>
+                    </a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Office</h4>
+                    <p class="text-sm">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Lagos, Nigeria
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="footer-social">
+                        <a href="#" aria-label="LinkedIn" class="tooltip">
+                            <i class="fab fa-linkedin"></i>
+                            <span class="tooltip-content">LinkedIn</span>
+                        </a>
+                        <a href="#" aria-label="Twitter" class="tooltip">
+                            <i class="fab fa-twitter"></i>
+                            <span class="tooltip-content">Twitter</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2024 GrantApp AI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

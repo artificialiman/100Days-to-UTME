@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GrantApp AI - Choose Your Stream</title>
+    <title>Science Clusters - GrantApp AI</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -57,127 +57,128 @@
         <div class="breadcrumbs">
             <a href="index.html" class="breadcrumb-item">Home</a>
             <span class="breadcrumb-separator">›</span>
-            <span class="breadcrumb-current">Choose Your Stream</span>
+            <span class="breadcrumb-item">Science</span>
+            <span class="breadcrumb-separator">›</span>
+            <span class="breadcrumb-current">Choose Cluster</span>
+        </div>
+    </div>
+
+    <!-- Progress Steps -->
+    <div class="container">
+        <div class="progress-steps">
+            <div class="progress-step">
+                <div class="step-number">1</div>
+                <div class="step-label">Choose Stream</div>
+            </div>
+            <div class="progress-step active">
+                <div class="step-number">2</div>
+                <div class="step-label">Select Cluster</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-number">3</div>
+                <div class="step-label">Start Practice</div>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-fill" style="width: 66%"></div>
         </div>
     </div>
 
     <!-- Hero Section -->
     <section class="hero">
-        <div class="container">
-            <h1 class="hero-title font-luxury">Choose Your Path to Excellence</h1>
+        <div class="container-narrow">
+            <h1 class="hero-title font-luxury">Science Clusters</h1>
             <p class="hero-subtitle">
-                Select your academic stream and unlock personalized JAMB preparation with adaptive learning and intelligent tracking.
+                Choose your subject combination. Each cluster is designed for specific university courses.
             </p>
         </div>
     </section>
 
-    <!-- Stats Overview -->
-    <div class="container">
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-number">[COUNT]+</div>
-                <div class="stat-label">Practice Questions</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">[PERCENTAGE]%</div>
-                <div class="stat-label">Success Rate</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">24/7</div>
-                <div class="stat-label">AI Tutoring</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">15:00</div>
-                <div class="stat-label">Per Subject Test</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Stream Selection -->
-    <section class="container py-3xl">
-        <h2 class="text-3xl font-bold text-center mb-xl">Available Streams</h2>
-        
-        <div class="grid grid-3">
-            <!-- Science Stream -->
-            <div class="card stream-card science">
+    <!-- Cluster Selection -->
+    <section class="container-narrow py-xl">
+        <div class="cluster-grid">
+            <!-- Cluster 1: Math/Eng/Phy/Chem -->
+            <div class="card cluster-card" data-cluster="mepc">
                 <div class="card-body">
-                    <div class="stream-icon">🔬</div>
-                    <h3 class="text-xl font-semibold mb-md">Science</h3>
-                    <p class="text-muted stream-description">
-                        For aspiring doctors, engineers, and scientists. Master core STEM subjects with advanced problem-solving techniques.
-                    </p>
-                    <div class="mb-lg">
-                        <div class="text-sm font-semibold mb-sm">Available Clusters:</div>
+                    <div class="flex items-center justify-between mb-lg">
+                        <h3 class="text-xl font-semibold">Engineering & Tech</h3>
+                        <span class="badge bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold">
+                            <i class="fas fa-calculator"></i> MEPC
+                        </span>
+                    </div>
+                    <div class="cluster-subjects">
+                        <span class="subject-tag">Mathematics</span>
+                        <span class="subject-tag">English Language</span>
+                        <span class="subject-tag">Physics</span>
+                        <span class="subject-tag">Chemistry</span>
+                    </div>
+                    <div class="mt-lg">
+                        <div class="text-sm font-semibold mb-sm">Perfect for:</div>
                         <ul class="text-sm text-muted space-y-1">
-                            <li>• Mathematics, English, Physics, Chemistry</li>
-                            <li>• Biology, English, Physics, Chemistry</li>
+                            <li>• Engineering (All disciplines)</li>
+                            <li>• Computer Science</li>
+                            <li>• Mathematics</li>
+                            <li>• Architecture</li>
                         </ul>
                     </div>
-                    <button class="btn btn-primary w-full" data-stream="science">
-                        <i class="fas fa-flask"></i> Choose Science
+                    <button class="btn btn-primary w-full mt-lg" data-cluster="mepc">
+                        <i class="fas fa-play"></i> Start Practice Test
                     </button>
                 </div>
             </div>
 
-            <!-- Arts Stream -->
-            <div class="card stream-card art">
+            <!-- Cluster 2: Bio/Eng/Phy/Chem -->
+            <div class="card cluster-card" data-cluster="bepc">
                 <div class="card-body">
-                    <div class="stream-icon">🎨</div>
-                    <h3 class="text-xl font-semibold mb-md">Arts & Humanities</h3>
-                    <p class="text-muted stream-description">
-                        For future lawyers, writers, historians, and artists. Develop critical thinking and analytical skills.
-                    </p>
-                    <div class="mb-lg">
-                        <div class="text-sm font-semibold mb-sm">Available Clusters:</div>
+                    <div class="flex items-center justify-between mb-lg">
+                        <h3 class="text-xl font-semibold">Medical & Life Sciences</h3>
+                        <span class="badge bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">
+                            <i class="fas fa-heartbeat"></i> BEPC
+                        </span>
+                    </div>
+                    <div class="cluster-subjects">
+                        <span class="subject-tag">Biology</span>
+                        <span class="subject-tag">English Language</span>
+                        <span class="subject-tag">Physics</span>
+                        <span class="subject-tag">Chemistry</span>
+                    </div>
+                    <div class="mt-lg">
+                        <div class="text-sm font-semibold mb-sm">Perfect for:</div>
                         <ul class="text-sm text-muted space-y-1">
-                            <li>• English, Literature, Government, CRS</li>
-                            <li class="text-warning">• More clusters coming soon</li>
+                            <li>• Medicine & Surgery</li>
+                            <li>• Pharmacy</li>
+                            <li>• Nursing</li>
+                            <li>• Biochemistry</li>
                         </ul>
                     </div>
-                    <button class="btn btn-primary w-full" data-stream="art">
-                        <i class="fas fa-palette"></i> Choose Arts
-                    </button>
-                </div>
-            </div>
-
-            <!-- Commercial Stream -->
-            <div class="card stream-card commerce">
-                <div class="card-body">
-                    <div class="stream-icon">📊</div>
-                    <h3 class="text-xl font-semibold mb-md">Commercial</h3>
-                    <p class="text-muted stream-description">
-                        For future accountants, economists, and business leaders. Master commerce, finance, and management principles.
-                    </p>
-                    <div class="mb-lg">
-                        <div class="text-sm font-semibold mb-sm">Available Clusters:</div>
-                        <ul class="text-sm text-muted space-y-1">
-                            <li>• English, Accounting, Commerce, Economics</li>
-                            <li>• English, Mathematics, Economics, Government</li>
-                            <li>• English, Economics, Government, Commerce</li>
-                        </ul>
-                    </div>
-                    <button class="btn btn-primary w-full" data-stream="commercial">
-                        <i class="fas fa-chart-line"></i> Choose Commercial
+                    <button class="btn btn-primary w-full mt-lg" data-cluster="bepc">
+                        <i class="fas fa-play"></i> Start Practice Test
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Quick Stats -->
+        <!-- Quick Info Card -->
         <div class="card mt-3xl">
             <div class="card-body">
-                <div class="grid grid-3">
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-gradient">[COUNT]+</div>
-                        <div class="text-sm text-muted">Science Students Active</div>
+                <h3 class="text-lg font-semibold mb-md">
+                    <i class="fas fa-info-circle text-info"></i> How It Works
+                </h3>
+                <div class="grid grid-2">
+                    <div>
+                        <div class="text-sm font-semibold mb-sm">Test Format</div>
+                        <ul class="text-sm text-muted space-y-1">
+                            <li>• 15 minutes per subject</li>
+                            <li>• 40 questions per subject</li>
+                            <li>• Multiple choice (A-D)</li>
+                        </ul>
                     </div>
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-gradient">[COUNT]+</div>
-                        <div class="text-sm text-muted">Arts Students Active</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-gradient">[COUNT]+</div>
-                        <div class="text-sm text-muted">Commercial Students Active</div>
+                    <div>
+                        <div class="text-sm font-semibold mb-sm">Adaptive Learning</div>
+                        <ul class="text-sm text-muted space-y-1">
+                            <li>• Questions match your level</li>
+                            <li>• Instant feedback & explanations</li>
+                            <li>• Progress tracking dashboard</li>
+                        </ul>
                     </div>
                 </div>
             </div>
