@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science Clusters - GrantApp AI</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="text-center">
+            <div class="skeleton" style="width: 100px; height: 100px; border-radius: 50%; margin: 0 auto var(--space-md);"></div>
+            <div class="skeleton" style="width: 200px; height: 20px; margin: 0 auto var(--space-sm);"></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">
+            <i class="fas fa-arrow-left"></i> Science Stream
+        </a>
+    </nav>
+
+    <!-- Breadcrumbs -->
+    <div class="container">
+        <div class="breadcrumbs">
+            <a href="index.html" class="breadcrumb-item">Stream Selection</a>
+            <span class="breadcrumb-separator">›</span>
+            <span class="breadcrumb-current">Science Clusters</span>
+        </div>
+    </div>
+
+    <!-- Cluster Selection -->
+    <section class="container py-xl">
+        <h1 class="text-3xl font-bold text-center mb-xl">Select Your Science Cluster</h1>
+        
+        <div class="grid grid-2">
+            <!-- Cluster 1 -->
+            <div class="card stream-card">
+                <div class="card-body">
+                    <h3 class="text-xl font-semibold mb-md">Core Science</h3>
+                    <p class="text-muted stream-description">
+                        Ideal for Engineering, Physics, and Chemistry majors. Focuses on advanced mathematics and physical sciences.
+                    </p>
+                    <div class="mb-lg">
+                        <div class="text-sm font-semibold mb-sm">Subjects:</div>
+                        <div class="flex flex-wrap gap-sm">
+                            <span class="px-3 py-1 bg-neutral-100 rounded text-sm">Mathematics</span>
+                            <span class="px-3 py-1 bg-neutral-100 rounded text-sm">English</span>
+                            <span class="px-3 py-1 bg-neutral-100 rounded text-sm">Physics</span>
+                            <span class="px-3 py-1 bg-neutral-100 rounded text-sm">Chemistry</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary w-full" onclick="GrantApp.selectCluster('mth_eng_phy_chm')">
+                        Start Practice
+                    </button>
+                </div>
+            </div>
+
+            <!-- Cluster 2 -->
+            <div class="card stream-card">
+                <div class="card-body">
+                    <h3 class="text-xl font-semibold mb-md">Life Sciences</h3>
+                    <p class="text-muted stream-description">
+                        Perfect for Medicine, Pharmacy, and Biological Sciences. Emphasizes biology and chemistry with supporting physics.
+                    </p>
+                    <div class="mb-lg">
+                        <div class="text-sm font-semibold mb-sm">Subjects:</div>
+                        <div class="flex flex-wrap gap-sm">
+                            <span class="px-3 py-1 bg-neutral-100 rounded text-sm">Biology</span>
+                            <span class="px-3 py-1 bg-neutral-100 rounded text-sm">English</span>
+                            <span class="px-3 py-1 bg-neutral-100 rounded text-sm">Physics</span>
+                            <span class="px-3 py-1 bg-neutral-100 rounded text-sm">Chemistry</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary w-full" onclick="GrantApp.selectCluster('bio_eng_phy_chm')">
+                        Start Practice
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>GrantApp AI</h4>
+                    <p class="text-sm">Intelligent exam preparation platform.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <a href="https://wa.me/234XXXXXXXXXX" class="footer-contact" target="_blank">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>Quick Support</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2024 GrantApp AI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
