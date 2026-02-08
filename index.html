@@ -1,0 +1,122 @@
+<!-- index.html - Landing Page with New Design System -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GrantApp AI - JAMB Excellence Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="#" class="navbar-brand">GrantApp AI</a>
+        <div class="navbar-menu">
+            <a href="#" class="nav-link">Dashboard</a>
+            <a href="#" class="nav-link">Performance</a>
+            <a href="#" class="nav-link">Study Plans</a>
+            <button class="btn btn-primary btn-sm">Upgrade</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="container py-2xl">
+        <div class="text-center mb-2xl">
+            <h1 class="font-luxury text-5xl mb-lg">GrantApp AI</h1>
+            <p class="text-xl text-muted mb-xl">Intelligent JAMB Preparation Platform</p>
+            
+            <div class="flex justify-center gap-md mb-xl">
+                <div class="text-center">
+                    <div class="text-3xl font-bold">15,000+</div>
+                    <div class="text-sm text-muted">Practice Questions</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold">94%</div>
+                    <div class="text-sm text-muted">Success Rate</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold">24/7</div>
+                    <div class="text-sm text-muted">AI Tutoring</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stream Selection -->
+        <div class="mb-2xl">
+            <h2 class="text-3xl font-semibold text-center mb-lg">Select Your Academic Stream</h2>
+            <p class="text-center text-muted mb-xl">Choose your field of study to begin personalized practice</p>
+            
+            <div class="grid grid-3">
+                <!-- Science Stream -->
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div class="text-4xl mb-md">🔬</div>
+                        <h3 class="text-2xl font-semibold mb-sm">Science</h3>
+                        <p class="text-muted mb-lg">Physics, Chemistry, Biology, Mathematics</p>
+                        <button class="btn btn-primary btn-full" onclick="selectStream('science')">
+                            Select Science
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Arts Stream -->
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div class="text-4xl mb-md">🎨</div>
+                        <h3 class="text-2xl font-semibold mb-sm">Arts & Humanities</h3>
+                        <p class="text-muted mb-lg">Literature, Government, CRS/IRS, History</p>
+                        <button class="btn btn-primary btn-full" onclick="selectStream('art')">
+                            Select Arts
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Commercial Stream -->
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div class="text-4xl mb-md">📊</div>
+                        <h3 class="text-2xl font-semibold mb-sm">Commercial</h3>
+                        <p class="text-muted mb-lg">Accounting, Commerce, Economics, Business</p>
+                        <button class="btn btn-primary btn-full" onclick="selectStream('commercial')">
+                            Select Commercial
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Access -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-xl font-semibold">Quick Practice</h3>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-lg">Start immediately with core subjects:</p>
+                <div class="grid grid-4">
+                    <a href="math_test.html" class="card card-flush text-center p-lg">
+                        <div class="text-2xl mb-sm">📐</div>
+                        <div class="font-medium">Mathematics</div>
+                    </a>
+                    <a href="english_test.html" class="card card-flush text-center p-lg">
+                        <div class="text-2xl mb-sm">📖</div>
+                        <div class="font-medium">English</div>
+                    </a>
+                    <a href="physics_test.html" class="card card-flush text-center p-lg">
+                        <div class="text-2xl mb-sm">⚛️</div>
+                        <div class="font-medium">Physics</div>
+                    </a>
+                    <a href="chemistry_test.html" class="card card-flush text-center p-lg">
+                        <div class="text-2xl mb-sm">🧪</div>
+                        <div class="font-medium">Chemistry</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="app.js"></script>
+</body>
+</html>
