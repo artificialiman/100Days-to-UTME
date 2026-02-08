@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science Clusters - GrantApp AI</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">
+            <i class="fas fa-graduation-cap"></i> GrantApp
+        </a>
+    </nav>
+
+    <!-- Breadcrumbs -->
+    <div class="container">
+        <div class="breadcrumbs">
+            <a href="index.html" class="breadcrumb-item">Home</a>
+            <span class="breadcrumb-separator">›</span>
+            <a href="index.html" class="breadcrumb-item">Choose Stream</a>
+            <span class="breadcrumb-separator">›</span>
+            <span class="breadcrumb-current">Science Clusters</span>
+        </div>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero-title fade-in-up">
+                Science <span class="text-gradient">Clusters</span>
+            </h1>
+            <p class="hero-subtitle fade-in-up delay-200">
+                Choose your subject combination for JAMB practice
+            </p>
+        </div>
+    </section>
+
+    <!-- Clusters -->
+    <section class="container py-3xl">
+        <div class="cluster-grid">
+            
+            <!-- Cluster A: Math-Based -->
+            <div class="card cluster-card">
+                <div class="card-body">
+                    <div class="flex items-center justify-between mb-lg">
+                        <div>
+                            <h3 class="text-2xl font-bold">Cluster A</h3>
+                            <p class="text-sm text-muted">Engineering, Physical Sciences</p>
+                        </div>
+                        <div class="text-4xl">🔬</div>
+                    </div>
+                    
+                    <div class="cluster-subjects">
+                        <span class="subject-tag">Mathematics</span>
+                        <span class="subject-tag">English</span>
+                        <span class="subject-tag">Physics</span>
+                        <span class="subject-tag">Chemistry</span>
+                    </div>
+                    
+                    <p class="text-sm text-muted mt-lg mb-lg">
+                        Perfect for Engineering, Computer Science, Architecture, and Physical Sciences courses.
+                    </p>
+                    
+                    <div class="flex gap-sm">
+                        <!-- THIS IS THE KEY PART - How to link to quiz -->
+                        <button class="btn btn-primary w-full" onclick="startQuiz('science', 0)">
+                            <i class="fas fa-play"></i>
+                            Start Practice Test
+                        </button>
+                    </div>
+                    
+                    <div class="text-xs text-muted mt-md text-center">
+                        <i class="fas fa-clock"></i> 15 minutes • 35 questions
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Cluster B: Biology-Based -->
+            <div class="card cluster-card">
+                <div class="card-body">
+                    <div class="flex items-center justify-between mb-lg">
+                        <div>
+                            <h3 class="text-2xl font-bold">Cluster B</h3>
+                            <p class="text-sm text-muted">Medicine, Health Sciences</p>
+                        </div>
+                        <div class="text-4xl">🧬</div>
+                    </div>
+                    
+                    <div class="cluster-subjects">
+                        <span class="subject-tag">Biology</span>
+                        <span class="subject-tag">English</span>
+                        <span class="subject-tag">Physics</span>
+                        <span class="subject-tag">Chemistry</span>
+                    </div>
+                    
+                    <p class="text-sm text-muted mt-lg mb-lg">
+                        Ideal for Medicine, Pharmacy, Nursing, Biochemistry, and related health sciences.
+                    </p>
+                    
+                    <div class="flex gap-sm">
+                        <!-- Index 1 for second cluster -->
+                        <button class="btn btn-primary w-full" onclick="startQuiz('science', 1)">
+                            <i class="fas fa-play"></i>
+                            Start Practice Test
+                        </button>
+                    </div>
+                    
+                    <div class="text-xs text-muted mt-md text-center">
+                        <i class="fas fa-clock"></i> 15 minutes • 35 questions
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Individual Subject Practice -->
+            <div class="card cluster-card">
+                <div class="card-body">
+                    <div class="flex items-center justify-between mb-lg">
+                        <div>
+                            <h3 class="text-2xl font-bold">Single Subject</h3>
+                            <p class="text-sm text-muted">Practice one subject</p>
+                        </div>
+                        <div class="text-4xl">📚</div>
+                    </div>
+                    
+                    <p class="text-sm text-muted mb-lg">
+                        Focus on mastering individual subjects before attempting full cluster tests.
+                    </p>
+                    
+                    <div class="flex flex-col gap-sm">
+                        <!-- Individual subject buttons -->
+                        <button class="btn btn-secondary" onclick="startSubjectQuiz('Physics')">
+                            <i class="fas fa-atom"></i> Physics Only
+                        </button>
+                        <button class="btn btn-secondary" onclick="startSubjectQuiz('Chemistry')">
+                            <i class="fas fa-flask"></i> Chemistry Only
+                        </button>
+                        <button class="btn btn-secondary" onclick="startSubjectQuiz('Mathematics')">
+                            <i class="fas fa-calculator"></i> Mathematics Only
+                        </button>
+                        <button class="btn btn-secondary" onclick="startSubjectQuiz('Biology')">
+                            <i class="fas fa-dna"></i> Biology Only
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- IMPORTANT: Include these scripts -->
+    <script src="question-parser.js"></script>
+    <script src="quiz-launcher.js"></script>
+    
+    <script>
+        // Optional: Add custom behavior or analytics
+        console.log('Science Clusters loaded');
+        console.log('Available clusters:', QUIZ_CONFIG.clusters.science);
+    </script>
+</body>
+</html>
