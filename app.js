@@ -36,15 +36,27 @@ class GrantApp {
         try {
             // Load saved position for landing page
             if (!timerContainer.classList.contains('quiz')) {
-                const saved = localStorage.getItem('grantappTimerPosition');
-                if (saved) {
-                    this.timerPosition = JSON.parse(saved);
+                try {
+                    const saved = localStorage.getItem('grantappTimerPosition');
+                    if (saved) {
+                        const pos = JSON.parse(saved);
+                        // Ensure position is on screen (basic bounds check)
+                        const maxX = window.innerWidth - 200;
+                        const maxY = window.innerHeight - 200;
+                        this.timerPosition.x = Math.min(Math.max(0, pos.x), maxX);
+                        this.timerPosition.y = Math.min(Math.max(60, pos.y), maxY);
+                    } else {
+                        // Default position - bottom right
+                        this.timerPosition.x = window.innerWidth - 220;
+                        this.timerPosition.y = window.innerHeight - 180;
+                    }
                     timerContainer.style.left = `${this.timerPosition.x}px`;
                     timerContainer.style.top = `${this.timerPosition.y}px`;
-                } else {
-                    // Default position
-                    timerContainer.style.left = '20px';
-                    timerContainer.style.top = '100px';
+                } catch (error) {
+                    // Fallback to safe visible position
+                    timerContainer.style.right = '20px';
+                    timerContainer.style.bottom = '20px';
+                    console.warn('Could not restore timer position:', error);
                 }
                 
                 // Make draggable
@@ -332,10 +344,11 @@ class GrantApp {
     // Initialize placeholder shimmer per README protocol
     initializePlaceholders() {
         try {
-            // Find all elements containing [COUNT] or [PERCENTAGE] templates
-            const allElements = document.querySelectorAll('*');
-            allElements.forEach(el => {
-                if (el.textContent.includes('[COUNT]') || el.textContent.includes('[PERCENTAGE]')) {
+            // Only query stat-number elements that might have placeholders - much more efficient
+            const statNumbers = document.querySelectorAll('.stat-number');
+            statNumbers.forEach(el => {
+                const text = el.textContent.trim();
+                if (text.includes('[COUNT]') || text.includes('[PERCENTAGE]')) {
                     el.classList.add('placeholder-shimmer');
                 }
             });
