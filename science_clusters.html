@@ -120,9 +120,9 @@
                             <li>• Architecture</li>
                         </ul>
                     </div>
-                    <button class="btn btn-primary w-full mt-lg" data-cluster="mepc">
-                        <i class="fas fa-play"></i> Start Practice Test
-                    </button>
+                    <!-- Change buttons from manual href to: -->
+<button onclick="startQuiz('science', 0)">Start Test</button>
+
                 </div>
             </div>
 
@@ -150,9 +150,9 @@
                             <li>• Biochemistry</li>
                         </ul>
                     </div>
-                    <button class="btn btn-primary w-full mt-lg" data-cluster="bepc">
-                        <i class="fas fa-play"></i> Start Practice Test
-                    </button>
+                    <!-- Change buttons from manual href to: -->
+<button onclick="startQuiz('science', 0)">Start Test</button>
+
                 </div>
             </div>
         </div>
@@ -276,5 +276,9 @@
     </footer>
 
     <script src="app.js"></script>
+    
+<script src="question-parser.js"></script>
+<script src="quiz-launcher.js"></script>
+
 </body>
 </html>
