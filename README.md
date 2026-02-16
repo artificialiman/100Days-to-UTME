@@ -1,7 +1,7 @@
 # Complete GitHub Actions Workflow
 
 ## Overview
-**Trigger:** Every 2 days at 3 AM OR when `.txt` file uploaded to Questt repo  
+**Trigger:** Every 2 days at 3 AM OR when `.txt` file uploaded to Questt repo 
 **Start Date:** Feb 10, 2026  
 **Cycle:** 50 cycles (Day 1-2, Day 3-4, ... Day 99-100)
 
