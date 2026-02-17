@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: artificialiman/100Days-to-UTME
-          token: ${{ secrets.WORKFLOW_TOKEN }}
+          token: ${{ secrets.PAT_TOKEN }}
           path: main-repo
           persist-credentials: true
       
@@ -31,7 +31,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: artificialiman/Questt
-          token: ${{ secrets.WORKFLOW_TOKEN }}
+          token: ${{ secrets.PAT_TOKEN }}
           path: questt-repo
           persist-credentials: true
       
@@ -39,7 +39,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: artificialiman/Questt-resources
-          token: ${{ secrets.WORKFLOW_TOKEN }}
+          token: ${{ secrets.PAT_TOKEN }}
           path: archive-repo
           persist-credentials: true
       
@@ -314,7 +314,7 @@ jobs:
           git config user.email "actions@github.com"
           
           # Set up authentication for push
-          git remote set-url origin https://x-access-token:${{ secrets.WORKFLOW_TOKEN }}@github.com/artificialiman/100Days-to-UTME.git
+          git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/artificialiman/100Days-to-UTME.git
           
           # Fetch latest changes
           git fetch origin main
@@ -371,7 +371,7 @@ jobs:
           git config user.email "actions@github.com"
           
           # Set up authentication for push
-          git remote set-url origin https://x-access-token:${{ secrets.WORKFLOW_TOKEN }}@github.com/artificialiman/Questt-resources.git
+          git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/artificialiman/Questt-resources.git
           
           # Fetch and rebase
           git fetch origin main
@@ -402,7 +402,7 @@ jobs:
           git config user.email "actions@github.com"
           
           # Set up authentication for push
-          git remote set-url origin https://x-access-token:${{ secrets.WORKFLOW_TOKEN }}@github.com/artificialiman/Questt.git
+          git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/artificialiman/Questt.git
           
           # Fetch and rebase
           git fetch origin main
