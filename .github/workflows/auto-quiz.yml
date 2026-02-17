@@ -219,6 +219,8 @@ jobs:
           CLUSTERS["science-cluster-b"]="biology,english,physics,chemistry"
           CLUSTERS["arts-cluster-a"]="english,literature,government,crs"
           CLUSTERS["commercial-cluster-a"]="english,accounting,commerce,economics"
+          CLUSTERS["commercial-cluster-b"]="english,mathematics,economics,government"
+          CLUSTERS["commercial-cluster-c"]="english,economics,government,commerce"
           
           # Generate each cluster
           for cluster_name in "${!CLUSTERS[@]}"; do
