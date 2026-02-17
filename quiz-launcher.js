@@ -5,17 +5,17 @@
  * Centralized config for easy updates
  */
 const QUIZ_CONFIG = {
-    // Question sources - UPDATE THESE PATHS
+    // Question sources
     questionBanks: {
-        // Option 1: GitHub raw URLs (current setup)
-        github: {
-            baseUrl: 'https://raw.githubusercontent.com/artificialiman/Questt/refs/heads/main',
+        // Primary: Local files in 100Days repo root (permanent fallback)
+        local: {
+            baseUrl: '.',
             subjects: {
                 'Physics': 'JAMB_Physics_Q1-35.txt',
                 'Mathematics': 'JAMB_Mathematics_Q1-35.txt',
                 'English': 'JAMB_English_Q1-35.txt',
                 'Chemistry': 'JAMB_Chemistry_Q1-35.txt',
-                'Biology': 'JAMB_Biology_Q1-35.txt', // Add when ready
+                'Biology': 'JAMB_Biology_Q1-35.txt',
                 'Literature': 'JAMB_Literature_Q1-35.txt',
                 'Government': 'JAMB_Government_Q1-35.txt',
                 'CRS': 'JAMB_CRS_Q1-35.txt',
@@ -25,29 +25,27 @@ const QUIZ_CONFIG = {
             }
         },
         
-        // Option 2: Local files (if you move questions to project)
-        local: {
-            baseUrl: './questions', // Relative path
+        // Secondary: Questt repo (fresh questions when available)
+        github: {
+            baseUrl: 'https://raw.githubusercontent.com/artificialiman/Questt/refs/heads/main',
             subjects: {
-                'Physics': 'physics.txt',
-                'Mathematics': 'mathematics.txt',
-                'English': 'english.txt',
-                'Chemistry': 'chemistry.txt'
-            }
-        },
-        
-        // Option 3: Separate question bank repo
-        questionBank: {
-            baseUrl: 'https://raw.githubusercontent.com/artificialiman/question-bank/main',
-            subjects: {
-                'Physics': 'physics/jamb-q1-35.txt',
-                'Mathematics': 'mathematics/jamb-q1-35.txt'
+                'Physics': 'JAMB_Physics_Q1-35.txt',
+                'Mathematics': 'JAMB_Mathematics_Q1-35.txt',
+                'English': 'JAMB_English_Q1-35.txt',
+                'Chemistry': 'JAMB_Chemistry_Q1-35.txt',
+                'Biology': 'JAMB_Biology_Q1-35.txt',
+                'Literature': 'JAMB_Literature_Q1-35.txt',
+                'Government': 'JAMB_Government_Q1-35.txt',
+                'CRS': 'JAMB_CRS_Q1-35.txt',
+                'Commerce': 'JAMB_Commerce_Q1-35.txt',
+                'Accounting': 'JAMB_Accounting_Q1-35.txt',
+                'Economics': 'JAMB_Economics_Q1-35.txt'
             }
         }
     },
     
-    // Active source - CHANGE THIS to switch between sources
-    activeSource: 'github', // 'github' | 'local' | 'questionBank'
+    // Fallback order: try local first, then github
+    fallbackOrder: ['local', 'github'],
     
     // Quiz settings
     duration: 900, // 15 minutes in seconds
@@ -84,6 +82,11 @@ const QUIZ_CONFIG = {
                 name: 'Commercial Cluster B',
                 subjects: ['English', 'Mathematics', 'Economics', 'Government'],
                 description: 'For Economics, Finance'
+            },
+            {
+                name: 'Commercial Cluster C',
+                subjects: ['English', 'Economics', 'Government', 'Commerce'],
+                description: 'For Public Admin, Business'
             }
         ]
     }
@@ -91,7 +94,7 @@ const QUIZ_CONFIG = {
 
 /**
  * Quiz Launcher Class
- * Handles loading questions from configured sources
+ * Handles loading questions with fallback chain
  */
 class QuizLauncher {
     constructor(config = QUIZ_CONFIG) {
@@ -100,24 +103,50 @@ class QuizLauncher {
     }
     
     /**
-     * Get URL for a subject based on active source
+     * Get URL for a subject from specific source
      */
-    getQuestionUrl(subject) {
-        const source = this.config.questionBanks[this.config.activeSource];
+    getQuestionUrl(subject, sourceName) {
+        const source = this.config.questionBanks[sourceName];
         if (!source) {
-            throw new Error(`Invalid source: ${this.config.activeSource}`);
+            throw new Error(`Invalid source: ${sourceName}`);
         }
         
         const filename = source.subjects[subject];
         if (!filename) {
-            throw new Error(`Subject "${subject}" not found in ${this.config.activeSource} source`);
+            throw new Error(`Subject "${subject}" not found in ${sourceName} source`);
         }
         
         return `${source.baseUrl}/${filename}`;
     }
     
     /**
-     * Load questions for a single subject
+     * Try to load from a specific source
+     */
+    async tryLoadFromSource(subject, sourceName) {
+        try {
+            const url = this.getQuestionUrl(subject, sourceName);
+            console.log(`Trying ${sourceName}: ${url}`);
+            
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            
+            const text = await response.text();
+            const parser = new QuestionParser();
+            const questions = parser.parse(text, subject);
+            
+            console.log(`✓ Loaded ${questions.length} ${subject} questions from ${sourceName}`);
+            return questions;
+            
+        } catch (error) {
+            console.warn(`Failed to load ${subject} from ${sourceName}:`, error.message);
+            return null;
+        }
+    }
+    
+    /**
+     * Load questions for a single subject with fallback chain
      */
     async loadSubject(subject) {
         // Check cache first
@@ -126,29 +155,18 @@ class QuizLauncher {
             return this.cache[subject];
         }
         
-        try {
-            const url = this.getQuestionUrl(subject);
-            console.log(`Loading ${subject} from: ${url}`);
-            
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        // Try each source in fallback order
+        for (const sourceName of this.config.fallbackOrder) {
+            const questions = await this.tryLoadFromSource(subject, sourceName);
+            if (questions && questions.length > 0) {
+                // Cache successful load
+                this.cache[subject] = questions;
+                return questions;
             }
-            
-            const text = await response.text();
-            const parser = new QuestionParser();
-            const questions = parser.parse(text, subject);
-            
-            // Cache for future use
-            this.cache[subject] = questions;
-            
-            console.log(`✓ Loaded ${questions.length} ${subject} questions`);
-            return questions;
-            
-        } catch (error) {
-            console.error(`Failed to load ${subject}:`, error);
-            throw error;
         }
+        
+        // All sources failed
+        throw new Error(`Failed to load ${subject} from all sources: ${this.config.fallbackOrder.join(', ')}`);
     }
     
     /**

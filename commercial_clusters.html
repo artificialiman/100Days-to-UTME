@@ -14,8 +14,8 @@
     <!-- Animated Background -->
     <div class="animated-bg"></div>
 
-    <!-- Loading Overlay -->
-    <div id="loading-overlay" class="loading-overlay">
+    <!-- Loading Overlay (Skeleton) -->
+    <div id="loading-overlay" class="loading-overlay hidden">
         <div class="text-center">
             <div class="skeleton" style="width: 100px; height: 100px; border-radius: 50%; margin: 0 auto var(--space-md);"></div>
             <div class="skeleton" style="width: 200px; height: 20px; margin: 0 auto var(--space-sm);"></div>
@@ -26,7 +26,7 @@
     <!-- Draggable Timer -->
     <div class="timer-container" id="timer-container">
         <div class="timer-widget" id="timer-widget">
-            <div class="timer-display">15:00</div>
+            <div class="timer-display">60:00</div>
             <div class="timer-label">Practice Test</div>
             <div class="timer-progress">
                 <div class="timer-progress-bar"></div>
@@ -59,7 +59,7 @@
             <span class="breadcrumb-separator">›</span>
             <span class="breadcrumb-item">Commercial</span>
             <span class="breadcrumb-separator">›</span>
-            <span class="breadcrumb-current">Choose Cluster</span>
+            <span class="breadcrumb-current">Choose Practice Mode</span>
         </div>
     </div>
 
@@ -72,7 +72,7 @@
             </div>
             <div class="progress-step active">
                 <div class="step-number">2</div>
-                <div class="step-label">Select Cluster</div>
+                <div class="step-label">Select Mode</div>
             </div>
             <div class="progress-step">
                 <div class="step-number">3</div>
@@ -86,21 +86,31 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container-narrow">
-            <h1 class="hero-title font-luxury">Commercial Clusters</h1>
+            <h1 class="hero-title font-luxury">Commercial Practice</h1>
             <p class="hero-subtitle">
-                Build your business acumen. Choose the cluster that aligns with your career goals.
+                Choose between full cluster exams or individual subject practice.
             </p>
+            <div class="text-center mt-lg">
+                <span class="badge bg-teal-100 text-teal-700 px-4 py-2 rounded-full text-sm font-semibold">
+                    <i class="fas fa-calendar-day"></i> Day <span id="current-day-range">Loading...</span>
+                </span>
+            </div>
         </div>
     </section>
 
     <!-- Cluster Selection -->
     <section class="container-narrow py-xl">
+        <h2 class="text-3xl font-bold mb-xl text-center">
+            <i class="fas fa-layer-group"></i> Cluster Exams
+        </h2>
+        <p class="text-center text-muted mb-2xl">Full JAMB-style exam with 4 subjects (140 questions, 60 minutes)</p>
+        
         <div class="cluster-grid">
-            <!-- Cluster 1: Eng/Acc/Com/Eco -->
-            <div class="card cluster-card" data-cluster="eace">
+            <!-- Cluster 1: Commercial Cluster A -->
+            <div class="card cluster-card scale-in delay-100">
                 <div class="card-body">
                     <div class="flex items-center justify-between mb-lg">
-                        <h3 class="text-xl font-semibold">Accounting & Finance</h3>
+                        <h3 class="text-xl font-semibold">Accounting & Business</h3>
                         <span class="badge bg-teal-100 text-teal-700 px-3 py-1 rounded-full text-sm font-semibold">
                             <i class="fas fa-calculator"></i> EACE
                         </span>
@@ -115,24 +125,31 @@
                         <div class="text-sm font-semibold mb-sm">Perfect for:</div>
                         <ul class="text-sm text-muted space-y-1">
                             <li>• Accounting</li>
-                            <li>• Banking & Finance</li>
                             <li>• Business Administration</li>
-                            <li>• Insurance</li>
-                            <li>• Taxation</li>
                         </ul>
                     </div>
-                    <button class="btn btn-primary w-full mt-lg" data-cluster="eace">
-                        <i class="fas fa-play"></i> Start Practice Test
+                    <div class="flex gap-sm mt-lg text-sm text-muted">
+                        <div class="flex items-center gap-xs">
+                            <i class="fas fa-list"></i>
+                            <span>140 Questions</span>
+                        </div>
+                        <div class="flex items-center gap-xs">
+                            <i class="fas fa-clock"></i>
+                            <span>60 Minutes</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-commerce w-full mt-lg" onclick="launchQuiz('commercial-cluster-a')">
+                        <i class="fas fa-play"></i> Start Cluster Exam
                     </button>
                 </div>
             </div>
 
-            <!-- Cluster 2: Eng/Math/Eco/Gov -->
-            <div class="card cluster-card" data-cluster="emeg">
+            <!-- Cluster 2: Commercial Cluster B -->
+            <div class="card cluster-card scale-in delay-150">
                 <div class="card-body">
                     <div class="flex items-center justify-between mb-lg">
-                        <h3 class="text-xl font-semibold">Economics & Policy</h3>
-                        <span class="badge bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold">
+                        <h3 class="text-xl font-semibold">Economics & Finance</h3>
+                        <span class="badge bg-teal-100 text-teal-700 px-3 py-1 rounded-full text-sm font-semibold">
                             <i class="fas fa-chart-line"></i> EMEG
                         </span>
                     </div>
@@ -146,24 +163,31 @@
                         <div class="text-sm font-semibold mb-sm">Perfect for:</div>
                         <ul class="text-sm text-muted space-y-1">
                             <li>• Economics</li>
-                            <li>• Public Administration</li>
-                            <li>• Development Studies</li>
-                            <li>• Statistics (Commercial)</li>
-                            <li>• Actuarial Science</li>
+                            <li>• Banking & Finance</li>
                         </ul>
                     </div>
-                    <button class="btn btn-primary w-full mt-lg" data-cluster="emeg">
-                        <i class="fas fa-play"></i> Start Practice Test
+                    <div class="flex gap-sm mt-lg text-sm text-muted">
+                        <div class="flex items-center gap-xs">
+                            <i class="fas fa-list"></i>
+                            <span>140 Questions</span>
+                        </div>
+                        <div class="flex items-center gap-xs">
+                            <i class="fas fa-clock"></i>
+                            <span>60 Minutes</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-commerce w-full mt-lg" onclick="launchQuiz('commercial-cluster-b')">
+                        <i class="fas fa-play"></i> Start Cluster Exam
                     </button>
                 </div>
             </div>
 
-            <!-- Cluster 3: Eng/Eco/Gov/Com -->
-            <div class="card cluster-card" data-cluster="eegc">
+            <!-- Cluster 3: Commercial Cluster C -->
+            <div class="card cluster-card scale-in delay-200">
                 <div class="card-body">
                     <div class="flex items-center justify-between mb-lg">
-                        <h3 class="text-xl font-semibold">Business & Management</h3>
-                        <span class="badge bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-semibold">
+                        <h3 class="text-xl font-semibold">Public Admin & Business</h3>
+                        <span class="badge bg-teal-100 text-teal-700 px-3 py-1 rounded-full text-sm font-semibold">
                             <i class="fas fa-briefcase"></i> EEGC
                         </span>
                     </div>
@@ -176,101 +200,182 @@
                     <div class="mt-lg">
                         <div class="text-sm font-semibold mb-sm">Perfect for:</div>
                         <ul class="text-sm text-muted space-y-1">
+                            <li>• Public Administration</li>
                             <li>• Business Management</li>
-                            <li>• Marketing</li>
-                            <li>• Entrepreneurship</li>
-                            <li>• Industrial Relations</li>
-                            <li>• Cooperative Economics</li>
                         </ul>
                     </div>
-                    <button class="btn btn-primary w-full mt-lg" data-cluster="eegc">
-                        <i class="fas fa-play"></i> Start Practice Test
+                    <div class="flex gap-sm mt-lg text-sm text-muted">
+                        <div class="flex items-center gap-xs">
+                            <i class="fas fa-list"></i>
+                            <span>140 Questions</span>
+                        </div>
+                        <div class="flex items-center gap-xs">
+                            <i class="fas fa-clock"></i>
+                            <span>60 Minutes</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-commerce w-full mt-lg" onclick="launchQuiz('commercial-cluster-c')">
+                        <i class="fas fa-play"></i> Start Cluster Exam
                     </button>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- Quick Info Card -->
-        <div class="card mt-3xl">
-            <div class="card-body">
-                <h3 class="text-lg font-semibold mb-md">
-                    <i class="fas fa-chart-pie text-success"></i> Commercial Stream Advantage
-                </h3>
-                <div class="grid grid-2">
-                    <div>
-                        <div class="text-sm font-semibold mb-sm">Core Competencies</div>
-                        <ul class="text-sm text-muted space-y-1">
-                            <li>• Financial literacy & analysis</li>
-                            <li>• Economic theory & application</li>
-                            <li>• Business strategy & planning</li>
-                            <li>• Quantitative reasoning</li>
-                        </ul>
+    <!-- Divider -->
+    <div class="container-narrow">
+        <div class="flex items-center gap-md my-3xl">
+            <div class="flex-1 border-t border-neutral-300"></div>
+            <span class="text-muted font-semibold">OR</span>
+            <div class="flex-1 border-t border-neutral-300"></div>
+        </div>
+    </div>
+
+    <!-- Individual Subjects -->
+    <section class="container-narrow py-xl">
+        <h2 class="text-3xl font-bold mb-xl text-center">
+            <i class="fas fa-book"></i> Individual Subjects
+        </h2>
+        <p class="text-center text-muted mb-2xl">Focus on one subject at a time (35 questions, 15 minutes)</p>
+        
+        <div class="grid grid-4 gap-lg">
+            <!-- English -->
+            <div class="card scale-in delay-100">
+                <div class="card-body text-center">
+                    <div class="text-5xl mb-md">📖</div>
+                    <h3 class="text-lg font-semibold mb-sm">English Language</h3>
+                    <div class="flex justify-center gap-sm mb-lg text-sm text-muted">
+                        <div class="flex items-center gap-xs">
+                            <i class="fas fa-list-ol"></i>
+                            <span>35 Q</span>
+                        </div>
+                        <div class="flex items-center gap-xs">
+                            <i class="fas fa-clock"></i>
+                            <span>15 min</span>
+                        </div>
                     </div>
-                    <div>
-                        <div class="text-sm font-semibold mb-sm">Career Opportunities</div>
-                        <ul class="text-sm text-muted space-y-1">
-                            <li>• Financial services sector</li>
-                            <li>• Corporate management</li>
-                            <li>• Government & policy analysis</li>
-                            <li>• Entrepreneurship & startups</li>
-                        </ul>
+                    <button class="btn btn-primary w-full btn-sm" onclick="launchQuiz('english')">
+                        <i class="fas fa-play"></i> Start
+                    </button>
+                </div>
+            </div>
+
+            <!-- Accounting -->
+            <div class="card scale-in delay-150">
+                <div class="card-body text-center">
+                    <div class="text-5xl mb-md">📊</div>
+                    <h3 class="text-lg font-semibold mb-sm">Accounting</h3>
+                    <div class="flex justify-center gap-sm mb-lg text-sm text-muted">
+                        <div class="flex items-center gap-xs">
+                            <i class="fas fa-list-ol"></i>
+                            <span>35 Q</span>
+                        </div>
+                        <div class="flex items-center gap-xs">
+                            <i class="fas fa-clock"></i>
+                            <span>15 min</span>
+                        </div>
                     </div>
+                    <button class="btn btn-primary w-full btn-sm" onclick="launchQuiz('accounting')">
+                        <i class="fas fa-play"></i> Start
+                    </button>
+                </div>
+            </div>
+
+            <!-- Commerce -->
+            <div class="card scale-in delay-200">
+                <div class="card-body text-center">
+                    <div class="text-5xl mb-md">💼</div>
+                    <h3 class="text-lg font-semibold mb-sm">Commerce</h3>
+                    <div class="flex justify-center gap-sm mb-lg text-sm text-muted">
+                        <div class="flex items-center gap-xs">
+                            <i class="fas fa-list-ol"></i>
+                            <span>35 Q</span>
+                        </div>
+                        <div class="flex items-center gap-xs">
+                            <i class="fas fa-clock"></i>
+                            <span>15 min</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary w-full btn-sm" onclick="launchQuiz('commerce')">
+                        <i class="fas fa-play"></i> Start
+                    </button>
+                </div>
+            </div>
+
+            <!-- Economics -->
+            <div class="card scale-in delay-250">
+                <div class="card-body text-center">
+                    <div class="text-5xl mb-md">💰</div>
+                    <h3 class="text-lg font-semibold mb-sm">Economics</h3>
+                    <div class="flex justify-center gap-sm mb-lg text-sm text-muted">
+                        <div class="flex items-center gap-xs">
+                            <i class="fas fa-list-ol"></i>
+                            <span>35 Q</span>
+                        </div>
+                        <div class="flex items-center gap-xs">
+                            <i class="fas fa-clock"></i>
+                            <span>15 min</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary w-full btn-sm" onclick="launchQuiz('economics')">
+                        <i class="fas fa-play"></i> Start
+                    </button>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- Subject Combo Guide -->
-        <div class="card mt-xl">
+    <!-- Quick Info Card -->
+    <section class="container-narrow py-xl">
+        <div class="card fade-in-up">
             <div class="card-body">
                 <h3 class="text-lg font-semibold mb-md">
-                    <i class="fas fa-question-circle text-info"></i> Which Cluster Should I Choose?
+                    <i class="fas fa-info-circle text-info"></i> How It Works
                 </h3>
-                <div class="space-y-md">
-                    <div class="flex items-start gap-md">
-                        <div class="text-2xl">📊</div>
-                        <div>
-                            <div class="text-sm font-semibold">Choose EACE if...</div>
-                            <p class="text-sm text-muted">You're strong in calculations and want professional certifications (ICAN, ACCA). Perfect for future accountants and financial analysts.</p>
-                        </div>
+                <div class="grid grid-2">
+                    <div>
+                        <div class="text-sm font-semibold mb-sm">Cluster Exams</div>
+                        <ul class="text-sm text-muted space-y-1">
+                            <li>• 140 questions total (35 per subject)</li>
+                            <li>• 60 minutes total time</li>
+                            <li>• JAMB exam simulation</li>
+                            <li>• All subjects combined</li>
+                        </ul>
                     </div>
-                    <div class="flex items-start gap-md">
-                        <div class="text-2xl">📈</div>
-                        <div>
-                            <div class="text-sm font-semibold">Choose EMEG if...</div>
-                            <p class="text-sm text-muted">You excel at mathematics and want to understand policy. Ideal for economists, statisticians, and policy researchers.</p>
-                        </div>
+                    <div>
+                        <div class="text-sm font-semibold mb-sm">Individual Subjects</div>
+                        <ul class="text-sm text-muted space-y-1">
+                            <li>• 35 questions per subject</li>
+                            <li>• 15 minutes per subject</li>
+                            <li>• Focus on weak areas</li>
+                            <li>• Quick practice sessions</li>
+                        </ul>
                     </div>
-                    <div class="flex items-start gap-md">
-                        <div class="text-2xl">💼</div>
-                        <div>
-                            <div class="text-sm font-semibold">Choose EEGC if...</div>
-                            <p class="text-sm text-muted">You're interested in broad business concepts and management. Great for aspiring entrepreneurs and business strategists.</p>
+                </div>
+                <div class="mt-lg pt-lg border-t border-neutral-200">
+                    <div class="text-sm font-semibold mb-sm">Features (All Modes)</div>
+                    <div class="flex flex-wrap gap-md text-sm text-muted">
+                        <div class="flex items-center gap-xs">
+                            <i class="fas fa-sync text-accent"></i>
+                            <span>New questions every 2 days</span>
+                        </div>
+                        <div class="flex items-center gap-xs">
+                            <i class="fas fa-calculator text-accent"></i>
+                            <span>Built-in calculator</span>
+                        </div>
+                        <div class="flex items-center gap-xs">
+                            <i class="fas fa-flag text-accent"></i>
+                            <span>Flag for review</span>
+                        </div>
+                        <div class="flex items-center gap-xs">
+                            <i class="fas fa-chart-bar text-accent"></i>
+                            <span>Instant scores</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- Error Modal -->
-    <div id="error-modal" class="modal-overlay hidden">
-        <div class="modal modal-sm">
-            <div class="card">
-                <div class="card-header">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-xl font-semibold">⚠️ Oops!</h3>
-                        <button class="btn btn-ghost btn-sm" data-close-modal="error-modal">×</button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <p class="text-muted" id="error-message">Something went wrong. Please try again.</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn btn-primary w-full" data-close-modal="error-modal">Got it</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Coming Soon Modal -->
     <div id="coming-soon-modal" class="modal-overlay hidden">
@@ -279,14 +384,14 @@
                 <div class="card-header">
                     <div class="flex justify-between items-center">
                         <h3 class="text-xl font-semibold">🚀 Coming Soon</h3>
-                        <button class="btn btn-ghost btn-sm" data-close-modal="coming-soon-modal">×</button>
+                        <button class="btn btn-ghost btn-sm" onclick="closeModal('coming-soon-modal')">×</button>
                     </div>
                 </div>
                 <div class="card-body">
                     <p class="text-muted" id="coming-soon-message">This feature is coming soon!</p>
                 </div>
                 <div class="card-footer">
-                    <button class="btn btn-primary w-full" data-close-modal="coming-soon-modal">Got it</button>
+                    <button class="btn btn-primary w-full" onclick="closeModal('coming-soon-modal')">Got it</button>
                 </div>
             </div>
         </div>
@@ -341,6 +446,107 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        // Configuration
+        const START_DATE = new Date('2026-02-18');
+        let currentQuiz = null;
+
+        // Calculate current period and day range
+        function calculateCurrentPeriod() {
+            const now = new Date();
+            const diffTime = Math.abs(now - START_DATE);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            const period = Math.floor(diffDays / 2) + 1;
+            const dayStart = (period * 2) - 1;
+            const dayEnd = period * 2;
+            
+            return {
+                period: period,
+                dayRange: `${dayStart}-${dayEnd}`,
+                dayStart: dayStart,
+                dayEnd: dayEnd
+            };
+        }
+
+        // Check if quiz file exists
+        async function checkQuizAvailability(quizName) {
+            try {
+                const response = await fetch(`quiz-${quizName}.html`, { method: 'HEAD' });
+                return response.ok;
+            } catch (error) {
+                console.error('Error checking quiz availability:', error);
+                return false;
+            }
+        }
+
+        // Launch quiz with silent fallback to existing quiz.html
+        async function launchQuiz(quizName) {
+            currentQuiz = quizName;
+            
+            // Show loading skeleton
+            document.getElementById('loading-overlay').classList.remove('hidden');
+            
+            // Check availability
+            const isAvailable = await checkQuizAvailability(quizName);
+            
+            // Hide loading skeleton
+            document.getElementById('loading-overlay').classList.add('hidden');
+            
+            if (isAvailable) {
+                // Navigate to generated quiz
+                window.location.href = `quiz-${quizName}.html`;
+            } else {
+                // Silent fallback to existing quiz with subject parameter
+                if (quizName.includes('cluster')) {
+                    // For clusters, use stream parameter
+                    const stream = 'commercial';
+                    let cluster = '0';
+                    if (quizName.includes('cluster-b')) cluster = '1';
+                    if (quizName.includes('cluster-c')) cluster = '2';
+                    window.location.href = `quiz.html?stream=${stream}&cluster=${cluster}`;
+                } else {
+                    // For individual subjects
+                    window.location.href = `quiz.html?subject=${quizName}`;
+                }
+            }
+        }
+
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        // Show coming soon modal
+        function showComingSoonModal(message) {
+            document.getElementById('coming-soon-message').textContent = message;
+            document.getElementById('coming-soon-modal').classList.remove('hidden');
+        }
+
+        // Update current day range on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const periodInfo = calculateCurrentPeriod();
+            document.getElementById('current-day-range').textContent = periodInfo.dayRange;
+            
+            // Handle coming soon features
+            document.querySelectorAll('[data-coming-soon]').forEach(element => {
+                element.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const feature = element.getAttribute('data-coming-soon');
+                    showComingSoonModal(`${feature} feature is coming soon!`);
+                });
+            });
+        });
+
+        // Close modals when clicking overlay
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.classList.add('hidden');
+                }
+            });
+        });
+    </script>
 
     <script src="app.js"></script>
 </body>
