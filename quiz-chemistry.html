@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Chemistry - JAMB Practice Test</title>
+    <!-- Generated: Period 1, Day 1-2, 2026-02-17 -->
+    <!-- Validation: PARTIAL -->
+    <!-- Subjects: Chemistry -->
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="quiz-styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="quiz-body">
+    
+    <!-- Error/Warning Banner -->
+    <div id="error-banner" class="error-banner hidden">
+        <div class="error-content">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div>
+                <h3 id="error-title">Notice</h3>
+                <p id="error-message"></p>
+            </div>
+            <button class="btn-icon" onclick="closeBanner()" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Fallback Container (Previous Quiz) -->
+    <div id="fallback-container" class="fallback-container hidden">
+        <div class="fallback-content">
+            <div class="fallback-icon">
+                <i class="fas fa-hourglass-half"></i>
+            </div>
+            <h2>Today's Quiz is Being Prepared</h2>
+            <p id="fallback-message">We're generating your Day 1-2 quiz. Practice yesterday's quiz while waiting.</p>
+            <div class="fallback-timer">
+                <p>Check back in: <span id="fallback-countdown">15:00</span></p>
+            </div>
+            <button class="btn btn-primary" onclick="loadPreviousQuiz()">
+                <i class="fas fa-play"></i> Practice Previous Quiz
+            </button>
+            <button class="btn btn-secondary" onclick="location.reload()">
+                <i class="fas fa-sync"></i> Refresh Page
+            </button>
+        </div>
+    </div>
+    
+    <!-- Fixed Header with Timer -->
+    <header class="quiz-header">
+        <div class="quiz-header-container">
+            <!-- Left: Subject Info -->
+            <div class="quiz-header-left">
+                <button class="btn-icon" id="menuBtn" aria-label="Menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="subject-info">
+                    <div class="subject-name" id="subjectName">Chemistry</div>
+                    <div class="subject-meta">Day 1-2 • Question <span id="currentQuestionNum">1</span> of <span id="totalQuestions">35</span></div>
+                </div>
+            </div>
+            
+            <!-- Center: Timer -->
+            <div class="quiz-timer-container">
+                <div class="timer-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="timer-display" id="timerDisplay">15:00</div>
+                <div class="timer-progress-ring">
+                    <svg width="60" height="60">
+                        <circle cx="30" cy="30" r="26" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="4"/>
+                        <circle id="timerProgressCircle" cx="30" cy="30" r="26" fill="none" stroke="var(--accent)" 
+                                stroke-width="4" stroke-dasharray="163.36" stroke-dashoffset="0" 
+                                transform="rotate(-90 30 30)" stroke-linecap="round"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <!-- Right: Actions -->
+            <div class="quiz-header-right">
+                <button class="btn-icon" id="calculatorBtn" aria-label="Calculator">
+                    <i class="fas fa-calculator"></i>
+                </button>
+                <button class="btn btn-sm btn-danger" id="submitBtn">
+                    Submit Test
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Quiz Container -->
+    <div class="quiz-container">
+        
+        <!-- Sidebar: Question Navigator -->
+        <aside class="quiz-sidebar" id="quizSidebar">
+            <div class="sidebar-header">
+                <h3>Question Navigator</h3>
+                <button class="btn-icon btn-close-sidebar" id="closeSidebar" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="sidebar-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="answeredCount">0</div>
+                    <div class="stat-label">Answered</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="unansweredCount">35</div>
+                    <div class="stat-label">Unanswered</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="flaggedCount">0</div>
+                    <div class="stat-label">Flagged</div>
+                </div>
+            </div>
+            
+            <div class="question-palette" id="questionPalette">
+                <!-- Generated by JS -->
+            </div>
+            
+            <div class="sidebar-legend">
+                <div class="legend-item">
+                    <span class="legend-dot answered"></span>
+                    <span>Answered</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot current"></span>
+                    <span>Current</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot flagged"></span>
+                    <span>Flagged</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot unanswered"></span>
+                    <span>Unanswered</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Question Area -->
+        <main class="quiz-main">
+            <!-- Question Card -->
+            <div class="question-card" id="questionCard">
+                <div class="question-header">
+                    <div class="question-number">
+                        Question <span id="questionNumber">1</span>
+                    </div>
+                    <button class="btn-flag" id="flagBtn" aria-label="Flag question">
+                        <i class="far fa-flag"></i>
+                        <span>Flag</span>
+                    </button>
+                </div>
+                
+                <div class="question-text" id="questionText">
+                    Loading question...
+                </div>
+                
+                <div class="options-container" id="optionsContainer">
+                    <!-- Generated by JS -->
+                </div>
+
+                <!-- Explanation (Hidden until review mode) -->
+                <div class="question-explanation hidden" id="questionExplanation">
+                    <div class="explanation-header">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>Explanation</span>
+                    </div>
+                    <div class="explanation-content" id="explanationContent"></div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="quiz-navigation">
+                <button class="btn btn-secondary" id="prevBtn" disabled>
+                    <i class="fas fa-arrow-left"></i>
+                    Previous
+                </button>
+                
+                <button class="btn btn-secondary" id="clearBtn">
+                    <i class="fas fa-eraser"></i>
+                    Clear Response
+                </button>
+                
+                <button class="btn btn-primary" id="nextBtn">
+                    Next
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Mobile Question Palette -->
+    <div class="mobile-palette-trigger" id="mobilePaletteBtn">
+        <i class="fas fa-th"></i>
+        <span>Questions</span>
+    </div>
+
+    <!-- Modals (Submit, Calculator, Time's Up) -->
+    <div class="modal-overlay hidden" id="submitModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Submit Test?</h3>
+                <button class="btn-icon" id="closeSubmitModal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="submit-summary">
+                    <div class="summary-item">
+                        <span class="summary-label">Total Questions:</span>
+                        <span class="summary-value" id="modalTotalQuestions">35</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Answered:</span>
+                        <span class="summary-value answered-text" id="modalAnsweredCount">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Unanswered:</span>
+                        <span class="summary-value warning-text" id="modalUnansweredCount">35</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Time Remaining:</span>
+                        <span class="summary-value" id="modalTimeRemaining">15:00</span>
+                    </div>
+                </div>
+                <div class="warning-message">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>You cannot change your answers after submission.</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelSubmitBtn">Cancel</button>
+                <button class="btn btn-danger" id="confirmSubmitBtn">
+                    <i class="fas fa-check"></i> Submit Test
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay hidden" id="calculatorModal">
+        <div class="modal calculator-modal">
+            <div class="modal-header">
+                <h3>Calculator</h3>
+                <button class="btn-icon" id="closeCalculatorModal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="calculator">
+                    <input type="text" class="calculator-display" id="calcDisplay" value="0" readonly>
+                    <div class="calculator-buttons">
+                        <button class="calc-btn" data-action="clear">C</button>
+                        <button class="calc-btn" data-action="delete">←</button>
+                        <button class="calc-btn" data-action="divide">÷</button>
+                        <button class="calc-btn" data-action="multiply">×</button>
+                        <button class="calc-btn" data-value="7">7</button>
+                        <button class="calc-btn" data-value="8">8</button>
+                        <button class="calc-btn" data-value="9">9</button>
+                        <button class="calc-btn" data-action="subtract">−</button>
+                        <button class="calc-btn" data-value="4">4</button>
+                        <button class="calc-btn" data-value="5">5</button>
+                        <button class="calc-btn" data-value="6">6</button>
+                        <button class="calc-btn" data-action="add">+</button>
+                        <button class="calc-btn" data-value="1">1</button>
+                        <button class="calc-btn" data-value="2">2</button>
+                        <button class="calc-btn" data-value="3">3</button>
+                        <button class="calc-btn calc-equals" data-action="equals" style="grid-row: span 2;">=</button>
+                        <button class="calc-btn" data-value="0" style="grid-column: span 2;">0</button>
+                        <button class="calc-btn" data-value=".">.</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay hidden" id="timeUpModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Time's Up!</h3>
+            </div>
+            <div class="modal-body">
+                <div class="time-up-message">
+                    <i class="fas fa-hourglass-end"></i>
+                    <p>Your test time has expired. Your answers have been automatically submitted.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="viewResultsBtn">View Results</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Embedded Quiz Data -->
+    <script>
+        // Quiz metadata
+        window.quizMetadata = {
+            period: 1,
+            days: "1-2",
+            subject: "Chemistry",
+            generatedDate: "2026-02-17",
+            validationStatus: "PARTIAL",
+            totalQuestions: 35,
+            timerMinutes: 15
+        };
+
+        // Question data - REPLACED BY WORKFLOW
+        window.quizData = [{"id": 1, "text": "An element X has atomic number 17 and mass number 35. The number of neutrons is:", "optionA": "17", "optionB": "18", "optionC": "35", "optionD": "52", "answer": "B"}, {"id": 2, "text": "Which electronic configuration violates Hund&#39;s rule?", "optionA": "1s² 2s² 2p⁶", "optionB": "1s² 2s² 2p⁴ (↑↓ ↑ ↑)", "optionC": "1s² 2s² 2p⁴ (↑↓ ↑↓ ↑)", "optionD": "1s² 2s² 2p³ (↑ ↑ ↑)", "answer": "C"}, {"id": 3, "text": "The ion with electronic configuration 1s² 2s² 2p⁶ could be:", "optionA": "Na⁺ only", "optionB": "F⁻ only", "optionC": "Both Na⁺ and F⁻", "optionD": "Neither", "answer": "C"}, {"id": 4, "text": "Electronegativity increases across a period because:", "optionA": "Nuclear charge increases, atomic radius decreases", "optionB": "Shielding increases", "optionC": "Atomic radius increases", "optionD": "Ionization energy decreases", "answer": "A"}, {"id": 5, "text": "The first ionization energy of magnesium is lower than sodium because:", "optionA": "This statement is FALSE (Na &lt; Mg)", "optionB": "Mg has more shielding", "optionC": "Mg has larger radius", "optionD": "Mg is a metal", "answer": "A"}, {"id": 6, "text": "Noble gases are unreactive because:", "optionA": "Full valence shell (stable octet)", "optionB": "High electronegativity", "optionC": "Large atomic radius", "optionD": "Low ionization energy", "answer": "A"}, {"id": 7, "text": "The bond angle in water (104.5°) is less than methane (109.5°) because:", "optionA": "Lone pairs repel more than bonding pairs", "optionB": "Oxygen is more electronegative", "optionC": "Hydrogen bonding", "optionD": "Water is polar", "answer": "A"}, {"id": 8, "text": "Which molecule is nonpolar despite having polar bonds?", "optionA": "CO₂ (linear, symmetrical)", "optionB": "H₂O", "optionC": "NH₃", "optionD": "HCl", "answer": "A"}, {"id": 9, "text": "The hybridization of carbon in CO₂ is:", "optionA": "sp", "optionB": "sp²", "optionC": "sp³", "optionD": "sp³d", "answer": "A"}, {"id": 10, "text": "Resonance structures of benzene show:", "optionA": "Electrons are delocalized (not fixed double bonds)", "optionB": "Molecule oscillates between structures", "optionC": "Double bonds alternate rapidly", "optionD": "Two different compounds exist", "answer": "A"}, {"id": 11, "text": "Hydrogen bonding is strongest between:", "optionA": "F-H···F (most electronegative)", "optionB": "O-H···O", "optionC": "N-H···N", "optionD": "C-H···O", "answer": "A"}, {"id": 12, "text": "The pH of 0.01 M HCl is:", "optionA": "2", "optionB": "1", "optionC": "0.01", "optionD": "12", "answer": "A"}, {"id": 13, "text": "A buffer solution resists pH change because:", "optionA": "Contains weak acid and its conjugate base", "optionB": "Contains strong acid", "optionC": "Is neutral", "optionD": "Has high concentration", "answer": "A"}, {"id": 14, "text": "The pH at equivalence point in strong acid-strong base titration is:", "optionA": "7", "optionB": "&lt;7", "optionC": "&gt;7", "optionD": "Depends on concentrations", "answer": "A"}, {"id": 15, "text": "Kw = [H⁺][OH⁻] = 10⁻¹⁴ at 25°C. At higher temperature, Kw:", "optionA": "Increases (ionization is endothermic)", "optionB": "Decreases", "optionC": "Stays constant", "optionD": "Becomes zero", "answer": "A"}, {"id": 16, "text": "The oxidation number of Cr in K₂Cr₂O₇ is:", "optionA": "+6", "optionB": "+7", "optionC": "+12", "optionD": "+14", "answer": "A"}, {"id": 17, "text": "In the reaction 2Fe²⁺ → 2Fe³⁺ + 2e⁻, iron is:", "optionA": "Oxidized (loses electrons)", "optionB": "Reduced", "optionC": "Oxidizing agent", "optionD": "Unchanged", "answer": "A"}, {"id": 18, "text": "The standard hydrogen electrode is assigned:", "optionA": "E° = 0.00 V (reference point)", "optionB": "E° = 1.00 V", "optionC": "E° = -1.00 V", "optionD": "E° = +0.76 V", "answer": "A"}, {"id": 19, "text": "In galvanic cell, the anode is:", "optionA": "Negative electrode (oxidation occurs)", "optionB": "Positive electrode", "optionC": "Where reduction occurs", "optionD": "Made of copper", "answer": "A"}, {"id": 20, "text": "Faraday&#39;s law: mass deposited is proportional to:", "optionA": "Charge passed (Q = nF)", "optionB": "Current only", "optionC": "Voltage", "optionD": "Resistance", "answer": "A"}, {"id": 21, "text": "Haber process produces ammonia at:", "optionA": "High pressure, moderate temperature, Fe catalyst", "optionB": "Low pressure, high temperature", "optionC": "Room conditions", "optionD": "High temperature only", "answer": "A"}, {"id": 22, "text": "In N₂ + 3H₂ ⇌ 2NH₃, adding more N₂:", "optionA": "Shifts equilibrium right (more NH₃)", "optionB": "Shifts left", "optionC": "No effect on equilibrium", "optionD": "Stops reaction", "answer": "A"}, {"id": 23, "text": "The equilibrium constant Kc for 2A ⇌ B is 4. For B ⇌ 2A, Kc is:", "optionA": "0.25 (1/4)", "optionB": "4", "optionC": "16", "optionD": "2", "answer": "A"}, {"id": 24, "text": "A reaction is spontaneous if:", "optionA": "ΔG &lt; 0", "optionB": "ΔH &lt; 0", "optionC": "ΔS &gt; 0", "optionD": "All of the above", "answer": "A"}, {"id": 25, "text": "Diamond is harder than graphite because:", "optionA": "3D network of strong C-C bonds vs 2D layers", "optionB": "Diamond has metallic bonding", "optionC": "Graphite has ionic bonding", "optionD": "Diamond has more electrons", "answer": "A"}, {"id": 26, "text": "The melting point of NaCl (ionic) is higher than I₂ (molecular) because:", "optionA": "Ionic bonds stronger than van der Waals forces", "optionB": "NaCl has more atoms", "optionC": "I₂ is covalent", "optionD": "NaCl is soluble in water", "answer": "A"}, {"id": 27, "text": "Transition metals show variable oxidation states because:", "optionA": "d electrons participate in bonding", "optionB": "They are large atoms", "optionC": "They are metals", "optionD": "They conduct electricity", "answer": "A"}, {"id": 28, "text": "Which is a Lewis acid?", "optionA": "BF₃ (electron deficient)", "optionB": "NH₃", "optionC": "H₂O", "optionD": "OH⁻", "answer": "A"}, {"id": 29, "text": "The pH of 10⁻⁸ M HCl is:", "optionA": "Approximately 7 (water ionization dominates)", "optionB": "Exactly 8", "optionC": "Exactly -8", "optionD": "14", "answer": "A"}, {"id": 30, "text": "Effusion rate of gas A is twice that of gas B. If M_A = 4, then M_B is:", "optionA": "16", "optionB": "8", "optionC": "2", "optionD": "1", "answer": "A"}, {"id": 31, "text": "Real gases deviate from ideal behavior at:", "optionA": "High pressure and low temperature", "optionB": "Low pressure and high temperature", "optionC": "All conditions equally", "optionD": "Never deviate", "answer": "A"}, {"id": 32, "text": "The van der Waals equation corrects ideal gas law for:", "optionA": "Molecular volume (b) and intermolecular forces (a)", "optionB": "Temperature only", "optionC": "Pressure only", "optionD": "Chemical reactions", "answer": "A"}, {"id": 33, "text": "Charcoal adsorbs gases because:", "optionA": "High surface area (porous structure)", "optionB": "It&#39;s black", "optionC": "It&#39;s solid", "optionD": "It&#39;s carbon", "answer": "A"}, {"id": 34, "text": "A catalyst increases reaction rate by:", "optionA": "Lowering activation energy", "optionB": "Increasing temperature", "optionC": "Increasing concentration", "optionD": "Shifting equilibrium", "answer": "A"}, {"id": 35, "text": "Rate = k[A]²[B]. If [A] doubles and [B] triples, rate:", "optionA": "Increases 12× (2² × 3)", "optionB": "Increases 6×", "optionC": "Doubles", "optionD": "Triples", "answer": "A"}];
+    </script>
+
+    <!-- Fisher-Yates Shuffle Algorithm -->
+    <script>
+        /**
+         * Fisher-Yates shuffle algorithm for option randomization
+         * @param {Object} question - Question object with options
+         * @returns {Object} - Shuffled options with correct answer index
+         */
+        function shuffleOptions(question) {
+            const options = [
+                { label: 'A', text: question.optionA, original: 'A' },
+                { label: 'B', text: question.optionB, original: 'B' },
+                { label: 'C', text: question.optionC, original: 'C' },
+                { label: 'D', text: question.optionD, original: 'D' }
+            ];
+            
+            const correctAnswer = question.answer; // e.g., 'B'
+            
+            // Fisher-Yates shuffle
+            for (let i = options.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [options[i], options[j]] = [options[j], options[i]];
+            }
+            
+            // Reassign display labels after shuffle
+            const shuffledOptions = options.map((opt, idx) => ({
+                displayLabel: String.fromCharCode(65 + idx), // A, B, C, D
+                text: opt.text,
+                original: opt.original
+            }));
+            
+            // Find new position of correct answer
+            const correctIndex = shuffledOptions.findIndex(opt => opt.original === correctAnswer);
+            const newCorrectLabel = shuffledOptions[correctIndex].displayLabel;
+            
+            return {
+                shuffledOptions: shuffledOptions,
+                correctAnswer: newCorrectLabel,
+                originalCorrectAnswer: correctAnswer
+            };
+        }
+    </script>
+
+    <!-- Quiz Validation & Initialization -->
+    <script>
+        // Validate quiz data on load
+        window.addEventListener('DOMContentLoaded', () => {
+            // Check if quiz data exists
+            if (!window.quizData || !Array.isArray(window.quizData)) {
+                showFallback('no-data');
+                return;
+            }
+            
+            // Check if quiz data is empty
+            if (window.quizData.length === 0) {
+                showFallback('empty-data');
+                return;
+            }
+            
+            // Filter valid questions only
+            const validQuestions = window.quizData.filter(q => 
+                q && 
+                q.text && 
+                q.optionA && q.optionB && q.optionC && q.optionD && 
+                q.answer && 
+                ['A', 'B', 'C', 'D'].includes(q.answer)
+            );
+            
+            // Check if we have partial data
+            if (validQuestions.length === 0) {
+                showFallback('invalid-data');
+                return;
+            }
+            
+            if (validQuestions.length < window.quizData.length) {
+                const missing = window.quizData.length - validQuestions.length;
+                showWarning(
+                    'Partial Quiz Available',
+                    `${validQuestions.length} out of ${window.quizData.length} questions are available. ${missing} questions had errors and were skipped.`
+                );
+            }
+            
+            // Update quiz data to valid questions only
+            window.quizData = validQuestions;
+            window.quizMetadata.totalQuestions = validQuestions.length;
+            
+            // Initialize quiz with validated data
+            initializeQuiz();
+        });
+
+        function showWarning(title, message) {
+            const banner = document.getElementById('error-banner');
+            const titleEl = document.getElementById('error-title');
+            const messageEl = document.getElementById('error-message');
+            
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+            banner.classList.remove('hidden');
+            banner.style.backgroundColor = '#fef3c7'; // Warning yellow
+            banner.querySelector('i').style.color = '#f59e0b';
+        }
+
+        function showError(title, message) {
+            const banner = document.getElementById('error-banner');
+            const titleEl = document.getElementById('error-title');
+            const messageEl = document.getElementById('error-message');
+            
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+            banner.classList.remove('hidden');
+            banner.style.backgroundColor = '#fee2e2'; // Error red
+            banner.querySelector('i').style.color = '#ef4444';
+        }
+
+        function closeBanner() {
+            document.getElementById('error-banner').classList.add('hidden');
+        }
+
+        function showFallback(reason) {
+            const container = document.getElementById('fallback-container');
+            const messageEl = document.getElementById('fallback-message');
+            
+            const messages = {
+                'no-data': `We're still generating your Day ${window.quizMetadata.days} quiz. Please check back in a few minutes.`,
+                'empty-data': `Your Day ${window.quizMetadata.days} quiz is being prepared. Practice yesterday's quiz while waiting.`,
+                'invalid-data': `There was an issue loading today's quiz. Please try refreshing or practice yesterday's quiz.`
+            };
+            
+            messageEl.textContent = messages[reason] || messages['no-data'];
+            container.classList.remove('hidden');
+            
+            // Hide main quiz interface
+            document.querySelector('.quiz-header').style.display = 'none';
+            document.querySelector('.quiz-container').style.display = 'none';
+            
+            // Start countdown
+            startFallbackCountdown();
+        }
+
+        function startFallbackCountdown() {
+            let seconds = 15 * 60; // 15 minutes
+            const countdownEl = document.getElementById('fallback-countdown');
+            
+            const timer = setInterval(() => {
+                if (seconds <= 0) {
+                    clearInterval(timer);
+                    countdownEl.textContent = '00:00';
+                    return;
+                }
+                
+                seconds--;
+                const mins = Math.floor(seconds / 60);
+                const secs = seconds % 60;
+                countdownEl.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function loadPreviousQuiz() {
+            const currentPeriod = window.quizMetadata.period;
+            const previousPeriod = currentPeriod - 1;
+            
+            if (previousPeriod < 1) {
+                alert('No previous quiz available. This is the first quiz!');
+                return;
+            }
+            
+            // Redirect to previous period's quiz
+            const currentFile = window.location.pathname.split('/').pop();
+            const previousFile = currentFile.replace(`period-${currentPeriod}`, `period-${previousPeriod}`);
+            
+            window.location.href = previousFile;
+        }
+
+        function initializeQuiz() {
+            // Quiz initialization code here
+            // This will be handled by existing quiz-app.js
+            console.log('Quiz initialized with', window.quizData.length, 'valid questions');
+        }
+    </script>
+
+    <!-- Load existing quiz scripts -->
+    <script src="question-parser.js"></script>
+    <script src="quiz-launcher.js"></script>
+    <script src="quiz-app.js"></script>
+</body>
+</html>

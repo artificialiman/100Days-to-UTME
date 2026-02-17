@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Commercial Cluster A - JAMB Practice Test</title>
+    <!-- Generated: Period 1, Day 1-2, 2026-02-17 -->
+    <!-- Validation: PARTIAL -->
+    <!-- Subjects: English, Accounting, Commerce -->
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="quiz-styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="quiz-body">
+    
+    <!-- Error/Warning Banner -->
+    <div id="error-banner" class="error-banner hidden">
+        <div class="error-content">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div>
+                <h3 id="error-title">Notice</h3>
+                <p id="error-message"></p>
+            </div>
+            <button class="btn-icon" onclick="closeBanner()" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Fallback Container (Previous Quiz) -->
+    <div id="fallback-container" class="fallback-container hidden">
+        <div class="fallback-content">
+            <div class="fallback-icon">
+                <i class="fas fa-hourglass-half"></i>
+            </div>
+            <h2>Today's Quiz is Being Prepared</h2>
+            <p id="fallback-message">We're generating your Day 1-2 quiz. Practice yesterday's quiz while waiting.</p>
+            <div class="fallback-timer">
+                <p>Check back in: <span id="fallback-countdown">15:00</span></p>
+            </div>
+            <button class="btn btn-primary" onclick="loadPreviousQuiz()">
+                <i class="fas fa-play"></i> Practice Previous Quiz
+            </button>
+            <button class="btn btn-secondary" onclick="location.reload()">
+                <i class="fas fa-sync"></i> Refresh Page
+            </button>
+        </div>
+    </div>
+    
+    <!-- Fixed Header with Timer -->
+    <header class="quiz-header">
+        <div class="quiz-header-container">
+            <!-- Left: Subject Info -->
+            <div class="quiz-header-left">
+                <button class="btn-icon" id="menuBtn" aria-label="Menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="subject-info">
+                    <div class="subject-name" id="subjectName">Commercial Cluster A</div>
+                    <div class="subject-meta">Day 1-2 • Question <span id="currentQuestionNum">1</span> of <span id="totalQuestions">105</span></div>
+                </div>
+            </div>
+            
+            <!-- Center: Timer -->
+            <div class="quiz-timer-container">
+                <div class="timer-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="timer-display" id="timerDisplay">60:00</div>
+                <div class="timer-progress-ring">
+                    <svg width="60" height="60">
+                        <circle cx="30" cy="30" r="26" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="4"/>
+                        <circle id="timerProgressCircle" cx="30" cy="30" r="26" fill="none" stroke="var(--accent)" 
+                                stroke-width="4" stroke-dasharray="163.36" stroke-dashoffset="0" 
+                                transform="rotate(-90 30 30)" stroke-linecap="round"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <!-- Right: Actions -->
+            <div class="quiz-header-right">
+                <button class="btn-icon" id="calculatorBtn" aria-label="Calculator">
+                    <i class="fas fa-calculator"></i>
+                </button>
+                <button class="btn btn-sm btn-danger" id="submitBtn">
+                    Submit Test
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Quiz Container -->
+    <div class="quiz-container">
+        
+        <!-- Sidebar: Question Navigator -->
+        <aside class="quiz-sidebar" id="quizSidebar">
+            <div class="sidebar-header">
+                <h3>Question Navigator</h3>
+                <button class="btn-icon btn-close-sidebar" id="closeSidebar" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="sidebar-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="answeredCount">0</div>
+                    <div class="stat-label">Answered</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="unansweredCount">105</div>
+                    <div class="stat-label">Unanswered</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="flaggedCount">0</div>
+                    <div class="stat-label">Flagged</div>
+                </div>
+            </div>
+            
+            <div class="question-palette" id="questionPalette">
+                <!-- Generated by JS -->
+            </div>
+            
+            <div class="sidebar-legend">
+                <div class="legend-item">
+                    <span class="legend-dot answered"></span>
+                    <span>Answered</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot current"></span>
+                    <span>Current</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot flagged"></span>
+                    <span>Flagged</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot unanswered"></span>
+                    <span>Unanswered</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Question Area -->
+        <main class="quiz-main">
+            <!-- Question Card -->
+            <div class="question-card" id="questionCard">
+                <div class="question-header">
+                    <div class="question-number">
+                        Question <span id="questionNumber">1</span>
+                    </div>
+                    <button class="btn-flag" id="flagBtn" aria-label="Flag question">
+                        <i class="far fa-flag"></i>
+                        <span>Flag</span>
+                    </button>
+                </div>
+                
+                <div class="question-text" id="questionText">
+                    Loading question...
+                </div>
+                
+                <div class="options-container" id="optionsContainer">
+                    <!-- Generated by JS -->
+                </div>
+
+                <!-- Explanation (Hidden until review mode) -->
+                <div class="question-explanation hidden" id="questionExplanation">
+                    <div class="explanation-header">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>Explanation</span>
+                    </div>
+                    <div class="explanation-content" id="explanationContent"></div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="quiz-navigation">
+                <button class="btn btn-secondary" id="prevBtn" disabled>
+                    <i class="fas fa-arrow-left"></i>
+                    Previous
+                </button>
+                
+                <button class="btn btn-secondary" id="clearBtn">
+                    <i class="fas fa-eraser"></i>
+                    Clear Response
+                </button>
+                
+                <button class="btn btn-primary" id="nextBtn">
+                    Next
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Mobile Question Palette -->
+    <div class="mobile-palette-trigger" id="mobilePaletteBtn">
+        <i class="fas fa-th"></i>
+        <span>Questions</span>
+    </div>
+
+    <!-- Modals (Submit, Calculator, Time's Up) -->
+    <div class="modal-overlay hidden" id="submitModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Submit Test?</h3>
+                <button class="btn-icon" id="closeSubmitModal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="submit-summary">
+                    <div class="summary-item">
+                        <span class="summary-label">Total Questions:</span>
+                        <span class="summary-value" id="modalTotalQuestions">105</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Answered:</span>
+                        <span class="summary-value answered-text" id="modalAnsweredCount">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Unanswered:</span>
+                        <span class="summary-value warning-text" id="modalUnansweredCount">105</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Time Remaining:</span>
+                        <span class="summary-value" id="modalTimeRemaining">60:00</span>
+                    </div>
+                </div>
+                <div class="warning-message">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>You cannot change your answers after submission.</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelSubmitBtn">Cancel</button>
+                <button class="btn btn-danger" id="confirmSubmitBtn">
+                    <i class="fas fa-check"></i> Submit Test
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay hidden" id="calculatorModal">
+        <div class="modal calculator-modal">
+            <div class="modal-header">
+                <h3>Calculator</h3>
+                <button class="btn-icon" id="closeCalculatorModal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="calculator">
+                    <input type="text" class="calculator-display" id="calcDisplay" value="0" readonly>
+                    <div class="calculator-buttons">
+                        <button class="calc-btn" data-action="clear">C</button>
+                        <button class="calc-btn" data-action="delete">←</button>
+                        <button class="calc-btn" data-action="divide">÷</button>
+                        <button class="calc-btn" data-action="multiply">×</button>
+                        <button class="calc-btn" data-value="7">7</button>
+                        <button class="calc-btn" data-value="8">8</button>
+                        <button class="calc-btn" data-value="9">9</button>
+                        <button class="calc-btn" data-action="subtract">−</button>
+                        <button class="calc-btn" data-value="4">4</button>
+                        <button class="calc-btn" data-value="5">5</button>
+                        <button class="calc-btn" data-value="6">6</button>
+                        <button class="calc-btn" data-action="add">+</button>
+                        <button class="calc-btn" data-value="1">1</button>
+                        <button class="calc-btn" data-value="2">2</button>
+                        <button class="calc-btn" data-value="3">3</button>
+                        <button class="calc-btn calc-equals" data-action="equals" style="grid-row: span 2;">=</button>
+                        <button class="calc-btn" data-value="0" style="grid-column: span 2;">0</button>
+                        <button class="calc-btn" data-value=".">.</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay hidden" id="timeUpModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Time's Up!</h3>
+            </div>
+            <div class="modal-body">
+                <div class="time-up-message">
+                    <i class="fas fa-hourglass-end"></i>
+                    <p>Your test time has expired. Your answers have been automatically submitted.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="viewResultsBtn">View Results</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Embedded Quiz Data -->
+    <script>
+        // Quiz metadata
+        window.quizMetadata = {
+            period: 1,
+            days: "1-2",
+            subject: "Commercial Cluster A",
+            generatedDate: "2026-02-17",
+            validationStatus: "PARTIAL",
+            totalQuestions: 105,
+            timerMinutes: 60
+        };
+
+        // Question data - REPLACED BY WORKFLOW
+        window.quizData = [{"id": 1, "text": "Choose the word that is OPPOSITE in meaning to &quot;ubiquitous&quot;", "optionA": "Rare", "optionB": "Common", "optionC": "Frequent", "optionD": "Universal", "answer": "A"}, {"id": 2, "text": "Choose the option with the same vowel sound as the underlined letters in &quot;blood&quot;", "optionA": "Flood", "optionB": "Food", "optionC": "Mood", "optionD": "Good", "answer": "A"}, {"id": 3, "text": "In the sentence &quot;The committee has submitted its report,&quot; the verb &quot;has&quot; agrees with:", "optionA": "Committee (singular collective noun)", "optionB": "Members (implied plural)", "optionC": "Report (object)", "optionD": "Either A or B", "answer": "A"}, {"id": 4, "text": "Identify the literary device: &quot;The classroom was a zoo&quot;", "optionA": "Simile", "optionB": "Metaphor", "optionC": "Personification", "optionD": "Hyperbole", "answer": "B"}, {"id": 5, "text": "Which sentence uses &quot;lie&quot; correctly?", "optionA": "I will lay down for a nap", "optionB": "The book is laying on the table", "optionC": "Yesterday, I lay down to rest", "optionD": "The hen has laid five eggs", "answer": "C"}, {"id": 6, "text": "Choose the correctly punctuated sentence:", "optionA": "The teacher said, &quot;homework is due tomorrow&quot;.", "optionB": "The teacher said, &quot;Homework is due tomorrow.&quot;", "optionC": "The teacher said &quot;Homework is due tomorrow.&quot;", "optionD": "The teacher said: &quot;homework is due tomorrow.&quot;", "answer": "B"}, {"id": 7, "text": "Identify the error: &quot;Neither the students nor the teacher were present&quot;", "optionA": "Subject-verb disagreement", "optionB": "Pronoun error", "optionC": "Tense error", "optionD": "No error", "answer": "A"}, {"id": 8, "text": "The prefix &quot;bi-&quot; in &quot;biannual&quot; means:", "optionA": "Once every two years", "optionB": "Twice a year", "optionC": "Half a year", "optionD": "Two years long", "answer": "B"}, {"id": 9, "text": "Choose the word with correct spelling:", "optionA": "Occured", "optionB": "Occurred", "optionC": "Ocurred", "optionD": "Occureed", "answer": "B"}, {"id": 10, "text": "In &quot;The faster you run, the sooner you&#39;ll arrive,&quot; the structure is:", "optionA": "Comparative correlation", "optionB": "Conditional clause", "optionC": "Superlative comparison", "optionD": "Parallel structure", "answer": "A"}, {"id": 11, "text": "Identify the sentence with correct pronoun usage:", "optionA": "Between you and I, he&#39;s wrong", "optionB": "He gave the gift to my wife and I", "optionC": "The secret is between you and me", "optionD": "Myself and John will attend", "answer": "C"}, {"id": 12, "text": "The word &quot;sanction&quot; can mean:", "optionA": "To approve OR to penalize", "optionB": "Only to approve", "optionC": "Only to penalize", "optionD": "To ignore", "answer": "A"}, {"id": 13, "text": "Which uses the subjunctive mood correctly?", "optionA": "If I was rich, I&#39;d travel", "optionB": "I wish I was taller", "optionC": "If he were here, he&#39;d help", "optionD": "She acts like she was the boss", "answer": "C"}, {"id": 14, "text": "Identify the dangling modifier:", "optionA": "Walking home, the rain started", "optionB": "While walking home, I felt raindrops", "optionC": "The rain started as I walked home", "optionD": "I walked home in the rain", "answer": "A"}, {"id": 15, "text": "The word &quot;egregious&quot; originally meant &quot;remarkably good&quot; but now means &quot;remarkably bad.&quot; This is an example of:", "optionA": "Amelioration", "optionB": "Pejoration", "optionC": "Generalization", "optionD": "Specialization", "answer": "B"}, {"id": 16, "text": "In &quot;She is taller than I,&quot; the implied ending is:", "optionA": "Than I am", "optionB": "Than me", "optionC": "Than I be", "optionD": "Either A or B", "answer": "A"}, {"id": 17, "text": "Choose the sentence with correct parallel structure:", "optionA": "She likes reading, to write, and painting", "optionB": "She likes to read, writing, and to paint", "optionC": "She likes reading, writing, and painting", "optionD": "She likes to read, to write, and painting", "answer": "C"}, {"id": 18, "text": "The phrase &quot;I could care less&quot; is:", "optionA": "Correct and means indifference", "optionB": "Incorrect; should be &quot;couldn&#39;t care less&quot;", "optionC": "Regional variation, both acceptable", "optionD": "Means extreme caring", "answer": "B"}, {"id": 19, "text": "Identify the oxymoron:", "optionA": "Deafening silence", "optionB": "Very unique", "optionC": "Hot coffee", "optionD": "Fast car", "answer": "A"}, {"id": 20, "text": "In passive voice, the sentence &quot;The cat chased the mouse&quot; becomes:", "optionA": "The mouse was chased by the cat", "optionB": "The mouse is chased by the cat", "optionC": "The cat was chasing the mouse", "optionD": "The mouse has been chased", "answer": "A"}, {"id": 21, "text": "The word &quot;literally&quot; is increasingly used to mean:", "optionA": "Figuratively (opposite of original meaning)", "optionB": "Only in literal sense", "optionC": "Approximately", "optionD": "Exactly", "answer": "A"}, {"id": 22, "text": "Choose the sentence with correct comma usage:", "optionA": "The red, old, car broke down", "optionB": "The old red car broke down", "optionC": "The old, red car broke down", "optionD": "The, old, red, car broke down", "answer": "C"}, {"id": 23, "text": "The error in &quot;Irregardless of the cost, we&#39;ll proceed&quot; is:", "optionA": "&quot;Irregardless&quot; is non-standard", "optionB": "Comma splice", "optionC": "Wrong preposition", "optionD": "No error", "answer": "A"}, {"id": 24, "text": "In &quot;The data is conclusive,&quot; the subject-verb agreement is:", "optionA": "Correct (modern usage)", "optionB": "Incorrect; should be &quot;data are&quot;", "optionC": "Regional variation", "optionD": "Either acceptable", "answer": "D"}, {"id": 25, "text": "Identify the malapropism: &quot;Texas has a large Portuguese population&quot;", "optionA": "Portuguese (should be &quot;populace&quot;)", "optionB": "Large (wrong word)", "optionC": "Texas (wrong place)", "optionD": "No error", "answer": "A"}, {"id": 26, "text": "The sentence &quot;Whom did you see?&quot; is:", "optionA": "Formally correct", "optionB": "Archaic and incorrect", "optionC": "Missing auxiliary verb", "optionD": "Conversationally wrong", "answer": "A"}, {"id": 27, "text": "Choose the correct verb form: &quot;If I _____ known, I would have come&quot;", "optionA": "have", "optionB": "had", "optionC": "would have", "optionD": "has", "answer": "B"}, {"id": 28, "text": "The phrase &quot;beg the question&quot; traditionally means:", "optionA": "To raise a question", "optionB": "To avoid answering", "optionC": "To assume what you&#39;re trying to prove (circular reasoning)", "optionD": "To ask formally", "answer": "C"}, {"id": 29, "text": "In &quot;She is one of those teachers who inspire students,&quot; the verb &quot;inspire&quot; is:", "optionA": "Correct (agrees with &quot;teachers&quot;)", "optionB": "Incorrect; should be &quot;inspires&quot;", "optionC": "Either acceptable", "optionD": "Subjunctive mood", "answer": "A"}, {"id": 30, "text": "Identify the split infinitive:", "optionA": "To boldly go where no one has gone", "optionB": "To go boldly where no one has gone", "optionC": "Boldly to go where no one has gone", "optionD": "Both B and C", "answer": "A"}, {"id": 31, "text": "The word &quot;presently&quot; means:", "optionA": "Currently OR soon", "optionB": "Only currently", "optionC": "Only soon", "optionD": "In the past", "answer": "A"}, {"id": 32, "text": "Choose the correct form: &quot;Neither of the answers _____ correct&quot;", "optionA": "is", "optionB": "are", "optionC": "were", "optionD": "be", "answer": "A"}, {"id": 33, "text": "In &quot;The house was engulfed in flames,&quot; the phrase &quot;in flames&quot; functions as:", "optionA": "Adverbial phrase", "optionB": "Adjectival phrase", "optionC": "Noun phrase", "optionD": "Prepositional object", "answer": "A"}, {"id": 34, "text": "The sentence &quot;We was ready to leave&quot; contains:", "optionA": "Dialect grammar (nonstandard but systematic)", "optionB": "Random error", "optionC": "Code-switching", "optionD": "Correct grammar", "answer": "A"}, {"id": 35, "text": "Identify the zeugma: &quot;She broke his car and his heart&quot;", "optionA": "&quot;Broke&quot; applies literally and figuratively", "optionB": "Parallel structure", "optionC": "Metaphor only", "optionD": "No rhetorical device", "answer": "A"}, {"id": 1, "text": "The systematic recording of business transactions is called?", "optionA": "Auditing", "optionB": "Book-keeping", "optionC": "Accounting", "optionD": "Costing", "answer": "B"}, {"id": 2, "text": "The accounting equation is?", "optionA": "Assets = Liabilities + Capital", "optionB": "Assets = Capital - Liabilities", "optionC": "Liabilities = Assets + Capital", "optionD": "Capital = Assets - Liabilities", "answer": "A"}, {"id": 3, "text": "Which of the following is a current asset?", "optionA": "Land", "optionB": "Building", "optionC": "Cash", "optionD": "Goodwill", "answer": "C"}, {"id": 4, "text": "The double entry principle states that?", "optionA": "Every transaction has two entries", "optionB": "Every debit has a credit", "optionC": "Assets equal liabilities", "optionD": "Income equals expenses", "answer": "B"}, {"id": 5, "text": "A business document that lists goods supplied with their prices is?", "optionA": "Receipt", "optionB": "Invoice", "optionC": "Voucher", "optionD": "Statement", "answer": "B"}, {"id": 6, "text": "Depreciation is charged on?", "optionA": "Current assets", "optionB": "Fixed assets", "optionC": "Intangible assets", "optionD": "All assets", "answer": "B"}, {"id": 7, "text": "The excess of current assets over current liabilities is called?", "optionA": "Net profit", "optionB": "Working capital", "optionC": "Capital employed", "optionD": "Gross profit", "answer": "B"}, {"id": 8, "text": "Bad debts are debts that are?", "optionA": "Not yet due", "optionB": "Overdue", "optionC": "Irrecoverable", "optionD": "Recoverable", "answer": "C"}, {"id": 9, "text": "Gross profit is calculated as?", "optionA": "Sales minus cost of goods sold", "optionB": "Sales minus all expenses", "optionC": "Revenue minus capital", "optionD": "Assets minus liabilities", "answer": "A"}, {"id": 10, "text": "A trial balance is prepared to?", "optionA": "Determine profit", "optionB": "Check arithmetical accuracy", "optionC": "Calculate depreciation", "optionD": "Value stock", "answer": "B"}, {"id": 11, "text": "Which of the following is a liability?", "optionA": "Cash", "optionB": "Debtors", "optionC": "Creditors", "optionD": "Stock", "answer": "C"}, {"id": 12, "text": "The accounting period is usually?", "optionA": "Monthly", "optionB": "Quarterly", "optionC": "Annually", "optionD": "Weekly", "answer": "C"}, {"id": 13, "text": "Accrued expenses are expenses that are?", "optionA": "Paid in advance", "optionB": "Outstanding", "optionC": "Prepaid", "optionD": "Cancelled", "answer": "B"}, {"id": 14, "text": "The straight-line method of depreciation charges?", "optionA": "Equal amounts each year", "optionB": "Reducing amounts each year", "optionC": "Increasing amounts each year", "optionD": "Variable amounts each year", "answer": "A"}, {"id": 15, "text": "Cash discount is given for?", "optionA": "Prompt payment", "optionB": "Bulk purchase", "optionC": "Trade purposes", "optionD": "Goodwill", "answer": "A"}, {"id": 16, "text": "Which account is credited when goods are sold on credit?", "optionA": "Cash account", "optionB": "Sales account", "optionC": "Purchases account", "optionD": "Debtors account", "answer": "B"}, {"id": 17, "text": "The book of original entry for credit sales is the?", "optionA": "Cash book", "optionB": "Sales journal", "optionC": "Purchases journal", "optionD": "General journal", "answer": "B"}, {"id": 18, "text": "Carriage inwards is added to?", "optionA": "Sales", "optionB": "Purchases", "optionC": "Capital", "optionD": "Liabilities", "answer": "B"}, {"id": 19, "text": "A provision for doubtful debts is created to?", "optionA": "Write off bad debts", "optionB": "Anticipate bad debts", "optionC": "Recover debts", "optionD": "Increase debtors", "answer": "B"}, {"id": 20, "text": "Net profit is transferred to?", "optionA": "Trading account", "optionB": "Profit and loss account", "optionC": "Capital account", "optionD": "Balance sheet", "answer": "C"}, {"id": 21, "text": "The document sent to a customer who returns goods is?", "optionA": "Debit note", "optionB": "Credit note", "optionC": "Invoice", "optionD": "Receipt", "answer": "B"}, {"id": 22, "text": "Opening stock plus purchases minus closing stock equals?", "optionA": "Gross profit", "optionB": "Net profit", "optionC": "Cost of goods sold", "optionD": "Sales", "answer": "C"}, {"id": 23, "text": "Petty cash is used for?", "optionA": "Large payments", "optionB": "Small routine expenses", "optionC": "Capital expenditure", "optionD": "Loan repayment", "answer": "B"}, {"id": 24, "text": "The purpose of financial statements is to?", "optionA": "Comply with law", "optionB": "Show financial position", "optionC": "Calculate tax", "optionD": "Attract investors", "answer": "B"}, {"id": 25, "text": "Assets purchased for long-term use are called?", "optionA": "Current assets", "optionB": "Fixed assets", "optionC": "Liquid assets", "optionD": "Fictitious assets", "answer": "B"}, {"id": 26, "text": "The bank reconciliation statement is prepared to?", "optionA": "Find bank balance", "optionB": "Agree cashbook with bank statement", "optionC": "Calculate interest", "optionD": "Record cheques", "answer": "B"}, {"id": 27, "text": "Revenue expenditure is?", "optionA": "Capital in nature", "optionB": "For fixed assets", "optionC": "For day-to-day expenses", "optionD": "Long-term", "answer": "C"}, {"id": 28, "text": "Drawings by the owner reduce?", "optionA": "Assets", "optionB": "Liabilities", "optionC": "Capital", "optionD": "Revenue", "answer": "C"}, {"id": 29, "text": "The current ratio measures?", "optionA": "Profitability", "optionB": "Liquidity", "optionC": "Efficiency", "optionD": "Solvency", "answer": "B"}, {"id": 30, "text": "Goodwill is classified as?", "optionA": "Current asset", "optionB": "Fixed asset", "optionC": "Intangible asset", "optionD": "Tangible asset", "answer": "C"}, {"id": 31, "text": "A debit balance in the cash book means?", "optionA": "Bank overdraft", "optionB": "Cash at bank", "optionC": "Cash shortage", "optionD": "Bank loan", "answer": "B"}, {"id": 32, "text": "The journal is used to record?", "optionA": "Cash transactions", "optionB": "Credit transactions", "optionC": "Non-routine transactions", "optionD": "All transactions", "answer": "C"}, {"id": 33, "text": "Stock valuation is based on?", "optionA": "Cost price only", "optionB": "Selling price only", "optionC": "Lower of cost and net realizable value", "optionD": "Average price", "answer": "C"}, {"id": 34, "text": "Creditors are found in the?", "optionA": "Trading account", "optionB": "Profit and loss account", "optionC": "Balance sheet", "optionD": "Cash book", "answer": "C"}, {"id": 35, "text": "The accounting concept that requires revenue to be recognized when earned is?", "optionA": "Matching concept", "optionB": "Realization concept", "optionC": "Going concern concept", "optionD": "Consistency concept", "answer": "B"}, {"id": 1, "text": "Commerce is primarily concerned with?", "optionA": "Production of goods", "optionB": "Distribution of goods and services", "optionC": "Manufacturing", "optionD": "Agriculture", "answer": "B"}, {"id": 2, "text": "A document that shows ownership of shares in a company is called?", "optionA": "Debenture", "optionB": "Certificate", "optionC": "Invoice", "optionD": "Receipt", "answer": "B"}, {"id": 3, "text": "The middleman between producers and retailers is called?", "optionA": "Wholesaler", "optionB": "Agent", "optionC": "Broker", "optionD": "Factor", "answer": "A"}, {"id": 4, "text": "Home trade is divided into?", "optionA": "Import and export", "optionB": "Wholesale and retail", "optionC": "Entrepot and export", "optionD": "Coastal and inland", "answer": "B"}, {"id": 5, "text": "An insurance policy that covers goods in transit is?", "optionA": "Fire insurance", "optionB": "Life insurance", "optionC": "Marine insurance", "optionD": "Motor insurance", "answer": "C"}, {"id": 6, "text": "The document that acknowledges receipt of goods for shipment is?", "optionA": "Bill of lading", "optionB": "Invoice", "optionC": "Waybill", "optionD": "Manifest", "answer": "A"}, {"id": 7, "text": "A cheque that can only be paid into a bank account is?", "optionA": "Open cheque", "optionB": "Crossed cheque", "optionC": "Bearer cheque", "optionD": "Order cheque", "answer": "B"}, {"id": 8, "text": "The principle of insurance that states that insurance is to restore the insured to their former position is?", "optionA": "Utmost good faith", "optionB": "Insurable interest", "optionC": "Indemnity", "optionD": "Proximate cause", "answer": "C"}, {"id": 9, "text": "Invisible trade refers to trade in?", "optionA": "Goods", "optionB": "Services", "optionC": "Commodities", "optionD": "Raw materials", "answer": "B"}, {"id": 10, "text": "A business owned by one person is called?", "optionA": "Partnership", "optionB": "Sole proprietorship", "optionC": "Corporation", "optionD": "Cooperative", "answer": "B"}, {"id": 11, "text": "The central bank of Nigeria is?", "optionA": "First Bank", "optionB": "Union Bank", "optionC": "Central Bank of Nigeria", "optionD": "Access Bank", "answer": "C"}, {"id": 12, "text": "A document sent by a seller to inform the buyer of goods dispatched is?", "optionA": "Invoice", "optionB": "Advice note", "optionC": "Debit note", "optionD": "Credit note", "answer": "B"}, {"id": 13, "text": "The difference between the cost price and selling price of goods is?", "optionA": "Discount", "optionB": "Profit or loss", "optionC": "Commission", "optionD": "Interest", "answer": "B"}, {"id": 14, "text": "Which of the following is a direct service?", "optionA": "Banking", "optionB": "Insurance", "optionC": "Transportation", "optionD": "Warehousing", "answer": "C"}, {"id": 15, "text": "A business where liability is limited to the amount invested is?", "optionA": "Partnership", "optionB": "Sole proprietorship", "optionC": "Limited liability company", "optionD": "Cooperative", "answer": "C"}, {"id": 16, "text": "The fastest means of communication is?", "optionA": "Telephone", "optionB": "Letter", "optionC": "Telegram", "optionD": "Fax", "answer": "A"}, {"id": 17, "text": "Grouping of goods according to quality and size is called?", "optionA": "Branding", "optionB": "Grading", "optionC": "Packaging", "optionD": "Labeling", "answer": "B"}, {"id": 18, "text": "An agreement to buy or sell goods at a future date is?", "optionA": "Cash transaction", "optionB": "Credit transaction", "optionC": "Forward contract", "optionD": "Spot transaction", "answer": "C"}, {"id": 19, "text": "The reward for entrepreneurship is?", "optionA": "Wages", "optionB": "Salary", "optionC": "Profit", "optionD": "Interest", "answer": "C"}, {"id": 20, "text": "A person who brings buyers and sellers together is?", "optionA": "Wholesaler", "optionB": "Retailer", "optionC": "Agent", "optionD": "Broker", "answer": "D"}, {"id": 21, "text": "Import duty is paid on goods?", "optionA": "Exported", "optionB": "Imported", "optionC": "Manufactured locally", "optionD": "Consumed locally", "answer": "B"}, {"id": 22, "text": "The document that lists goods sent by post is?", "optionA": "Parcel post", "optionB": "Waybill", "optionC": "Invoice", "optionD": "Dispatch note", "answer": "B"}, {"id": 23, "text": "Which of the following is a function of a wholesaler?", "optionA": "Selling in small quantities", "optionB": "Buying in large quantities", "optionC": "Manufacturing goods", "optionD": "Advertising to final consumers", "answer": "B"}, {"id": 24, "text": "Money kept in a bank that earns interest is kept in?", "optionA": "Current account", "optionB": "Savings account", "optionC": "Fixed deposit", "optionD": "Loan account", "answer": "B"}, {"id": 25, "text": "The practice of selling the same product at different prices in different markets is called?", "optionA": "Price discrimination", "optionB": "Price control", "optionC": "Price fixing", "optionD": "Price war", "answer": "A"}, {"id": 26, "text": "A warehouse where imported goods are kept without paying duty is called?", "optionA": "Public warehouse", "optionB": "Private warehouse", "optionC": "Bonded warehouse", "optionD": "Cold storage", "answer": "C"}, {"id": 27, "text": "The person who insures is called?", "optionA": "Insured", "optionB": "Insurer", "optionC": "Broker", "optionD": "Agent", "answer": "B"}, {"id": 28, "text": "Advertising that promotes a particular brand is?", "optionA": "Competitive advertising", "optionB": "Informative advertising", "optionC": "Persuasive advertising", "optionD": "Generic advertising", "answer": "A"}, {"id": 29, "text": "A person who buys and sells shares on behalf of others is?", "optionA": "Broker", "optionB": "Jobber", "optionC": "Dealer", "optionD": "Agent", "answer": "A"}, {"id": 30, "text": "The removal of government control over business activities is called?", "optionA": "Nationalization", "optionB": "Privatization", "optionC": "Commercialization", "optionD": "Deregulation", "answer": "D"}, {"id": 31, "text": "Which of the following is not a means of payment?", "optionA": "Cash", "optionB": "Cheque", "optionC": "Invoice", "optionD": "Credit card", "answer": "C"}, {"id": 32, "text": "E-commerce refers to?", "optionA": "Traditional trading", "optionB": "Electronic trading", "optionC": "Foreign trade", "optionD": "Domestic trade", "answer": "B"}, {"id": 33, "text": "The document sent to a debtor requesting payment is?", "optionA": "Invoice", "optionB": "Receipt", "optionC": "Statement of account", "optionD": "Debit note", "answer": "C"}, {"id": 34, "text": "A market where shares are bought and sold is?", "optionA": "Money market", "optionB": "Capital market", "optionC": "Foreign exchange market", "optionD": "Commodity market", "answer": "B"}, {"id": 35, "text": "Consumer protection aims to?", "optionA": "Increase prices", "optionB": "Protect sellers", "optionC": "Safeguard consumers&#39; interests", "optionD": "Reduce production", "answer": "C"}];
+    </script>
+
+    <!-- Fisher-Yates Shuffle Algorithm -->
+    <script>
+        /**
+         * Fisher-Yates shuffle algorithm for option randomization
+         * @param {Object} question - Question object with options
+         * @returns {Object} - Shuffled options with correct answer index
+         */
+        function shuffleOptions(question) {
+            const options = [
+                { label: 'A', text: question.optionA, original: 'A' },
+                { label: 'B', text: question.optionB, original: 'B' },
+                { label: 'C', text: question.optionC, original: 'C' },
+                { label: 'D', text: question.optionD, original: 'D' }
+            ];
+            
+            const correctAnswer = question.answer; // e.g., 'B'
+            
+            // Fisher-Yates shuffle
+            for (let i = options.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [options[i], options[j]] = [options[j], options[i]];
+            }
+            
+            // Reassign display labels after shuffle
+            const shuffledOptions = options.map((opt, idx) => ({
+                displayLabel: String.fromCharCode(65 + idx), // A, B, C, D
+                text: opt.text,
+                original: opt.original
+            }));
+            
+            // Find new position of correct answer
+            const correctIndex = shuffledOptions.findIndex(opt => opt.original === correctAnswer);
+            const newCorrectLabel = shuffledOptions[correctIndex].displayLabel;
+            
+            return {
+                shuffledOptions: shuffledOptions,
+                correctAnswer: newCorrectLabel,
+                originalCorrectAnswer: correctAnswer
+            };
+        }
+    </script>
+
+    <!-- Quiz Validation & Initialization -->
+    <script>
+        // Validate quiz data on load
+        window.addEventListener('DOMContentLoaded', () => {
+            // Check if quiz data exists
+            if (!window.quizData || !Array.isArray(window.quizData)) {
+                showFallback('no-data');
+                return;
+            }
+            
+            // Check if quiz data is empty
+            if (window.quizData.length === 0) {
+                showFallback('empty-data');
+                return;
+            }
+            
+            // Filter valid questions only
+            const validQuestions = window.quizData.filter(q => 
+                q && 
+                q.text && 
+                q.optionA && q.optionB && q.optionC && q.optionD && 
+                q.answer && 
+                ['A', 'B', 'C', 'D'].includes(q.answer)
+            );
+            
+            // Check if we have partial data
+            if (validQuestions.length === 0) {
+                showFallback('invalid-data');
+                return;
+            }
+            
+            if (validQuestions.length < window.quizData.length) {
+                const missing = window.quizData.length - validQuestions.length;
+                showWarning(
+                    'Partial Quiz Available',
+                    `${validQuestions.length} out of ${window.quizData.length} questions are available. ${missing} questions had errors and were skipped.`
+                );
+            }
+            
+            // Update quiz data to valid questions only
+            window.quizData = validQuestions;
+            window.quizMetadata.totalQuestions = validQuestions.length;
+            
+            // Initialize quiz with validated data
+            initializeQuiz();
+        });
+
+        function showWarning(title, message) {
+            const banner = document.getElementById('error-banner');
+            const titleEl = document.getElementById('error-title');
+            const messageEl = document.getElementById('error-message');
+            
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+            banner.classList.remove('hidden');
+            banner.style.backgroundColor = '#fef3c7'; // Warning yellow
+            banner.querySelector('i').style.color = '#f59e0b';
+        }
+
+        function showError(title, message) {
+            const banner = document.getElementById('error-banner');
+            const titleEl = document.getElementById('error-title');
+            const messageEl = document.getElementById('error-message');
+            
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+            banner.classList.remove('hidden');
+            banner.style.backgroundColor = '#fee2e2'; // Error red
+            banner.querySelector('i').style.color = '#ef4444';
+        }
+
+        function closeBanner() {
+            document.getElementById('error-banner').classList.add('hidden');
+        }
+
+        function showFallback(reason) {
+            const container = document.getElementById('fallback-container');
+            const messageEl = document.getElementById('fallback-message');
+            
+            const messages = {
+                'no-data': `We're still generating your Day ${window.quizMetadata.days} quiz. Please check back in a few minutes.`,
+                'empty-data': `Your Day ${window.quizMetadata.days} quiz is being prepared. Practice yesterday's quiz while waiting.`,
+                'invalid-data': `There was an issue loading today's quiz. Please try refreshing or practice yesterday's quiz.`
+            };
+            
+            messageEl.textContent = messages[reason] || messages['no-data'];
+            container.classList.remove('hidden');
+            
+            // Hide main quiz interface
+            document.querySelector('.quiz-header').style.display = 'none';
+            document.querySelector('.quiz-container').style.display = 'none';
+            
+            // Start countdown
+            startFallbackCountdown();
+        }
+
+        function startFallbackCountdown() {
+            let seconds = 15 * 60; // 15 minutes
+            const countdownEl = document.getElementById('fallback-countdown');
+            
+            const timer = setInterval(() => {
+                if (seconds <= 0) {
+                    clearInterval(timer);
+                    countdownEl.textContent = '00:00';
+                    return;
+                }
+                
+                seconds--;
+                const mins = Math.floor(seconds / 60);
+                const secs = seconds % 60;
+                countdownEl.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function loadPreviousQuiz() {
+            const currentPeriod = window.quizMetadata.period;
+            const previousPeriod = currentPeriod - 1;
+            
+            if (previousPeriod < 1) {
+                alert('No previous quiz available. This is the first quiz!');
+                return;
+            }
+            
+            // Redirect to previous period's quiz
+            const currentFile = window.location.pathname.split('/').pop();
+            const previousFile = currentFile.replace(`period-${currentPeriod}`, `period-${previousPeriod}`);
+            
+            window.location.href = previousFile;
+        }
+
+        function initializeQuiz() {
+            // Quiz initialization code here
+            // This will be handled by existing quiz-app.js
+            console.log('Quiz initialized with', window.quizData.length, 'valid questions');
+        }
+    </script>
+
+    <!-- Load existing quiz scripts -->
+    <script src="question-parser.js"></script>
+    <script src="quiz-launcher.js"></script>
+    <script src="quiz-app.js"></script>
+</body>
+</html>
