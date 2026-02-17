@@ -253,10 +253,9 @@ jobs:
           git remote set-url origin \
             https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/artificialiman/Questt.git
 
+          git add -A
           git fetch origin main
           git pull origin main --rebase
-
-          git add -A
 
           DAY_RANGE=${{ steps.calc-period.outputs.day_range }}
 
