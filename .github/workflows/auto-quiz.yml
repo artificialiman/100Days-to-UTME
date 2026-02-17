@@ -323,16 +323,24 @@ jobs:
           cp questt-repo/validation-report.json "$ARCHIVE_DIR/"
           
           # Create metadata
-          cat > "$ARCHIVE_DIR/metadata.json" << 'EOF'
-{
-  "period": ${{ steps.calc-period.outputs.period }},
-  "day_range": "${{ steps.calc-period.outputs.day_range }}",
-  "generated_date": "${{ steps.calc-period.outputs.generated_date }}",
-  "validation_status": "${{ steps.validate.outputs.validation_status }}",
-  "total_files": ${{ steps.validate.outputs.total_files }},
-  "valid_files": ${{ steps.validate.outputs.valid_files }}
-}
-EOF
+          cat > "$ARCHIVE_DIR/metadata.json" <<'METADATA_EOF'
+          {
+            "period": $PERIOD,
+            "day_range": "$DAY_RANGE",
+            "generated_date": "GENERATED_DATE_PLACEHOLDER",
+            "validation_status": "VALIDATION_STATUS_PLACEHOLDER",
+            "total_files": TOTAL_FILES_PLACEHOLDER,
+            "valid_files": VALID_FILES_PLACEHOLDER
+          }
+          METADATA_EOF
+          
+          # Replace placeholders
+          sed -i "s/GENERATED_DATE_PLACEHOLDER/$(date +%Y-%m-%d)/" "$ARCHIVE_DIR/metadata.json"
+          sed -i "s/VALIDATION_STATUS_PLACEHOLDER/$(cat questt-repo/validation-report.json | jq -r '.validation_status // "UNKNOWN"')/" "$ARCHIVE_DIR/metadata.json"
+          sed -i "s/TOTAL_FILES_PLACEHOLDER/$(cat questt-repo/validation-report.json | jq '.total_files // 0')/" "$ARCHIVE_DIR/metadata.json"
+          sed -i "s/VALID_FILES_PLACEHOLDER/$(cat questt-repo/validation-report.json | jq '.valid_files // 0')/" "$ARCHIVE_DIR/metadata.json"
+          sed -i "s/\$PERIOD/$PERIOD/" "$ARCHIVE_DIR/metadata.json"
+          sed -i "s/\$DAY_RANGE/$DAY_RANGE/" "$ARCHIVE_DIR/metadata.json"
           
           cd archive-repo
           git config user.name "GitHub Actions Bot"
