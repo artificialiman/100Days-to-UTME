@@ -323,10 +323,10 @@ jobs:
           cp questt-repo/validation-report.json "$ARCHIVE_DIR/"
           
           # Create metadata
-          cat > "$ARCHIVE_DIR/metadata.json" << EOF
+          cat > "$ARCHIVE_DIR/metadata.json" << 'EOF'
 {
   "period": ${{ steps.calc-period.outputs.period }},
-  "day_range": "$DAY_RANGE",
+  "day_range": "${{ steps.calc-period.outputs.day_range }}",
   "generated_date": "${{ steps.calc-period.outputs.generated_date }}",
   "validation_status": "${{ steps.validate.outputs.validation_status }}",
   "total_files": ${{ steps.validate.outputs.total_files }},
