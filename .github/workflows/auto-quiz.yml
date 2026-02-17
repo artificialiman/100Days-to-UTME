@@ -8,6 +8,11 @@ on:
     paths:
       - '*.txt'  # Trigger when .txt files uploaded to Questt repo
   workflow_dispatch:  # Manual trigger option
+    inputs:
+      force_run:
+        description: 'Force run even if already generated'
+        required: false
+        default: 'false'
 
 jobs:
   generate-quizzes:
@@ -20,6 +25,7 @@ jobs:
           repository: artificialiman/100Days-to-UTME
           token: ${{ secrets.WORKFLOW_TOKEN }}
           path: main-repo
+          persist-credentials: true
       
       - name: Checkout Questt repo (staging)
         uses: actions/checkout@v3
@@ -27,6 +33,7 @@ jobs:
           repository: artificialiman/Questt
           token: ${{ secrets.WORKFLOW_TOKEN }}
           path: questt-repo
+          persist-credentials: true
       
       - name: Checkout Questt-resources repo (archive)
         uses: actions/checkout@v3
@@ -34,16 +41,22 @@ jobs:
           repository: artificialiman/Questt-resources
           token: ${{ secrets.WORKFLOW_TOKEN }}
           path: archive-repo
+          persist-credentials: true
       
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
       
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+      
       - name: Calculate Current Period
         id: calc-period
         run: |
-          START_DATE="2026-02-10"
+          START_DATE="2026-02-17"
           CURRENT_DATE=$(date +%Y-%m-%d)
           
           # Calculate days elapsed
@@ -300,13 +313,24 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           
+          # Set up authentication for push
+          git remote set-url origin https://x-access-token:${{ secrets.WORKFLOW_TOKEN }}@github.com/artificialiman/100Days-to-UTME.git
+          
+          # Fetch latest changes
+          git fetch origin main
+          git pull origin main --rebase || true
+          
           git add quiz-*.html
           
           PERIOD=${{ steps.calc-period.outputs.period }}
           DAY_RANGE=${{ steps.calc-period.outputs.day_range }}
           
-          git commit -m "Generate quizzes for Day $DAY_RANGE (Period $PERIOD)" || echo "No changes to commit"
-          git push
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Generate quizzes for Day $DAY_RANGE (Period $PERIOD)"
+            git push origin main
+          fi
       
       - name: Archive to Questt-resources
         if: steps.check-existing.outputs.already_generated == 'false' && steps.validate.outputs.valid_files > 0
@@ -346,9 +370,21 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           
+          # Set up authentication for push
+          git remote set-url origin https://x-access-token:${{ secrets.WORKFLOW_TOKEN }}@github.com/artificialiman/Questt-resources.git
+          
+          # Fetch and rebase
+          git fetch origin main
+          git pull origin main --rebase || true
+          
           git add archive/
-          git commit -m "Archive questions for Day $DAY_RANGE" || echo "No changes to commit"
-          git push
+          
+          if git diff --staged --quiet; then
+            echo "No changes to commit to archive"
+          else
+            git commit -m "Archive questions for Day $DAY_RANGE"
+            git push origin main
+          fi
       
       - name: Clear Questt Repo
         if: steps.check-existing.outputs.already_generated == 'false' && steps.validate.outputs.valid_files > 0
@@ -365,11 +401,23 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           
+          # Set up authentication for push
+          git remote set-url origin https://x-access-token:${{ secrets.WORKFLOW_TOKEN }}@github.com/artificialiman/Questt.git
+          
+          # Fetch and rebase
+          git fetch origin main
+          git pull origin main --rebase || true
+          
           git add -A
           
           DAY_RANGE=${{ steps.calc-period.outputs.day_range }}
-          git commit -m "Clear used questions (Day $DAY_RANGE)" || echo "No changes to commit"
-          git push
+          
+          if git diff --staged --quiet; then
+            echo "No changes to commit to Questt"
+          else
+            git commit -m "Clear used questions (Day $DAY_RANGE)"
+            git push origin main
+          fi
       
       - name: Summary
         if: always()
