@@ -132,10 +132,16 @@ jobs:
           # Run validation
           python validate_questions.py . validation-report.json
           
+          # Check if validation report was created successfully
+          if [ ! -f "validation-report.json" ] || ! jq empty validation-report.json 2>/dev/null; then
+            echo "❌ validation-report.json missing or malformed, creating default"
+            echo '{"summary":{"valid_files":0,"total_files":0,"validation_status":"FAILED"},"valid_files":[],"invalid_files":[]}' > validation-report.json
+          fi
+          
           # Read validation results
-          VALID_COUNT=$(jq -r '.summary.valid_files' validation-report.json)
-          TOTAL_COUNT=$(jq -r '.summary.total_files' validation-report.json)
-          STATUS=$(jq -r '.summary.validation_status' validation-report.json)
+          VALID_COUNT=$(jq -r '.summary.valid_files // 0' validation-report.json)
+          TOTAL_COUNT=$(jq -r '.summary.total_files // 0' validation-report.json)
+          STATUS=$(jq -r '.summary.validation_status // "UNKNOWN"' validation-report.json)
           
           echo "valid_files=$VALID_COUNT" >> $GITHUB_OUTPUT
           echo "total_files=$TOTAL_COUNT" >> $GITHUB_OUTPUT
@@ -145,7 +151,7 @@ jobs:
           echo "📊 Status: $STATUS"
           
           # Extract valid file list
-          VALID_FILES=$(jq -r '.valid_files[]' validation-report.json | tr '\n' ',' | sed 's/,$//')
+          VALID_FILES=$(jq -r '.valid_files[]? // empty' validation-report.json | tr '\n' ',' | sed 's/,$//')
           echo "valid_file_list=$VALID_FILES" >> $GITHUB_OUTPUT
       
       - name: Parse Questions to JSON
