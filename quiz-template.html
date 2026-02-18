@@ -36,9 +36,7 @@
     <!-- Fallback Container -->
     <div id="fallback-container" class="fallback-container hidden">
         <div class="fallback-content">
-            <div class="fallback-icon">
-                <i class="fas fa-hourglass-half"></i>
-            </div>
+            <div class="fallback-icon"><i class="fas fa-hourglass-half"></i></div>
             <h2>Today's Quiz is Being Prepared</h2>
             <p id="fallback-message">We're generating your Day {{DAY_RANGE}} quiz. Practice yesterday's quiz while waiting.</p>
             <div class="fallback-timer">
@@ -53,13 +51,11 @@
         </div>
     </div>
     
-    <!-- Fixed Header with Timer -->
+    <!-- Fixed Header -->
     <header class="quiz-header">
         <div class="quiz-header-container">
             <div class="quiz-header-left">
-                <button class="btn-icon" id="menuBtn" aria-label="Menu">
-                    <i class="fas fa-bars"></i>
-                </button>
+                <button class="btn-icon" id="menuBtn" aria-label="Menu"><i class="fas fa-bars"></i></button>
                 <div class="subject-info">
                     <div class="subject-name" id="subjectName">{{SUBJECT_NAME}}</div>
                     <div class="subject-meta">Day {{DAY_RANGE}} • Question <span id="currentQuestionNum">1</span> of <span id="totalQuestions">{{TOTAL_QUESTIONS}}</span></div>
@@ -78,9 +74,7 @@
                 </div>
             </div>
             <div class="quiz-header-right">
-                <button class="btn-icon" id="calculatorBtn" aria-label="Calculator">
-                    <i class="fas fa-calculator"></i>
-                </button>
+                <button class="btn-icon" id="calculatorBtn" aria-label="Calculator"><i class="fas fa-calculator"></i></button>
                 <button class="btn btn-sm btn-danger" id="submitBtn">Submit Test</button>
             </div>
         </div>
@@ -91,23 +85,12 @@
         <aside class="quiz-sidebar" id="quizSidebar">
             <div class="sidebar-header">
                 <h3>Question Navigator</h3>
-                <button class="btn-icon btn-close-sidebar" id="closeSidebar" aria-label="Close">
-                    <i class="fas fa-times"></i>
-                </button>
+                <button class="btn-icon btn-close-sidebar" id="closeSidebar" aria-label="Close"><i class="fas fa-times"></i></button>
             </div>
             <div class="sidebar-stats">
-                <div class="stat-item">
-                    <div class="stat-value" id="answeredCount">0</div>
-                    <div class="stat-label">Answered</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="unansweredCount">{{TOTAL_QUESTIONS}}</div>
-                    <div class="stat-label">Unanswered</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="flaggedCount">0</div>
-                    <div class="stat-label">Flagged</div>
-                </div>
+                <div class="stat-item"><div class="stat-value" id="answeredCount">0</div><div class="stat-label">Answered</div></div>
+                <div class="stat-item"><div class="stat-value" id="unansweredCount">{{TOTAL_QUESTIONS}}</div><div class="stat-label">Unanswered</div></div>
+                <div class="stat-item"><div class="stat-value" id="flaggedCount">0</div><div class="stat-label">Flagged</div></div>
             </div>
             <div class="question-palette" id="questionPalette"></div>
             <div class="sidebar-legend">
@@ -123,37 +106,26 @@
                 <div class="question-header">
                     <div class="question-number">Question <span id="questionNumber">1</span></div>
                     <button class="btn-flag" id="flagBtn" aria-label="Flag question">
-                        <i class="far fa-flag"></i>
-                        <span>Flag</span>
+                        <i class="far fa-flag"></i><span>Flag</span>
                     </button>
                 </div>
                 <div class="question-text" id="questionText">Loading question...</div>
                 <div class="options-container" id="optionsContainer"></div>
                 <div class="question-explanation hidden" id="questionExplanation">
-                    <div class="explanation-header">
-                        <i class="fas fa-lightbulb"></i>
-                        <span>Explanation</span>
-                    </div>
+                    <div class="explanation-header"><i class="fas fa-lightbulb"></i><span>Explanation</span></div>
                     <div class="explanation-content" id="explanationContent"></div>
                 </div>
             </div>
             <div class="quiz-navigation">
-                <button class="btn btn-secondary" id="prevBtn" disabled>
-                    <i class="fas fa-arrow-left"></i> Previous
-                </button>
-                <button class="btn btn-secondary" id="clearBtn">
-                    <i class="fas fa-eraser"></i> Clear Response
-                </button>
-                <button class="btn btn-primary" id="nextBtn">
-                    Next <i class="fas fa-arrow-right"></i>
-                </button>
+                <button class="btn btn-secondary" id="prevBtn" disabled><i class="fas fa-arrow-left"></i> Previous</button>
+                <button class="btn btn-secondary" id="clearBtn"><i class="fas fa-eraser"></i> Clear Response</button>
+                <button class="btn btn-primary" id="nextBtn">Next <i class="fas fa-arrow-right"></i></button>
             </div>
         </main>
     </div>
 
     <div class="mobile-palette-trigger" id="mobilePaletteBtn">
-        <i class="fas fa-th"></i>
-        <span>Questions</span>
+        <i class="fas fa-th"></i><span>Questions</span>
     </div>
 
     <!-- Submit Modal -->
@@ -247,16 +219,27 @@
         window.quizData = {{QUESTIONS_JSON}};
     </script>
 
-    <!-- Scripts load BEFORE init so all classes are defined -->
+    <!-- Load scripts FIRST — classes must exist before init below runs -->
     <script src="question-parser.js"></script>
     <script src="quiz-launcher.js"></script>
     <script src="quiz-app.js"></script>
 
-    <!-- Init runs synchronously after scripts above — no DOMContentLoaded race -->
+    <!-- Init: runs synchronously after scripts above, no DOMContentLoaded race -->
     <script>
         (function () {
+            window.closeBanner = function () {
+                document.getElementById('error-banner').classList.add('hidden');
+            };
+
+            window.loadPreviousQuiz = function () {
+                var prev = window.quizMetadata.period - 1;
+                if (prev < 1) { alert('No previous quiz available.'); return; }
+                window.location.href = window.location.pathname.split('/').pop()
+                    .replace('period-' + window.quizMetadata.period, 'period-' + prev);
+            };
+
             function showWarning(title, message) {
-                const banner = document.getElementById('error-banner');
+                var banner = document.getElementById('error-banner');
                 document.getElementById('error-title').textContent = title;
                 document.getElementById('error-message').textContent = message;
                 banner.classList.remove('hidden');
@@ -264,32 +247,20 @@
                 banner.querySelector('i').style.color = '#f59e0b';
             }
 
-            window.closeBanner = function () {
-                document.getElementById('error-banner').classList.add('hidden');
-            };
-
-            window.loadPreviousQuiz = function () {
-                const prev = window.quizMetadata.period - 1;
-                if (prev < 1) { alert('No previous quiz available.'); return; }
-                window.location.href = window.location.pathname.split('/').pop()
-                    .replace('period-' + window.quizMetadata.period, 'period-' + prev);
-            };
-
             function showFallback(reason) {
-                const msgs = {
-                    'no-data':      'We\'re still generating your Day ' + window.quizMetadata.days + ' quiz. Check back soon.',
-                    'empty-data':   'Your Day ' + window.quizMetadata.days + ' quiz is being prepared.',
-                    'invalid-data': 'There was an issue loading today\'s quiz. Please refresh.'
+                var msgs = {
+                    'no-data':      "We're still generating your Day " + window.quizMetadata.days + " quiz. Check back soon.",
+                    'empty-data':   "Your Day " + window.quizMetadata.days + " quiz is being prepared.",
+                    'invalid-data': "There was an issue loading today's quiz. Please refresh."
                 };
                 document.getElementById('fallback-message').textContent = msgs[reason] || msgs['no-data'];
                 document.getElementById('fallback-container').classList.remove('hidden');
                 document.querySelector('.quiz-header').style.display = 'none';
                 document.querySelector('.quiz-container').style.display = 'none';
-                var seconds = 15 * 60;
-                var el = document.getElementById('fallback-countdown');
+                var seconds = 15 * 60, el = document.getElementById('fallback-countdown');
                 var t = setInterval(function () {
                     if (--seconds <= 0) { clearInterval(t); return; }
-                    el.textContent = String(Math.floor(seconds / 60)).padStart(2, '0') + ':' + String(seconds % 60).padStart(2, '0');
+                    el.textContent = String(Math.floor(seconds/60)).padStart(2,'0') + ':' + String(seconds%60).padStart(2,'0');
                 }, 1000);
             }
 
@@ -300,11 +271,10 @@
 
             var valid = window.quizData.filter(function (q) {
                 return q && q.text && q.optionA && q.optionB && q.optionC && q.optionD &&
-                    q.answer && ['A', 'B', 'C', 'D'].indexOf(q.answer) !== -1;
+                    q.answer && ['A','B','C','D'].indexOf(q.answer) !== -1;
             });
 
             if (valid.length === 0) { showFallback('invalid-data'); return; }
-
             if (valid.length < window.quizData.length) {
                 showWarning('Partial Quiz', valid.length + ' of ' + window.quizData.length + ' questions loaded.');
             }
@@ -312,7 +282,7 @@
             window.quizData = valid;
             window.quizMetadata.totalQuestions = valid.length;
 
-            // Bootstrap quiz — QuizLauncher / QuizState / QuizUI already defined by scripts above
+            // Bootstrap — QuizLauncher / QuizState / QuizUI defined by scripts above
             try {
                 var launcher = new QuizLauncher();
                 var questions = launcher.convertEmbeddedData(window.quizData);
