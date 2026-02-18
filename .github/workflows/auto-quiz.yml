@@ -61,8 +61,8 @@ jobs:
           DAY_START=$(( (PERIOD * 2) - 1 ))
           DAY_END=$(( PERIOD * 2 ))
           DAY_RANGE="${DAY_START}-${DAY_END}"
-          echo "period=$PERIOD"             >> $GITHUB_OUTPUT
-          echo "day_range=$DAY_RANGE"       >> $GITHUB_OUTPUT
+          echo "period=$PERIOD" >> $GITHUB_OUTPUT
+          echo "day_range=$DAY_RANGE" >> $GITHUB_OUTPUT
           echo "generated_date=$CURRENT_DATE" >> $GITHUB_OUTPUT
           echo "Period: $PERIOD  Day Range: $DAY_RANGE"
 
@@ -72,10 +72,10 @@ jobs:
           PERIOD=${{ steps.calc-period.outputs.period }}
           if grep -q "Period $PERIOD," main-repo/quiz-*.html 2>/dev/null; then
             echo "already_generated=true" >> $GITHUB_OUTPUT
-            echo "Quizzes for Period $PERIOD already exist — skipping"
+            echo "Quizzes for Period $PERIOD already exist - skipping"
           else
             echo "already_generated=false" >> $GITHUB_OUTPUT
-            echo "Period $PERIOD not yet generated — proceeding"
+            echo "Period $PERIOD not yet generated - proceeding"
           fi
 
       - name: Find Question Files
@@ -92,40 +92,30 @@ jobs:
           fi
 
       - name: Copy Scripts to Questt Directory
-        if: >
-          steps.check-existing.outputs.already_generated == 'false' &&
-          steps.find-files.outputs.has_files == 'true'
+        if: steps.check-existing.outputs.already_generated == 'false' && steps.find-files.outputs.has_files == 'true'
         run: |
           cp main-repo/parser.py questt-repo/ 2>/dev/null || true
           cp main-repo/validate_questions.py questt-repo/ 2>/dev/null || true
 
       - name: Validate Question Files
-        if: >
-          steps.check-existing.outputs.already_generated == 'false' &&
-          steps.find-files.outputs.has_files == 'true'
+        if: steps.check-existing.outputs.already_generated == 'false' && steps.find-files.outputs.has_files == 'true'
         id: validate
         run: |
           cd questt-repo
           python validate_questions.py . validation-report.json 2>/dev/null || true
-
-          # Ensure a valid report exists regardless
           if [ ! -f "validation-report.json" ] || ! jq empty validation-report.json 2>/dev/null; then
             echo '{"summary":{"valid_files":1,"total_files":1,"validation_status":"PASSED"},"valid_files":[],"invalid_files":[]}' > validation-report.json
           fi
-
           VALID_COUNT=$(jq -r '.summary.valid_files // 1' validation-report.json)
           TOTAL_COUNT=$(jq -r '.summary.total_files // 1' validation-report.json)
           STATUS=$(jq -r '.summary.validation_status // "PASSED"' validation-report.json)
-
-          echo "valid_files=$VALID_COUNT"       >> $GITHUB_OUTPUT
-          echo "total_files=$TOTAL_COUNT"       >> $GITHUB_OUTPUT
-          echo "validation_status=$STATUS"      >> $GITHUB_OUTPUT
-          echo "Validation: $VALID_COUNT/$TOTAL_COUNT valid — $STATUS"
+          echo "valid_files=$VALID_COUNT" >> $GITHUB_OUTPUT
+          echo "total_files=$TOTAL_COUNT" >> $GITHUB_OUTPUT
+          echo "validation_status=$STATUS" >> $GITHUB_OUTPUT
+          echo "Validation: $VALID_COUNT/$TOTAL_COUNT valid - $STATUS"
 
       - name: Collect Previous Period Questions
-        if: >
-          steps.check-existing.outputs.already_generated == 'false' &&
-          steps.find-files.outputs.has_files == 'true'
+        if: steps.check-existing.outputs.already_generated == 'false' && steps.find-files.outputs.has_files == 'true'
         run: |
           PERIOD=${{ steps.calc-period.outputs.period }}
           PREV_PERIOD=$(( PERIOD - 1 ))
@@ -133,40 +123,27 @@ jobs:
             PREV_DAY_START=$(( (PREV_PERIOD * 2) - 1 ))
             PREV_DAY_END=$(( PREV_PERIOD * 2 ))
             PREV_RANGE="${PREV_DAY_START}-${PREV_DAY_END}"
-            ARCHIVE_PATH="archive-repo/archive/day-${PREV_RANGE}"
             python main-repo/collect_prev_questions.py \
-              --archive-dir "$ARCHIVE_PATH" \
+              --archive-dir "archive-repo/archive/day-${PREV_RANGE}" \
               --output-file /tmp/prev_questions.json || true
-          else
-            echo "[]" > /tmp/prev_questions.json
           fi
-          # Guarantee the file always exists
           [ -f /tmp/prev_questions.json ] || echo "[]" > /tmp/prev_questions.json
 
       - name: Generate Quiz HTML Files
-        if: >
-          steps.check-existing.outputs.already_generated == 'false' &&
-          steps.find-files.outputs.has_files == 'true'
+        if: steps.check-existing.outputs.already_generated == 'false' && steps.find-files.outputs.has_files == 'true'
         run: |
-          PERIOD=${{ steps.calc-period.outputs.period }}
-          DAY_RANGE=${{ steps.calc-period.outputs.day_range }}
-          GEN_DATE=${{ steps.calc-period.outputs.generated_date }}
-          VALIDATION_STATUS=${{ steps.validate.outputs.validation_status }}
-
           python main-repo/generate_quiz.py \
             --questt-dir questt-repo \
             --template main-repo/quiz-template.html \
             --output-dir main-repo \
-            --period "$PERIOD" \
-            --day-range "$DAY_RANGE" \
-            --generated-date "$GEN_DATE" \
-            --validation-status "$VALIDATION_STATUS" \
+            --period "${{ steps.calc-period.outputs.period }}" \
+            --day-range "${{ steps.calc-period.outputs.day_range }}" \
+            --generated-date "${{ steps.calc-period.outputs.generated_date }}" \
+            --validation-status "${{ steps.validate.outputs.validation_status }}" \
             --prev-questions-file /tmp/prev_questions.json
 
       - name: Commit and Push to 100Days-to-UTME
-        if: >
-          steps.check-existing.outputs.already_generated == 'false' &&
-          steps.find-files.outputs.has_files == 'true'
+        if: steps.check-existing.outputs.already_generated == 'false' && steps.find-files.outputs.has_files == 'true'
         run: |
           cd main-repo
           git config user.name "GitHub Actions Bot"
@@ -175,19 +152,15 @@ jobs:
           git fetch origin main
           git pull origin main --rebase || true
           git add quiz-*.html
-          PERIOD=${{ steps.calc-period.outputs.period }}
-          DAY_RANGE=${{ steps.calc-period.outputs.day_range }}
           if git diff --staged --quiet; then
             echo "No quiz changes to commit"
           else
-            git commit -m "Generate quizzes for Day $DAY_RANGE (Period $PERIOD)"
+            git commit -m "Generate quizzes for Day ${{ steps.calc-period.outputs.day_range }} (Period ${{ steps.calc-period.outputs.period }})"
             git push origin main
           fi
 
       - name: Archive to Questt-resources
-        if: >
-          steps.check-existing.outputs.already_generated == 'false' &&
-          steps.find-files.outputs.has_files == 'true'
+        if: steps.check-existing.outputs.already_generated == 'false' && steps.find-files.outputs.has_files == 'true'
         env:
           PERIOD: ${{ steps.calc-period.outputs.period }}
           DAY_RANGE: ${{ steps.calc-period.outputs.day_range }}
@@ -198,28 +171,9 @@ jobs:
         run: |
           ARCHIVE_DIR="archive-repo/archive/day-${DAY_RANGE}"
           mkdir -p "$ARCHIVE_DIR"
-
-          # Copy .txt files and validation report
           cp questt-repo/*.txt "$ARCHIVE_DIR/" 2>/dev/null || true
           cp questt-repo/validation-report.json "$ARCHIVE_DIR/" 2>/dev/null || true
-
-          # Write metadata.json via Python — no shell interpolation into JSON
-          python3 - <<'PYEOF'
-import json, os
-data = {
-    "period":            int(os.environ["PERIOD"]),
-    "day_range":         os.environ["DAY_RANGE"],
-    "generated_date":    os.environ["GEN_DATE"],
-    "validation_status": os.environ["VALIDATION_STATUS"],
-    "total_files":       int(os.environ.get("TOTAL_COUNT", 0)),
-    "valid_files":       int(os.environ.get("VALID_COUNT", 0)),
-}
-out = os.path.join("archive-repo", "archive", "day-" + os.environ["DAY_RANGE"], "metadata.json")
-with open(out, "w", encoding="utf-8") as f:
-    json.dump(data, f, indent=2)
-print("metadata.json written to", out)
-PYEOF
-
+          python main-repo/write_metadata.py
           cd archive-repo
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
@@ -227,18 +181,15 @@ PYEOF
           git fetch origin main
           git pull origin main --rebase || true
           git add archive/
-          DAY_RANGE_VAL=${{ steps.calc-period.outputs.day_range }}
           if git diff --staged --quiet; then
             echo "No archive changes to commit"
           else
-            git commit -m "Archive questions for Day $DAY_RANGE_VAL"
+            git commit -m "Archive questions for Day ${DAY_RANGE}"
             git push origin main
           fi
 
       - name: Clear Questt Repo
-        if: >
-          steps.check-existing.outputs.already_generated == 'false' &&
-          steps.find-files.outputs.has_files == 'true'
+        if: steps.check-existing.outputs.already_generated == 'false' && steps.find-files.outputs.has_files == 'true'
         run: |
           cd questt-repo
           rm -f *.txt *.json *.py
@@ -248,11 +199,10 @@ PYEOF
           git fetch origin main
           git pull origin main --rebase || true
           git add -A
-          DAY_RANGE=${{ steps.calc-period.outputs.day_range }}
           if git diff --staged --quiet; then
             echo "No changes to clear"
           else
-            git commit -m "Clear used questions (Day $DAY_RANGE)"
+            git commit -m "Clear used questions (Day ${{ steps.calc-period.outputs.day_range }})"
             git push origin main
           fi
 
