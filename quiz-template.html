@@ -9,7 +9,6 @@
     <!-- Generated: Period {{PERIOD}}, Day {{DAY_RANGE}}, {{GENERATED_DATE}} -->
     <!-- Validation: {{VALIDATION_STATUS}} -->
     <!-- Subjects: {{SUBJECTS_LIST}} -->
-    
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="quiz-styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,40 +17,30 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="quiz-body">
-    
-    <!-- Error/Warning Banner -->
+
+    <!-- Warning Banner -->
     <div id="error-banner" class="error-banner hidden">
         <div class="error-content">
             <i class="fas fa-exclamation-triangle"></i>
-            <div>
-                <h3 id="error-title">Notice</h3>
-                <p id="error-message"></p>
-            </div>
-            <button class="btn-icon" onclick="closeBanner()" aria-label="Close">
+            <div><h3 id="error-title">Notice</h3><p id="error-message"></p></div>
+            <button class="btn-icon" onclick="document.getElementById('error-banner').classList.add('hidden')" aria-label="Close">
                 <i class="fas fa-times"></i>
             </button>
         </div>
     </div>
 
-    <!-- Fallback Container -->
+    <!-- Fallback: quiz not ready yet -->
     <div id="fallback-container" class="fallback-container hidden">
         <div class="fallback-content">
             <div class="fallback-icon"><i class="fas fa-hourglass-half"></i></div>
             <h2>Today's Quiz is Being Prepared</h2>
-            <p id="fallback-message">We're generating your Day {{DAY_RANGE}} quiz. Practice yesterday's quiz while waiting.</p>
-            <div class="fallback-timer">
-                <p>Check back in: <span id="fallback-countdown">15:00</span></p>
-            </div>
-            <button class="btn btn-primary" onclick="loadPreviousQuiz()">
-                <i class="fas fa-play"></i> Practice Previous Quiz
-            </button>
-            <button class="btn btn-secondary" onclick="location.reload()">
-                <i class="fas fa-sync"></i> Refresh Page
-            </button>
+            <p id="fallback-message"></p>
+            <button class="btn btn-secondary" onclick="location.reload()"><i class="fas fa-sync"></i> Refresh Page</button>
+            <a href="index.html" class="btn btn-primary"><i class="fas fa-home"></i> Back to Home</a>
         </div>
     </div>
-    
-    <!-- Fixed Header -->
+
+    <!-- Header -->
     <header class="quiz-header">
         <div class="quiz-header-container">
             <div class="quiz-header-left">
@@ -67,8 +56,8 @@
                 <div class="timer-progress-ring">
                     <svg width="60" height="60">
                         <circle cx="30" cy="30" r="26" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="4"/>
-                        <circle id="timerProgressCircle" cx="30" cy="30" r="26" fill="none" stroke="var(--accent)" 
-                                stroke-width="4" stroke-dasharray="163.36" stroke-dashoffset="0" 
+                        <circle id="timerProgressCircle" cx="30" cy="30" r="26" fill="none" stroke="var(--accent)"
+                                stroke-width="4" stroke-dasharray="163.36" stroke-dashoffset="0"
                                 transform="rotate(-90 30 30)" stroke-linecap="round"/>
                     </svg>
                 </div>
@@ -80,7 +69,7 @@
         </div>
     </header>
 
-    <!-- Main Quiz Container -->
+    <!-- Main -->
     <div class="quiz-container">
         <aside class="quiz-sidebar" id="quizSidebar">
             <div class="sidebar-header">
@@ -105,9 +94,7 @@
             <div class="question-card" id="questionCard">
                 <div class="question-header">
                     <div class="question-number">Question <span id="questionNumber">1</span></div>
-                    <button class="btn-flag" id="flagBtn" aria-label="Flag question">
-                        <i class="far fa-flag"></i><span>Flag</span>
-                    </button>
+                    <button class="btn-flag" id="flagBtn" aria-label="Flag question"><i class="far fa-flag"></i><span>Flag</span></button>
                 </div>
                 <div class="question-text" id="questionText">Loading question...</div>
                 <div class="options-container" id="optionsContainer"></div>
@@ -124,17 +111,12 @@
         </main>
     </div>
 
-    <div class="mobile-palette-trigger" id="mobilePaletteBtn">
-        <i class="fas fa-th"></i><span>Questions</span>
-    </div>
+    <div class="mobile-palette-trigger" id="mobilePaletteBtn"><i class="fas fa-th"></i><span>Questions</span></div>
 
     <!-- Submit Modal -->
     <div class="modal-overlay hidden" id="submitModal">
         <div class="modal">
-            <div class="modal-header">
-                <h3>Submit Test?</h3>
-                <button class="btn-icon" id="closeSubmitModal"><i class="fas fa-times"></i></button>
-            </div>
+            <div class="modal-header"><h3>Submit Test?</h3><button class="btn-icon" id="closeSubmitModal"><i class="fas fa-times"></i></button></div>
             <div class="modal-body">
                 <div class="submit-summary">
                     <div class="summary-item"><span class="summary-label">Total Questions:</span><span class="summary-value" id="modalTotalQuestions">{{TOTAL_QUESTIONS}}</span></div>
@@ -142,10 +124,7 @@
                     <div class="summary-item"><span class="summary-label">Unanswered:</span><span class="summary-value warning-text" id="modalUnansweredCount">{{TOTAL_QUESTIONS}}</span></div>
                     <div class="summary-item"><span class="summary-label">Time Remaining:</span><span class="summary-value" id="modalTimeRemaining">{{TIMER_DURATION}}</span></div>
                 </div>
-                <div class="warning-message">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <span>You cannot change your answers after submission.</span>
-                </div>
+                <div class="warning-message"><i class="fas fa-exclamation-triangle"></i><span>You cannot change your answers after submission.</span></div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" id="cancelSubmitBtn">Cancel</button>
@@ -157,10 +136,7 @@
     <!-- Calculator Modal -->
     <div class="modal-overlay hidden" id="calculatorModal">
         <div class="modal calculator-modal">
-            <div class="modal-header">
-                <h3>Calculator</h3>
-                <button class="btn-icon" id="closeCalculatorModal"><i class="fas fa-times"></i></button>
-            </div>
+            <div class="modal-header"><h3>Calculator</h3><button class="btn-icon" id="closeCalculatorModal"><i class="fas fa-times"></i></button></div>
             <div class="modal-body">
                 <div class="calculator">
                     <input type="text" class="calculator-display" id="calcDisplay" value="0" readonly>
@@ -180,8 +156,8 @@
                         <button class="calc-btn" data-value="1">1</button>
                         <button class="calc-btn" data-value="2">2</button>
                         <button class="calc-btn" data-value="3">3</button>
-                        <button class="calc-btn calc-equals" data-action="equals" style="grid-row: span 2;">=</button>
-                        <button class="calc-btn" data-value="0" style="grid-column: span 2;">0</button>
+                        <button class="calc-btn calc-equals" data-action="equals" style="grid-row:span 2">=</button>
+                        <button class="calc-btn" data-value="0" style="grid-column:span 2">0</button>
                         <button class="calc-btn" data-value=".">.</button>
                     </div>
                 </div>
@@ -194,106 +170,278 @@
         <div class="modal">
             <div class="modal-header"><h3>Time's Up!</h3></div>
             <div class="modal-body">
-                <div class="time-up-message">
-                    <i class="fas fa-hourglass-end"></i>
-                    <p>Your test time has expired. Your answers have been automatically submitted.</p>
-                </div>
+                <div class="time-up-message"><i class="fas fa-hourglass-end"></i><p>Your test time has expired. Your answers have been automatically submitted.</p></div>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" id="viewResultsBtn">View Results</button>
-            </div>
+            <div class="modal-footer"><button class="btn btn-primary" id="viewResultsBtn">View Results</button></div>
         </div>
     </div>
 
-    <!-- Embedded Quiz Data -->
+    <!-- ═══════════════════════════════════════════════════
+         EMBEDDED DATA — injected by generate_quiz.py
+    ═══════════════════════════════════════════════════ -->
     <script>
-        window.quizMetadata = {
+        window.QUIZ_META = {
             period: {{PERIOD}},
             days: "{{DAY_RANGE}}",
             subject: "{{SUBJECT_NAME}}",
-            generatedDate: "{{GENERATED_DATE}}",
-            validationStatus: "{{VALIDATION_STATUS}}",
-            totalQuestions: {{TOTAL_QUESTIONS}},
-            timerMinutes: {{TIMER_MINUTES}}
+            timerMinutes: {{TIMER_MINUTES}},
+            totalQuestions: {{TOTAL_QUESTIONS}}
         };
-        window.quizData = {{QUESTIONS_JSON}};
+        // Format: [{id, text, optionA, optionB, optionC, optionD, answer, explanation, exception}, ...]
+        window.QUIZ_DATA = {{QUESTIONS_JSON}};
     </script>
 
-    <!-- Load scripts FIRST — classes must exist before init below runs -->
-    <script src="question-parser.js"></script>
-    <script src="quiz-launcher.js"></script>
-    <script src="quiz-app.js"></script>
-
-    <!-- Init: runs synchronously after scripts above, no DOMContentLoaded race -->
+    <!-- ═══════════════════════════════════════════════════
+         QUIZ ENGINE — self-contained, no external JS needed
+    ═══════════════════════════════════════════════════ -->
     <script>
-        (function () {
-            window.closeBanner = function () {
-                document.getElementById('error-banner').classList.add('hidden');
+    (function () {
+
+        // ── Helpers ───────────────────────────────────────────────────────────
+        function $(id) { return document.getElementById(id); }
+
+        function showFallback(msg) {
+            $('fallback-message').textContent = msg;
+            $('fallback-container').classList.remove('hidden');
+            document.querySelector('.quiz-header').style.display = 'none';
+            document.querySelector('.quiz-container').style.display = 'none';
+        }
+
+        function showWarning(msg) {
+            $('error-title').textContent = 'Notice';
+            $('error-message').textContent = msg;
+            $('error-banner').classList.remove('hidden');
+        }
+
+        // ── Validate data ─────────────────────────────────────────────────────
+        var raw = window.QUIZ_DATA;
+        if (!raw || !Array.isArray(raw) || raw.length === 0) {
+            showFallback("We're still generating this quiz. Check back soon."); return;
+        }
+
+        var questions = raw.filter(function(q) {
+            return q && q.text && q.optionA && q.optionB && q.optionC && q.optionD
+                && q.answer && 'ABCD'.indexOf(q.answer) !== -1;
+        }).map(function(q) {
+            return {
+                id:      q.id,
+                text:    q.text,
+                options: { A: q.optionA, B: q.optionB, C: q.optionC, D: q.optionD },
+                answer:  q.answer,
+                explanation: q.explanation || '',
+                exception:   q.exception   || ''
             };
+        });
 
-            window.loadPreviousQuiz = function () {
-                var prev = window.quizMetadata.period - 1;
-                if (prev < 1) { alert('No previous quiz available.'); return; }
-                window.location.href = window.location.pathname.split('/').pop()
-                    .replace('period-' + window.quizMetadata.period, 'period-' + prev);
-            };
+        if (questions.length === 0) {
+            showFallback("There was an issue loading this quiz. Please refresh."); return;
+        }
+        if (questions.length < raw.length) {
+            showWarning((raw.length - questions.length) + ' questions were skipped due to formatting errors.');
+        }
 
-            function showWarning(title, message) {
-                var banner = document.getElementById('error-banner');
-                document.getElementById('error-title').textContent = title;
-                document.getElementById('error-message').textContent = message;
-                banner.classList.remove('hidden');
-                banner.style.backgroundColor = '#fef3c7';
-                banner.querySelector('i').style.color = '#f59e0b';
-            }
+        // ── State ─────────────────────────────────────────────────────────────
+        var state = {
+            questions:    questions,
+            current:      0,
+            answers:      {},   // { id: 'A'|'B'|'C'|'D' }
+            flagged:      {},   // { id: true }
+            duration:     window.QUIZ_META.timerMinutes * 60,
+            timeLeft:     window.QUIZ_META.timerMinutes * 60,
+            submitted:    false,
+            timerHandle:  null
+        };
 
-            function showFallback(reason) {
-                var msgs = {
-                    'no-data':      "We're still generating your Day " + window.quizMetadata.days + " quiz. Check back soon.",
-                    'empty-data':   "Your Day " + window.quizMetadata.days + " quiz is being prepared.",
-                    'invalid-data': "There was an issue loading today's quiz. Please refresh."
-                };
-                document.getElementById('fallback-message').textContent = msgs[reason] || msgs['no-data'];
-                document.getElementById('fallback-container').classList.remove('hidden');
-                document.querySelector('.quiz-header').style.display = 'none';
-                document.querySelector('.quiz-container').style.display = 'none';
-                var seconds = 15 * 60, el = document.getElementById('fallback-countdown');
-                var t = setInterval(function () {
-                    if (--seconds <= 0) { clearInterval(t); return; }
-                    el.textContent = String(Math.floor(seconds/60)).padStart(2,'0') + ':' + String(seconds%60).padStart(2,'0');
-                }, 1000);
-            }
+        // ── Render ────────────────────────────────────────────────────────────
+        function render() {
+            var q   = questions[state.current];
+            var tot = questions.length;
 
-            // Validate
-            if (!window.quizData || !Array.isArray(window.quizData) || window.quizData.length === 0) {
-                showFallback('no-data'); return;
-            }
+            // Header
+            $('currentQuestionNum').textContent = state.current + 1;
+            $('totalQuestions').textContent     = tot;
+            $('subjectName').textContent        = window.QUIZ_META.subject;
 
-            var valid = window.quizData.filter(function (q) {
-                return q && q.text && q.optionA && q.optionB && q.optionC && q.optionD &&
-                    q.answer && ['A','B','C','D'].indexOf(q.answer) !== -1;
+            // Question
+            $('questionNumber').textContent = state.current + 1;
+            $('questionText').textContent   = q.text;
+
+            // Options
+            var container = $('optionsContainer');
+            container.innerHTML = '';
+            ['A','B','C','D'].forEach(function(lbl) {
+                if (!q.options[lbl]) return;
+                var div = document.createElement('div');
+                div.className = 'option' + (state.answers[q.id] === lbl ? ' selected' : '');
+                div.innerHTML = '<div class="option-label">' + lbl + '</div>'
+                              + '<div class="option-text">' + q.options[lbl] + '</div>';
+                div.addEventListener('click', function() { selectAnswer(lbl); });
+                container.appendChild(div);
             });
 
-            if (valid.length === 0) { showFallback('invalid-data'); return; }
-            if (valid.length < window.quizData.length) {
-                showWarning('Partial Quiz', valid.length + ' of ' + window.quizData.length + ' questions loaded.');
+            // Flag button
+            var flagBtn = $('flagBtn');
+            if (state.flagged[q.id]) {
+                flagBtn.classList.add('flagged');
+                flagBtn.querySelector('i').className = 'fas fa-flag';
+            } else {
+                flagBtn.classList.remove('flagged');
+                flagBtn.querySelector('i').className = 'far fa-flag';
             }
 
-            window.quizData = valid;
-            window.quizMetadata.totalQuestions = valid.length;
+            // Nav buttons
+            $('prevBtn').disabled = state.current === 0;
+            $('nextBtn').innerHTML = state.current === tot - 1
+                ? '<i class="fas fa-check"></i> Review & Submit'
+                : 'Next <i class="fas fa-arrow-right"></i>';
 
-            // Bootstrap — QuizLauncher / QuizState / QuizUI defined by scripts above
-            try {
-                var launcher = new QuizLauncher();
-                var questions = launcher.convertEmbeddedData(window.quizData);
-                QUIZ_CONFIG.duration = window.quizMetadata.timerMinutes * 60;
-                var state = new QuizState(questions, QUIZ_CONFIG.duration);
-                new QuizUI(state);
-            } catch (err) {
-                console.error('Quiz init error:', err);
-                showFallback('invalid-data');
-            }
-        })();
+            // Sidebar palette
+            var palette = $('questionPalette');
+            palette.innerHTML = '';
+            questions.forEach(function(pq, idx) {
+                var btn = document.createElement('button');
+                btn.className = 'palette-btn';
+                btn.textContent = idx + 1;
+                if (idx === state.current)      btn.classList.add('current');
+                else if (state.answers[pq.id])  btn.classList.add('answered');
+                if (state.flagged[pq.id])       btn.classList.add('flagged');
+                btn.addEventListener('click', function() { state.current = idx; render(); closeSidebar(); });
+                palette.appendChild(btn);
+            });
+
+            // Stats
+            var answered = Object.keys(state.answers).length;
+            $('answeredCount').textContent   = answered;
+            $('unansweredCount').textContent = tot - answered;
+            $('flaggedCount').textContent    = Object.keys(state.flagged).length;
+
+            $('questionCard').scrollTop = 0;
+        }
+
+        // ── Actions ───────────────────────────────────────────────────────────
+        function selectAnswer(lbl) {
+            state.answers[questions[state.current].id] = lbl;
+            render();
+        }
+
+        function clearAnswer() {
+            delete state.answers[questions[state.current].id];
+            render();
+        }
+
+        function toggleFlag() {
+            var id = questions[state.current].id;
+            if (state.flagged[id]) delete state.flagged[id]; else state.flagged[id] = true;
+            render();
+        }
+
+        function closeSidebar() {
+            if (window.innerWidth <= 1024) $('quizSidebar').classList.remove('open');
+        }
+
+        // ── Timer ─────────────────────────────────────────────────────────────
+        function startTimer() {
+            state.timerHandle = setInterval(function() {
+                state.timeLeft--;
+                updateTimerDisplay();
+                if (state.timeLeft <= 0) {
+                    clearInterval(state.timerHandle);
+                    $('timeUpModal').classList.remove('hidden');
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            var m = Math.floor(state.timeLeft / 60);
+            var s = state.timeLeft % 60;
+            $('timerDisplay').textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+            var progress = (state.timeLeft / state.duration) * 163.36;
+            $('timerProgressCircle').style.strokeDashoffset = 163.36 - progress;
+            $('timerDisplay').classList.toggle('warning', state.timeLeft <= 300 && state.timeLeft > 60);
+            $('timerDisplay').classList.toggle('danger',  state.timeLeft <= 60);
+        }
+
+        // ── Submit ────────────────────────────────────────────────────────────
+        function showSubmitModal() {
+            var answered = Object.keys(state.answers).length;
+            $('modalTotalQuestions').textContent  = questions.length;
+            $('modalAnsweredCount').textContent   = answered;
+            $('modalUnansweredCount').textContent = questions.length - answered;
+            $('modalTimeRemaining').textContent   =
+                String(Math.floor(state.timeLeft/60)).padStart(2,'0') + ':' +
+                String(state.timeLeft%60).padStart(2,'0');
+            $('submitModal').classList.remove('hidden');
+        }
+
+        function submitQuiz() {
+            state.submitted = true;
+            clearInterval(state.timerHandle);
+            $('submitModal').classList.add('hidden');
+
+            var correct = 0;
+            questions.forEach(function(q) { if (state.answers[q.id] === q.answer) correct++; });
+            var pct = ((correct / questions.length) * 100).toFixed(1);
+            alert('Quiz Complete!\n\nScore: ' + correct + '/' + questions.length + ' (' + pct + '%)');
+            window.location.href = 'index.html';
+        }
+
+        // ── Calculator ────────────────────────────────────────────────────────
+        document.querySelectorAll('.calc-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var display = $('calcDisplay');
+                var v = btn.dataset.value, a = btn.dataset.action;
+                if (v) {
+                    display.value = display.value === '0' ? v : display.value + v;
+                } else if (a === 'clear') {
+                    display.value = '0';
+                } else if (a === 'delete') {
+                    display.value = display.value.slice(0,-1) || '0';
+                } else if (a === 'equals') {
+                    try {
+                        display.value = eval(display.value.replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-'));
+                    } catch(e) { display.value = 'Error'; setTimeout(function(){display.value='0';},1000); }
+                } else {
+                    display.value += ' ' + btn.textContent + ' ';
+                }
+            });
+        });
+
+        // ── Event listeners ───────────────────────────────────────────────────
+        $('prevBtn').addEventListener('click', function() { if (state.current > 0) { state.current--; render(); } });
+        $('nextBtn').addEventListener('click', function() {
+            if (state.current === questions.length - 1) showSubmitModal();
+            else { state.current++; render(); }
+        });
+        $('clearBtn').addEventListener('click', clearAnswer);
+        $('flagBtn').addEventListener('click', toggleFlag);
+        $('menuBtn').addEventListener('click', function() { $('quizSidebar').classList.toggle('open'); });
+        $('closeSidebar').addEventListener('click', function() { $('quizSidebar').classList.remove('open'); });
+        $('mobilePaletteBtn').addEventListener('click', function() { $('quizSidebar').classList.toggle('open'); });
+        $('submitBtn').addEventListener('click', showSubmitModal);
+        $('closeSubmitModal').addEventListener('click', function() { $('submitModal').classList.add('hidden'); });
+        $('cancelSubmitBtn').addEventListener('click', function() { $('submitModal').classList.add('hidden'); });
+        $('confirmSubmitBtn').addEventListener('click', submitQuiz);
+        $('calculatorBtn').addEventListener('click', function() { $('calculatorModal').classList.remove('hidden'); });
+        $('closeCalculatorModal').addEventListener('click', function() { $('calculatorModal').classList.add('hidden'); });
+        $('viewResultsBtn').addEventListener('click', submitQuiz);
+
+        document.addEventListener('keydown', function(e) {
+            if (e.target.tagName === 'INPUT') return;
+            if (e.key === 'ArrowLeft')  { if (state.current > 0) { state.current--; render(); } }
+            if (e.key === 'ArrowRight') { if (state.current < questions.length-1) { state.current++; render(); } }
+            if ('ABCD'.includes(e.key.toUpperCase())) selectAnswer(e.key.toUpperCase());
+            if (e.key.toLowerCase() === 'f') toggleFlag();
+        });
+
+        window.addEventListener('beforeunload', function(e) {
+            if (!state.submitted) { e.preventDefault(); e.returnValue = ''; }
+        });
+
+        // ── Boot ──────────────────────────────────────────────────────────────
+        render();
+        startTimer();
+
+    })();
     </script>
 
 </body>
