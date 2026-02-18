@@ -1,16 +1,47 @@
-// GrantApp AI - Reconciled JavaScript with Anti-Silent-Failure
+// GrantApp AI - app.js
+
+// ─── CLUSTER → FILE MAP ────────────────────────────────────────────────────
+// Single source of truth. quiz-launcher.js also reads this via window.CLUSTER_FILE_MAP.
+// Never construct filenames by string-concatenating cluster keys — use this map.
+const CLUSTER_FILE_MAP = {
+    // Science
+    'science-a':    'quiz-science-cluster-a.html',
+    'science-b':    'quiz-science-cluster-b.html',
+    // Arts
+    'arts-a':           'quiz-arts-cluster-a.html',
+    'arts-b':           'quiz-arts-cluster-b.html',
+    'arts-cluster-a':   'quiz-arts-cluster-a.html',
+    'arts-cluster-b':   'quiz-arts-cluster-b.html',
+    // Commercial
+    'commercial-cluster-a': 'quiz-commercial-cluster-a.html',
+    'commercial-cluster-b': 'quiz-commercial-cluster-b.html',
+    'commercial-cluster-c': 'quiz-commercial-cluster-c.html',
+    // Legacy keys — kept so old data-cluster values still work
+    'mepc':  'quiz-science-cluster-a.html',
+    'bepc':  'quiz-science-cluster-b.html',
+};
+
+// Expose for quiz-launcher.js
+window.CLUSTER_FILE_MAP = CLUSTER_FILE_MAP;
+
+// ─── STREAM → CLUSTERS PAGE MAP ───────────────────────────────────────────
+const STREAM_FILE_MAP = {
+    'science':    'science_clusters.html',
+    'art':        'art_clusters.html',
+    'arts':       'art_clusters.html',
+    'commercial': 'commercial_clusters.html',
+};
 
 class GrantApp {
     constructor() {
-        this.timerInterval = null;
-        this.timeLeft = 15 * 60; // 15 minutes in seconds
-        this.isDragging = false;
-        this.dragOffset = { x: 0, y: 0 };
-        this.timerPosition = { x: 20, y: 100 };
-        this.initialized = false;
+        this.timerInterval  = null;
+        this.timeLeft       = 15 * 60;
+        this.isDragging     = false;
+        this.dragOffset     = { x: 0, y: 0 };
+        this.timerPosition  = { x: 20, y: 100 };
+        this.initialized    = false;
     }
 
-    // Initialize the application with error handling
     init() {
         try {
             this.initBackgroundParticles();
@@ -23,51 +54,42 @@ class GrantApp {
         }
     }
 
-    // Initialize draggable timer with error handling
+    // ── Timer ──────────────────────────────────────────────────────────────
+
     initTimer() {
         const timerContainer = document.querySelector('.timer-container');
-        const timerWidget = document.querySelector('.timer-widget');
-        
+        const timerWidget    = document.querySelector('.timer-widget');
+
         if (!timerContainer || !timerWidget) {
-            console.warn('Timer elements not found - timer functionality will be disabled');
+            console.warn('Timer elements not found — timer disabled');
             return;
         }
-        
+
         try {
-            // Load saved position for landing page
             if (!timerContainer.classList.contains('quiz')) {
                 try {
                     const saved = localStorage.getItem('grantappTimerPosition');
                     if (saved) {
-                        const pos = JSON.parse(saved);
-                        // Ensure position is on screen (basic bounds check)
-                        const maxX = window.innerWidth - 200;
+                        const pos  = JSON.parse(saved);
+                        const maxX = window.innerWidth  - 200;
                         const maxY = window.innerHeight - 200;
-                        this.timerPosition.x = Math.min(Math.max(0, pos.x), maxX);
+                        this.timerPosition.x = Math.min(Math.max(0, pos.x),  maxX);
                         this.timerPosition.y = Math.min(Math.max(60, pos.y), maxY);
                     } else {
-                        // Default position - bottom right
-                        this.timerPosition.x = window.innerWidth - 220;
+                        this.timerPosition.x = window.innerWidth  - 220;
                         this.timerPosition.y = window.innerHeight - 180;
                     }
                     timerContainer.style.left = `${this.timerPosition.x}px`;
-                    timerContainer.style.top = `${this.timerPosition.y}px`;
-                } catch (error) {
-                    // Fallback to safe visible position
-                    timerContainer.style.right = '20px';
+                    timerContainer.style.top  = `${this.timerPosition.y}px`;
+                } catch {
+                    timerContainer.style.right  = '20px';
                     timerContainer.style.bottom = '20px';
-                    console.warn('Could not restore timer position:', error);
                 }
-                
-                // Make draggable
                 this.setupDraggableTimer(timerContainer);
             }
-            
-            // Start countdown
             this.startCountdown();
         } catch (error) {
-            console.error('Timer initialization error:', error);
-            // Timer fails gracefully - show static timer
+            console.error('Timer init error:', error);
             const display = timerContainer.querySelector('.timer-display');
             if (display) display.textContent = '15:00';
         }
@@ -76,172 +98,106 @@ class GrantApp {
     setupDraggableTimer(container) {
         const timerWidget = container.querySelector('.timer-widget');
         if (!timerWidget) return;
-        
-        try {
-            // Mouse events
-            timerWidget.addEventListener('mousedown', (e) => {
-                this.isDragging = true;
-                container.classList.add('dragging');
-                
-                const rect = container.getBoundingClientRect();
-                this.dragOffset.x = e.clientX - rect.left;
-                this.dragOffset.y = e.clientY - rect.top;
-                
-                document.addEventListener('mousemove', this.handleDrag.bind(this));
-                document.addEventListener('mouseup', this.stopDrag.bind(this));
-            });
-            
-            // Touch events
-            timerWidget.addEventListener('touchstart', (e) => {
-                this.isDragging = true;
-                container.classList.add('dragging');
-                
-                const touch = e.touches[0];
-                const rect = container.getBoundingClientRect();
-                this.dragOffset.x = touch.clientX - rect.left;
-                this.dragOffset.y = touch.clientY - rect.top;
-                
-                document.addEventListener('touchmove', this.handleTouchDrag.bind(this));
-                document.addEventListener('touchend', this.stopDrag.bind(this));
-            });
-        } catch (error) {
-            console.error('Error setting up draggable timer:', error);
-            // Timer stays in place if drag fails
-        }
-    }
 
-    handleDrag(e) {
-        if (!this.isDragging) return;
-        
-        try {
-            const container = document.querySelector('.timer-container');
-            if (!container) return;
-            
-            this.timerPosition.x = e.clientX - this.dragOffset.x;
-            this.timerPosition.y = e.clientY - this.dragOffset.y;
-            
+        const onMouseDown = (e) => {
+            this.isDragging = true;
+            container.classList.add('dragging');
+            const rect = container.getBoundingClientRect();
+            this.dragOffset = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        };
+        const onMouseMove = (e) => {
+            if (!this.isDragging) return;
+            this.timerPosition = { x: e.clientX - this.dragOffset.x, y: e.clientY - this.dragOffset.y };
             container.style.left = `${this.timerPosition.x}px`;
-            container.style.top = `${this.timerPosition.y}px`;
-        } catch (error) {
-            console.error('Drag error:', error);
-        }
-    }
-
-    handleTouchDrag(e) {
-        if (!this.isDragging || !e.touches[0]) return;
-        
-        try {
-            const container = document.querySelector('.timer-container');
-            if (!container) return;
-            
-            const touch = e.touches[0];
-            this.timerPosition.x = touch.clientX - this.dragOffset.x;
-            this.timerPosition.y = touch.clientY - this.dragOffset.y;
-            
-            container.style.left = `${this.timerPosition.x}px`;
-            container.style.top = `${this.timerPosition.y}px`;
-        } catch (error) {
-            console.error('Touch drag error:', error);
-        }
-    }
-
-    stopDrag() {
-        this.isDragging = false;
-        const container = document.querySelector('.timer-container');
-        if (container) {
+            container.style.top  = `${this.timerPosition.y}px`;
+        };
+        const onMouseUp = () => {
+            this.isDragging = false;
             container.classList.remove('dragging');
-        }
-        
-        // Save position
-        try {
-            localStorage.setItem('grantappTimerPosition', JSON.stringify(this.timerPosition));
-        } catch (error) {
-            console.warn('Could not save timer position:', error);
-        }
-        
-        // Remove event listeners
-        document.removeEventListener('mousemove', this.handleDrag.bind(this));
-        document.removeEventListener('mouseup', this.stopDrag.bind(this));
-        document.removeEventListener('touchmove', this.handleTouchDrag.bind(this));
-        document.removeEventListener('touchend', this.stopDrag.bind(this));
+            try { localStorage.setItem('grantappTimerPosition', JSON.stringify(this.timerPosition)); } catch {}
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup',   onMouseUp);
+        };
+
+        const onTouchStart = (e) => {
+            this.isDragging = true;
+            container.classList.add('dragging');
+            const touch = e.touches[0];
+            const rect  = container.getBoundingClientRect();
+            this.dragOffset = { x: touch.clientX - rect.left, y: touch.clientY - rect.top };
+            document.addEventListener('touchmove', onTouchMove);
+            document.addEventListener('touchend',  onTouchEnd);
+        };
+        const onTouchMove = (e) => {
+            if (!this.isDragging || !e.touches[0]) return;
+            const touch = e.touches[0];
+            this.timerPosition = { x: touch.clientX - this.dragOffset.x, y: touch.clientY - this.dragOffset.y };
+            container.style.left = `${this.timerPosition.x}px`;
+            container.style.top  = `${this.timerPosition.y}px`;
+        };
+        const onTouchEnd = () => {
+            this.isDragging = false;
+            container.classList.remove('dragging');
+            try { localStorage.setItem('grantappTimerPosition', JSON.stringify(this.timerPosition)); } catch {}
+            document.removeEventListener('touchmove', onTouchMove);
+            document.removeEventListener('touchend',  onTouchEnd);
+        };
+
+        timerWidget.addEventListener('mousedown', onMouseDown);
+        timerWidget.addEventListener('touchstart', onTouchStart);
     }
 
-    // Start timer countdown
     startCountdown() {
-        const display = document.querySelector('.timer-display');
+        const display     = document.querySelector('.timer-display');
         const progressBar = document.querySelector('.timer-progress-bar');
-        const container = document.querySelector('.timer-container');
-        
-        if (!display) {
-            console.warn('Timer display not found');
-            return;
-        }
-        
+        const container   = document.querySelector('.timer-container');
+
+        if (!display) return;
+
         const updateTimer = () => {
             try {
                 if (this.timeLeft <= 0) {
                     display.textContent = '00:00';
                     if (progressBar) progressBar.style.width = '0%';
-                    if (container) container.classList.add('timer-critical');
+                    if (container)   container.classList.add('timer-critical');
                     clearInterval(this.timerInterval);
-                    
-                    // Auto-submit on quiz pages
-                    if (document.querySelector('.timer-container.quiz')) {
-                        this.submitTest();
-                    }
+                    if (document.querySelector('.timer-container.quiz')) this.submitTest();
                     return;
                 }
-                
                 this.timeLeft--;
-                const minutes = Math.floor(this.timeLeft / 60);
-                const seconds = this.timeLeft % 60;
-                display.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                
-                // Update progress bar
-                if (progressBar) {
-                    const progress = (this.timeLeft / (15 * 60)) * 100;
-                    progressBar.style.width = `${progress}%`;
-                }
-                
-                // Update timer styling based on README spec
+                const m = Math.floor(this.timeLeft / 60);
+                const s = this.timeLeft % 60;
+                display.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+                if (progressBar) progressBar.style.width = `${(this.timeLeft / (15 * 60)) * 100}%`;
                 if (container) {
                     container.classList.remove('timer-safe', 'timer-warning', 'timer-critical');
-                    if (minutes >= 10) {
-                        container.classList.add('timer-safe'); // Green >10min
-                    } else if (minutes >= 5) {
-                        container.classList.add('timer-warning'); // Orange 5-10min
-                    } else {
-                        container.classList.add('timer-critical'); // Red <5min with pulse
-                    }
+                    container.classList.add(m >= 10 ? 'timer-safe' : m >= 5 ? 'timer-warning' : 'timer-critical');
                 }
-            } catch (error) {
-                console.error('Timer update error:', error);
+            } catch (e) {
+                console.error('Timer update error:', e);
                 clearInterval(this.timerInterval);
             }
         };
-        
-        updateTimer(); // Initial call
+
+        updateTimer();
         this.timerInterval = setInterval(updateTimer, 1000);
     }
 
-    // Stream selection
+    // ── Navigation ─────────────────────────────────────────────────────────
+
+    /**
+     * Navigate to a stream's cluster-selection page.
+     * stream: 'science' | 'art' | 'arts' | 'commercial'
+     */
     selectStream(stream) {
-        if (!stream) {
-            this.showError('Please select a valid stream');
-            return;
-        }
-        
+        if (!stream) { this.showError('Please select a valid stream'); return; }
         try {
             this.showLoading();
-            
-            // Save selection
+            const dest = STREAM_FILE_MAP[stream] || `${stream}_clusters.html`;
             localStorage.setItem('selectedStream', stream);
-            
-            // Navigate after delay - handle art vs arts naming
-            setTimeout(() => {
-                const routeName = stream === 'art' ? 'art' : stream;
-                window.location.href = `${routeName}_clusters.html`;
-            }, 1000);
+            setTimeout(() => { window.location.href = dest; }, 600);
         } catch (error) {
             this.hideLoading();
             this.showError('Unable to proceed. Please try again.');
@@ -249,23 +205,25 @@ class GrantApp {
         }
     }
 
-    // Cluster selection
+    /**
+     * Navigate to a quiz file using CLUSTER_FILE_MAP.
+     * cluster: e.g. 'science-a', 'arts-a', 'commercial-cluster-b'
+     *
+     * Falls back through the same chain as quiz-launcher.js:
+     *   1. CLUSTER_FILE_MAP lookup
+     *   2. quiz-${cluster}.html (generic)
+     *   3. quiz.html?cluster=${cluster} (last resort — quiz-app.js will load sampleQuestions)
+     */
     selectCluster(cluster) {
-        if (!cluster) {
-            this.showError('Please select a valid cluster');
-            return;
-        }
-        
+        if (!cluster) { this.showError('Please select a valid cluster'); return; }
         try {
             this.showLoading();
-            
-            // Save cluster selection
             localStorage.setItem('selectedCluster', cluster);
-            
-            // Navigate to practice test
-            setTimeout(() => {
-                window.location.href = `practice_${cluster}.html`;
-            }, 1000);
+
+            const dest = CLUSTER_FILE_MAP[cluster]
+                      || `quiz-${cluster}.html`;
+
+            setTimeout(() => { window.location.href = dest; }, 600);
         } catch (error) {
             this.hideLoading();
             this.showError('Unable to proceed. Please try again.');
@@ -273,281 +231,176 @@ class GrantApp {
         }
     }
 
-    // Loading system with error handling
+    // ── Loading state ───────────────────────────────────────────────────────
+
     showLoading() {
         const overlay = document.getElementById('loading-overlay');
-        if (overlay) {
-            overlay.classList.add('active');
-            try {
-                localStorage.setItem('grantappLoading', 'true');
-            } catch (error) {
-                console.warn('Could not set loading state:', error);
-            }
-        }
+        if (overlay) overlay.classList.add('active');
+        try { localStorage.setItem('grantappLoading', 'true'); } catch {}
     }
 
     hideLoading() {
         const overlay = document.getElementById('loading-overlay');
-        if (overlay) {
-            overlay.classList.remove('active');
-            try {
-                localStorage.removeItem('grantappLoading');
-            } catch (error) {
-                console.warn('Could not clear loading state:', error);
-            }
-        }
+        if (overlay) overlay.classList.remove('active');
+        try { localStorage.removeItem('grantappLoading'); } catch {}
     }
 
     checkBackNavigation() {
         try {
             if (localStorage.getItem('grantappLoading') === 'true') {
-                setTimeout(() => {
-                    this.hideLoading();
-                }, 500);
+                setTimeout(() => this.hideLoading(), 500);
             }
-        } catch (error) {
-            console.warn('Could not check loading state:', error);
+        } catch {
             this.hideLoading();
         }
     }
 
-    // Setup background particles
+    // ── Background particles ────────────────────────────────────────────────
+
     initBackgroundParticles() {
         const bg = document.querySelector('.animated-bg');
         if (!bg) return;
-        
-        try {
-            // Clear existing particles
-            bg.innerHTML = '';
-            
-            // Create particles
-            for (let i = 0; i < 12; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'bg-particle';
-                
-                const size = Math.random() * 120 + 60;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                particle.style.top = `${Math.random() * 100}%`;
-                particle.style.left = `${Math.random() * 100}%`;
-                particle.style.animationDelay = `${Math.random() * 10}s`;
-                particle.style.opacity = Math.random() * 0.08 + 0.02;
-                
-                bg.appendChild(particle);
-            }
-        } catch (error) {
-            console.error('Error creating background particles:', error);
-            // Fails silently - background is decorative
+        bg.innerHTML = '';
+        for (let i = 0; i < 12; i++) {
+            const p    = document.createElement('div');
+            p.className = 'bg-particle';
+            const size = Math.random() * 120 + 60;
+            p.style.cssText = `
+                width:${size}px; height:${size}px;
+                top:${Math.random()*100}%;
+                left:${Math.random()*100}%;
+                animation-delay:${Math.random()*10}s;
+                opacity:${(Math.random()*0.08+0.02).toFixed(3)};
+            `;
+            bg.appendChild(p);
         }
     }
 
-    // Initialize placeholder shimmer per README protocol
+    // ── Placeholders shimmer ────────────────────────────────────────────────
+
     initializePlaceholders() {
-        try {
-            // Only query stat-number elements that might have placeholders - much more efficient
-            const statNumbers = document.querySelectorAll('.stat-number');
-            statNumbers.forEach(el => {
-                const text = el.textContent.trim();
-                if (text.includes('[COUNT]') || text.includes('[PERCENTAGE]')) {
-                    el.classList.add('placeholder-shimmer');
-                }
-            });
-        } catch (error) {
-            console.warn('Could not initialize placeholders:', error);
-        }
+        document.querySelectorAll('.stat-number').forEach(el => {
+            if (/\[(COUNT|PERCENTAGE)\]/.test(el.textContent)) {
+                el.classList.add('placeholder-shimmer');
+            }
+        });
     }
 
-    // Setup event listeners with unified data-attribute pattern
+    // ── Event listeners ─────────────────────────────────────────────────────
+
     setupEventListeners() {
         try {
-            // Apply shimmer to placeholders per README protocol
             this.initializePlaceholders();
-            
-            // Stream selection buttons
+
             document.querySelectorAll('[data-stream]').forEach(btn => {
-                btn.addEventListener('click', (e) => {
+                btn.addEventListener('click', e => {
                     e.preventDefault();
-                    const stream = btn.dataset.stream;
-                    this.selectStream(stream);
+                    this.selectStream(btn.dataset.stream);
                 });
             });
-            
-            // Cluster selection buttons
+
             document.querySelectorAll('[data-cluster]').forEach(btn => {
-                btn.addEventListener('click', (e) => {
+                btn.addEventListener('click', e => {
                     e.preventDefault();
-                    const cluster = btn.dataset.cluster;
-                    this.selectCluster(cluster);
+                    this.selectCluster(btn.dataset.cluster);
                 });
             });
-            
-            // Coming soon buttons
+
             document.querySelectorAll('[data-coming-soon]').forEach(btn => {
-                btn.addEventListener('click', (e) => {
+                btn.addEventListener('click', e => {
                     e.preventDefault();
-                    const feature = btn.dataset.comingSoon;
-                    this.showComingSoon(feature);
+                    this.showComingSoon(btn.dataset.comingSoon);
                 });
             });
-            
-            // Modal close buttons
+
             document.querySelectorAll('[data-close-modal]').forEach(btn => {
-                btn.addEventListener('click', (e) => {
+                btn.addEventListener('click', e => {
                     e.preventDefault();
-                    const modalId = btn.dataset.closeModal;
-                    this.closeModal(modalId);
+                    this.closeModal(btn.dataset.closeModal);
                 });
             });
-            
-            // Close modals on overlay click
+
             document.querySelectorAll('.modal-overlay').forEach(overlay => {
-                overlay.addEventListener('click', (e) => {
-                    if (e.target === overlay) {
-                        overlay.classList.add('hidden');
-                    }
+                overlay.addEventListener('click', e => {
+                    if (e.target === overlay) overlay.classList.add('hidden');
                 });
             });
         } catch (error) {
-            console.error('Error setting up event listeners:', error);
+            console.error('Event listener setup error:', error);
             this.showError('Some interactive features may not work properly. Please refresh the page.');
         }
     }
 
-    // Show coming soon modal
+    // ── Modals & errors ─────────────────────────────────────────────────────
+
     showComingSoon(feature) {
-        try {
-            const message = document.getElementById('coming-soon-message');
-            if (message) {
-                message.textContent = `${feature} is coming soon! We're working hard to bring you this feature.`;
-            }
-            this.showModal('coming-soon-modal');
-        } catch (error) {
-            console.error('Error showing coming soon modal:', error);
-        }
+        const msg = document.getElementById('coming-soon-message');
+        if (msg) msg.textContent = `${feature} is coming soon! We're working hard to bring you this feature.`;
+        this.showModal('coming-soon-modal');
     }
 
-    // Show error modal with user-friendly message
     showError(message) {
         try {
-            const errorMessage = document.getElementById('error-message');
-            if (errorMessage) {
-                errorMessage.textContent = message;
-            }
+            const el = document.getElementById('error-message');
+            if (el) el.textContent = message;
             this.showModal('error-modal');
-        } catch (error) {
-            console.error('Error showing error modal:', error);
-            // Fallback to alert if modal fails
+        } catch {
             alert(message);
         }
     }
 
-    // Handle fatal errors
     handleFatalError(userMessage, error) {
         console.error('Fatal error:', error);
         this.showError(userMessage);
     }
 
-    // Modal controls
     showModal(modalId) {
-        try {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.classList.remove('hidden');
-            } else {
-                console.warn(`Modal ${modalId} not found`);
-            }
-        } catch (error) {
-            console.error('Error showing modal:', error);
-        }
+        const modal = document.getElementById(modalId);
+        if (modal) modal.classList.remove('hidden');
+        else console.warn(`Modal ${modalId} not found`);
     }
 
     closeModal(modalId) {
-        try {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.classList.add('hidden');
-            }
-        } catch (error) {
-            console.error('Error closing modal:', error);
-        }
+        const modal = document.getElementById(modalId);
+        if (modal) modal.classList.add('hidden');
     }
 
-    // Quiz submission
+    // ── Quiz helpers ────────────────────────────────────────────────────────
+
     submitTest() {
-        try {
-            console.log('Submitting test...');
-            this.showError('Time is up! Your test has been submitted.');
-            // Add actual submission logic here when backend is ready
-        } catch (error) {
-            console.error('Error submitting test:', error);
-            this.showError('Unable to submit test. Please contact support.');
-        }
+        console.log('Auto-submitting test (time up)');
+        this.showError('Time is up! Your test has been submitted.');
     }
 
-    // Reset timer (for practice tests)
     resetTimer(minutes = 15) {
-        try {
-            if (this.timerInterval) {
-                clearInterval(this.timerInterval);
-            }
-            this.timeLeft = minutes * 60;
-            this.startCountdown();
-        } catch (error) {
-            console.error('Error resetting timer:', error);
-        }
+        if (this.timerInterval) clearInterval(this.timerInterval);
+        this.timeLeft = minutes * 60;
+        this.startCountdown();
     }
 
-    // Pause timer
     pauseTimer() {
-        try {
-            if (this.timerInterval) {
-                clearInterval(this.timerInterval);
-                this.timerInterval = null;
-            }
-        } catch (error) {
-            console.error('Error pausing timer:', error);
-        }
+        if (this.timerInterval) { clearInterval(this.timerInterval); this.timerInterval = null; }
     }
 
-    // Resume timer
     resumeTimer() {
-        try {
-            if (!this.timerInterval && this.timeLeft > 0) {
-                this.startCountdown();
-            }
-        } catch (error) {
-            console.error('Error resuming timer:', error);
-        }
+        if (!this.timerInterval && this.timeLeft > 0) this.startCountdown();
     }
 }
 
-// Initialize when DOM is loaded with error handling
+// ── Bootstrap ────────────────────────────────────────────────────────────────
+
 document.addEventListener('DOMContentLoaded', () => {
     try {
         window.GrantApp = new GrantApp();
         window.GrantApp.init();
-        console.log('GrantApp initialized successfully');
     } catch (error) {
-        console.error('Failed to initialize GrantApp:', error);
-        
-        // Show user-friendly error
-        const body = document.body;
-        if (body) {
-            const errorDiv = document.createElement('div');
-            errorDiv.style.cssText = 'position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #EF4444; color: white; padding: 1rem 2rem; border-radius: 8px; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.15);';
-            errorDiv.textContent = 'Unable to start the application. Please refresh the page.';
-            body.appendChild(errorDiv);
-        }
+        console.error('Failed to initialise GrantApp:', error);
+        const div = document.createElement('div');
+        div.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#EF4444;color:white;padding:1rem 2rem;border-radius:8px;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,.15)';
+        div.textContent   = 'Unable to start the application. Please refresh the page.';
+        document.body.appendChild(div);
     }
 });
 
-// Prevent errors from breaking the page
-window.addEventListener('error', (event) => {
-    console.error('Global error:', event.error);
-    // Don't show modal for every error, just log it
-});
-
-window.addEventListener('unhandledrejection', (event) => {
-    console.error('Unhandled promise rejection:', event.reason);
-    // Don't show modal for every rejection, just log it
-});
+window.addEventListener('error',              e => console.error('Global error:',   e.error));
+window.addEventListener('unhandledrejection', e => console.error('Unhandled rejection:', e.reason));
