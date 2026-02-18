@@ -23,8 +23,8 @@ const QUIZ_CONFIG = {
     },
 
     // Timer durations
-    duration: 3600, // 60 min for clusters (seconds) — overridden by timerMinutes in metadata
-    subjectDuration: 900, // 15 min for individual subjects
+    duration: 3600,        // 60 min for clusters (seconds) — overridden by timerMinutes in metadata
+    subjectDuration: 900,  // 15 min for individual subjects
 
     // Cluster subject lists — mirrors generate_quiz.py CLUSTERS
     clusters: {
@@ -34,34 +34,62 @@ const QUIZ_CONFIG = {
         'commercial-cluster-a': ['English', 'Accounting', 'Commerce', 'Economics'],
         'commercial-cluster-b': ['English', 'Mathematics', 'Economics', 'Government'],
         'commercial-cluster-c': ['English', 'Economics', 'Government', 'Commerce']
-    }
+    },
+
+    // isCluster flag - set true for cluster quiz pages
+    isCluster: false
 };
 
 /**
- * Build archive URL for a given period and subject
+ * Map of cluster shortcodes to actual generated quiz filenames.
+ * Single source of truth — referenced by science/art/commercial cluster pages.
  */
+const CLUSTER_FILE_MAP = {
+    // Science
+    'mepc':               'quiz-science-cluster-a.html',
+    'bepc':               'quiz-science-cluster-b.html',
+    'science-a':          'quiz-science-cluster-a.html',
+    'science-b':          'quiz-science-cluster-b.html',
+    'science-cluster-a':  'quiz-science-cluster-a.html',
+    'science-cluster-b':  'quiz-science-cluster-b.html',
+    // Arts
+    'arts-a':             'quiz-arts-cluster-a.html',
+    'arts-cluster-a':     'quiz-arts-cluster-a.html',
+    // Commercial
+    'comm-a':             'quiz-commercial-cluster-a.html',
+    'comm-b':             'quiz-commercial-cluster-b.html',
+    'comm-c':             'quiz-commercial-cluster-c.html',
+    'commercial-a':       'quiz-commercial-cluster-a.html',
+    'commercial-b':       'quiz-commercial-cluster-b.html',
+    'commercial-c':       'quiz-commercial-cluster-c.html',
+    'commercial-cluster-a': 'quiz-commercial-cluster-a.html',
+    'commercial-cluster-b': 'quiz-commercial-cluster-b.html',
+    'commercial-cluster-c': 'quiz-commercial-cluster-c.html'
+};
+
+// Expose on window so cluster pages can use it without importing
+window.CLUSTER_FILE_MAP = CLUSTER_FILE_MAP;
+
+// ── Helpers ────────────────────────────────────────────────────────────────────
+
 function buildArchiveUrl(period, subject) {
     const dayStart = (period * 2) - 1;
     const dayEnd   = period * 2;
-    const dayRange = `${String(dayStart).padStart(2,'0')}-${String(dayEnd).padStart(2,'0')}`;
+    const dayRange = String(dayStart).padStart(2,'0') + '-' + String(dayEnd).padStart(2,'0');
     const filename = QUIZ_CONFIG.subjectFiles[subject];
     if (!filename) return null;
-    return `${QUIZ_CONFIG.archiveBaseUrl}/day-${dayRange}/${filename}`;
+    return QUIZ_CONFIG.archiveBaseUrl + '/day-' + dayRange + '/' + filename;
 }
 
-/**
- * Fetch and parse a .txt question file from a URL.
- * Returns array of question objects, or [] on any failure.
- */
 async function fetchAndParseQuestions(url, subject) {
     try {
         const response = await fetch(url);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        if (!response.ok) throw new Error('HTTP ' + response.status);
         const text = await response.text();
         const parser = new QuestionParser();
         return parser.parse(text, subject);
     } catch (e) {
-        console.warn(`fetchAndParseQuestions failed for ${subject} at ${url}:`, e.message);
+        console.warn('fetchAndParseQuestions failed for ' + subject + ' at ' + url + ':', e.message);
         return [];
     }
 }
@@ -71,45 +99,45 @@ async function fetchAndParseQuestions(url, subject) {
  * into the format QuizState expects {id, subject, text, options{}, answer}
  */
 function normaliseEmbeddedQuestions(raw, subjectHint) {
-    return raw.map((q, i) => ({
-        id:      q.id ?? (i + 1),
-        subject: q.subject || subjectHint || window.quizMetadata?.subject || 'General',
-        text:    q.text,
-        options: {
-            A: q.optionA || q.options?.A || '',
-            B: q.optionB || q.options?.B || '',
-            C: q.optionC || q.options?.C || '',
-            D: q.optionD || q.options?.D || ''
-        },
-        answer:      q.answer,
-        explanation: q.explanation || '',
-        exception:   q.exception   || ''
-    }));
+    return raw.map(function(q, i) {
+        return {
+            id:      q.id != null ? q.id : (i + 1),
+            subject: q.subject || subjectHint || (window.quizMetadata && window.quizMetadata.subject) || 'General',
+            text:    q.text,
+            options: {
+                A: q.optionA || (q.options && q.options.A) || '',
+                B: q.optionB || (q.options && q.options.B) || '',
+                C: q.optionC || (q.options && q.options.C) || '',
+                D: q.optionD || (q.options && q.options.D) || ''
+            },
+            answer:      q.answer,
+            explanation: q.explanation || '',
+            exception:   q.exception   || ''
+        };
+    });
 }
 
-/**
- * Validate a questions array — must have text, all 4 options, valid answer
- */
 function validateQuestions(questions) {
     if (!Array.isArray(questions) || questions.length === 0) return [];
-    return questions.filter(q =>
-        q &&
-        q.text &&
-        q.options &&
-        q.options.A && q.options.B && q.options.C && q.options.D &&
-        ['A','B','C','D'].includes(q.answer)
-    );
+    return questions.filter(function(q) {
+        return q && q.text &&
+               q.options && q.options.A && q.options.B && q.options.C && q.options.D &&
+               ['A','B','C','D'].includes(q.answer);
+    });
 }
 
+// ── QuizLauncher ───────────────────────────────────────────────────────────────
+
 /**
- * QuizLauncher — full fallback chain, guaranteed to return questions
+ * Full 5-level fallback chain — guaranteed to return questions or throw only
+ * as an absolute last resort.
  *
  * Priority:
- *   1. window.quizData (embedded by workflow) ← zero network calls
- *   2. window.previousQuizData (previous period, also embedded)
- *   3. Questt-resources archive for current period
- *   4. Questt-resources archive for previous period
- *   5. sampleQuestions from quiz-app.js ← silent last resort, always works
+ *   1. window.quizData  (embedded by workflow)            ← zero network calls
+ *   2. window.previousQuizData  (also embedded)
+ *   3. Questt-resources archive — current period
+ *   4. Questt-resources archive — previous period
+ *   5. sampleQuestions from quiz-app.js                   ← always works
  */
 class QuizLauncher {
     constructor() {
@@ -117,107 +145,92 @@ class QuizLauncher {
         this.period   = this.metadata.period || 1;
     }
 
-    /**
-     * Main entry point — always returns a non-empty questions array
-     */
     async initializeFromUrl() {
-        // --- Level 1: embedded current data ---
+
+        // ── Level 1: embedded current data ──────────────────────────────────
         if (window.quizData && Array.isArray(window.quizData) && window.quizData.length > 0) {
             const valid = validateQuestions(normaliseEmbeddedQuestions(window.quizData));
             if (valid.length > 0) {
-                console.log(`✓ Using embedded quizData (${valid.length} questions)`);
+                console.log('✓ Using embedded quizData (' + valid.length + ' questions)');
                 return valid;
             }
         }
 
-        // --- Level 2: embedded previous period data ---
+        // ── Level 2: embedded previous period data ───────────────────────────
         if (window.previousQuizData && Array.isArray(window.previousQuizData) && window.previousQuizData.length > 0) {
             const valid = validateQuestions(normaliseEmbeddedQuestions(window.previousQuizData));
             if (valid.length > 0) {
-                console.warn('⚠ Embedded data empty/invalid — using embedded previousQuizData');
+                console.warn('⚠ Using embedded previousQuizData');
                 this._showPreviousBanner();
                 return valid;
             }
         }
 
-        // --- Level 3: fetch from Questt-resources archive (current period) ---
-        const currentArchiveQuestions = await this._fetchArchive(this.period);
-        if (currentArchiveQuestions.length > 0) {
-            console.warn('⚠ Embedded data missing — loaded from archive (current period)');
-            return currentArchiveQuestions;
+        // ── Level 3: archive — current period ───────────────────────────────
+        const currentArchive = await this._fetchArchive(this.period);
+        if (currentArchive.length > 0) {
+            console.warn('⚠ Loaded from archive (current period)');
+            return currentArchive;
         }
 
-        // --- Level 4: fetch from Questt-resources archive (previous period) ---
+        // ── Level 4: archive — previous period ──────────────────────────────
         if (this.period > 1) {
-            const prevArchiveQuestions = await this._fetchArchive(this.period - 1);
-            if (prevArchiveQuestions.length > 0) {
-                console.warn('⚠ Using archive from previous period as fallback');
+            const prevArchive = await this._fetchArchive(this.period - 1);
+            if (prevArchive.length > 0) {
+                console.warn('⚠ Using archive from previous period');
                 this._showPreviousBanner();
-                return prevArchiveQuestions;
+                return prevArchive;
             }
         }
 
-        // --- Level 5: sampleQuestions (always available, defined in quiz-app.js) ---
+        // ── Level 5: built-in sample questions ──────────────────────────────
         console.warn('⚠ All sources failed — using built-in sample questions');
         if (typeof sampleQuestions !== 'undefined' && sampleQuestions.length > 0) {
             return validateQuestions(normaliseEmbeddedQuestions(sampleQuestions));
         }
 
-        // Should be unreachable, but just in case
         throw new Error('FATAL: No question source available');
     }
 
-    /**
-     * Fetch all subjects for the current quiz from the archive for a given period
-     */
     async _fetchArchive(period) {
-        // Determine which subjects to fetch
         const subjects = this._getSubjectsForThisPage();
         if (!subjects || subjects.length === 0) return [];
 
-        const allQuestions = [];
+        const all = [];
         for (const subject of subjects) {
             const url = buildArchiveUrl(period, subject);
             if (!url) continue;
-            const questions = await fetchAndParseQuestions(url, subject);
-            const valid = validateQuestions(normaliseEmbeddedQuestions(questions, subject));
-            allQuestions.push(...valid);
+            const qs    = await fetchAndParseQuestions(url, subject);
+            const valid = validateQuestions(normaliseEmbeddedQuestions(qs, subject));
+            all.push(...valid);
         }
-        return allQuestions;
+        return all;
     }
 
-    /**
-     * Determine which subjects belong on this page from metadata or cluster name
-     */
     _getSubjectsForThisPage() {
-        // Try to get cluster name from page filename
-        const filename = window.location.pathname.split('/').pop().replace('.html','');
+        const filename = window.location.pathname.split('/').pop().replace('.html', '');
 
-        // Check cluster map
-        for (const [clusterKey, subjects] of Object.entries(QUIZ_CONFIG.clusters)) {
-            if (filename.includes(clusterKey)) return subjects;
+        // Match cluster key inside filename
+        for (const [key, subjects] of Object.entries(QUIZ_CONFIG.clusters)) {
+            if (filename.includes(key)) return subjects;
         }
 
-        // Fall back to metadata subject (individual subject quiz)
+        // Individual subject page
         const subject = this.metadata.subject;
         if (subject && QUIZ_CONFIG.subjectFiles[subject]) return [subject];
 
-        // Try all subjects listed in metadata
+        // Comma-separated subjects in metadata
         if (this.metadata.subjects) {
-            return this.metadata.subjects
-                .split(',')
-                .map(s => s.trim())
-                .filter(s => QUIZ_CONFIG.subjectFiles[s]);
+            return this.metadata.subjects.split(',').map(s => s.trim()).filter(s => QUIZ_CONFIG.subjectFiles[s]);
         }
 
         return [];
     }
 
     _showPreviousBanner() {
-        // Show a soft non-blocking banner — never an error screen
+        const banner  = document.getElementById('error-banner');
         const titleEl = document.getElementById('error-title');
         const msgEl   = document.getElementById('error-message');
-        const banner  = document.getElementById('error-banner');
         if (!banner) return;
         if (titleEl) titleEl.textContent = 'Showing Previous Quiz';
         if (msgEl)   msgEl.textContent   = "Today's quiz is still being prepared. You're practising the previous set.";
@@ -228,51 +241,24 @@ class QuizLauncher {
     }
 }
 
-// ─── Navigation helpers called from cluster pages ────────────────────────────
-
-/**
- * Map of cluster shortcodes (used in science_clusters.html etc.)
- * to the actual generated quiz filenames.
- */
-const CLUSTER_FILE_MAP = {
-    // Science
-    'mepc':             'quiz-science-cluster-a.html',
-    'bepc':             'quiz-science-cluster-b.html',
-    'science-a':        'quiz-science-cluster-a.html',
-    'science-b':        'quiz-science-cluster-b.html',
-    // Arts
-    'arts-a':           'quiz-arts-cluster-a.html',
-    // Commercial
-    'comm-a':           'quiz-commercial-cluster-a.html',
-    'comm-b':           'quiz-commercial-cluster-b.html',
-    'comm-c':           'quiz-commercial-cluster-c.html',
-    'commercial-a':     'quiz-commercial-cluster-a.html',
-    'commercial-b':     'quiz-commercial-cluster-b.html',
-    'commercial-c':     'quiz-commercial-cluster-c.html'
-};
+// ── Navigation helpers (called from cluster pages) ─────────────────────────────
 
 function startQuiz(clusterKey) {
     const file = CLUSTER_FILE_MAP[clusterKey];
-    if (!file) {
-        console.error(`Unknown cluster key: ${clusterKey}`);
-        return;
-    }
+    if (!file) { console.error('Unknown cluster key: ' + clusterKey); return; }
     _showLoadingOverlay();
-    setTimeout(() => { window.location.href = file; }, 400);
+    setTimeout(function() { window.location.href = file; }, 400);
 }
 
 function startSubjectQuiz(subject) {
-    const file = `quiz-${subject.toLowerCase()}.html`;
     _showLoadingOverlay();
-    setTimeout(() => { window.location.href = file; }, 400);
+    setTimeout(function() { window.location.href = 'quiz-' + subject.toLowerCase() + '.html'; }, 400);
 }
 
 function _showLoadingOverlay() {
-    // Use app.js overlay if available, otherwise create a minimal one
-    if (window.GrantApp) {
-        window.GrantApp.showLoading();
-        return;
-    }
+    if (window.GrantApp && window.GrantApp.showLoading) { window.GrantApp.showLoading(); return; }
+    const existing = document.getElementById('ql-loading');
+    if (existing) return;
     const div = document.createElement('div');
     div.id = 'ql-loading';
     div.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:9999;';
