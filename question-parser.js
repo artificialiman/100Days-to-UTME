@@ -1,241 +1,221 @@
 // question-parser.js - Complete Parser for JAMB Question Files
 
 /**
- * Parse question text files into structured JSON format
- * Handles the format:
- * 1. Question text
- * A. Option A
- * B. Option B
- * C. Option C
- * D. Option D
- * Answer: A
- * Explanation: ...
- * Exception: ...
+ * Parse question text files into structured JSON format.
+ * Handles:
+ *   1. Question text
+ *   A. Option A  …  D. Option D
+ *   Answer: A
+ *   Explanation: …
+ *   Exception: …
  */
 
 class QuestionParser {
     constructor() {
         this.questions = [];
     }
-    
+
     /**
-     * Parse a complete question file text
-     * @param {string} text - Raw text from question file
-     * @param {string} subject - Subject name (Physics, Math, etc.)
-     * @returns {Array} Array of parsed question objects
+     * Parse raw text from a question file.
+     * @param {string} text    - Raw text content
+     * @param {string} subject - Subject label (Physics, Math, …)
+     * @returns {Array} Parsed question objects
      */
     parse(text, subject) {
         this.questions = [];
         const lines = text.split('\n');
-        let currentQuestion = null;
+        let currentQuestion       = null;
         let collectingExplanation = false;
-        let collectingException = false;
-        
+        let collectingException   = false;
+
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i].trim();
-            
-            // Skip empty lines and header
-            if (!line || line.startsWith('JAMB ') || line.includes('EXCEPTIONAL QUESTIONS')) {
-                continue;
-            }
-            
-            // Match question number pattern (e.g., "1. " or "35. ")
+
+            if (!line || line.startsWith('JAMB ') || line.includes('EXCEPTIONAL QUESTIONS')) continue;
+
+            // Question number: "1. text…"
             const questionMatch = line.match(/^(\d+)\.\s+(.+)$/);
             if (questionMatch) {
-                // Save previous question if exists
-                if (currentQuestion) {
-                    this.questions.push(currentQuestion);
-                }
-                
-                // Start new question
+                if (currentQuestion) this.questions.push(currentQuestion);
                 currentQuestion = {
-                    id: parseInt(questionMatch[1]),
-                    subject: subject,
-                    text: questionMatch[2],
-                    options: {},
-                    answer: null,
+                    id:          parseInt(questionMatch[1]),
+                    subject:     subject,
+                    text:        questionMatch[2],
+                    options:     {},
+                    answer:      null,
                     explanation: '',
-                    exception: ''
+                    exception:   ''
                 };
                 collectingExplanation = false;
-                collectingException = false;
+                collectingException   = false;
                 continue;
             }
-            
-            // Match options (A., B., C., D.)
+
+            // Option: "A. text…"
             const optionMatch = line.match(/^([A-D])\.\s+(.+)$/);
             if (optionMatch && currentQuestion) {
                 currentQuestion.options[optionMatch[1]] = optionMatch[2];
                 collectingExplanation = false;
-                collectingException = false;
+                collectingException   = false;
                 continue;
             }
-            
-            // Match answer
+
             if (line.startsWith('Answer:') && currentQuestion) {
                 currentQuestion.answer = line.replace('Answer:', '').trim();
                 collectingExplanation = false;
-                collectingException = false;
+                collectingException   = false;
                 continue;
             }
-            
-            // Match explanation
+
             if (line.startsWith('Explanation:') && currentQuestion) {
                 currentQuestion.explanation = line.replace('Explanation:', '').trim();
                 collectingExplanation = true;
-                collectingException = false;
+                collectingException   = false;
                 continue;
             }
-            
-            // Match exception
+
             if (line.startsWith('Exception:') && currentQuestion) {
                 currentQuestion.exception = line.replace('Exception:', '').trim();
                 collectingExplanation = false;
-                collectingException = true;
+                collectingException   = true;
                 continue;
             }
-            
-            // Continue collecting explanation
+
             if (collectingExplanation && line && currentQuestion) {
                 currentQuestion.explanation += ' ' + line;
                 continue;
             }
-            
-            // Continue collecting exception
             if (collectingException && line && currentQuestion) {
                 currentQuestion.exception += ' ' + line;
                 continue;
             }
         }
-        
-        // Don't forget the last question
-        if (currentQuestion) {
-            this.questions.push(currentQuestion);
-        }
-        
+
+        if (currentQuestion) this.questions.push(currentQuestion);
         return this.questions;
     }
-    
-    /**
-     * Parse from a URL
-     * @param {string} url - URL to question file
-     * @param {string} subject - Subject name
-     * @returns {Promise<Array>} Parsed questions
-     */
-    async parseFromUrl(url, subject) {
-        try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`Failed to fetch: ${response.statusText}`);
-            }
-            const text = await response.text();
-            return this.parse(text, subject);
-        } catch (error) {
-            console.error('Error parsing from URL:', error);
-            throw error;
-        }
-    }
-    
-    /**
-     * Export questions as JSON
-     * @returns {string} JSON string
-     */
-    toJSON() {
-        return JSON.stringify(this.questions, null, 2);
-    }
-    
-    /**
-     * Export questions as JavaScript file content
-     * @param {string} variableName - Variable name for the questions array
-     * @returns {string} JavaScript file content
-     */
-    toJavaScript(variableName = 'QUESTIONS') {
-        return `// Auto-generated question file
-const ${variableName} = ${JSON.stringify(this.questions, null, 2)};
 
-// Export for use in modules
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = ${variableName};
-}
-`;
+    /** Fetch a URL and parse it. Throws on HTTP error. */
+    async parseFromUrl(url, subject) {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`HTTP ${response.status} — ${url}`);
+        const text = await response.text();
+        return this.parse(text, subject);
     }
-    
-    /**
-     * Get statistics about parsed questions
-     * @returns {Object} Statistics
-     */
+
+    toJSON()                       { return JSON.stringify(this.questions, null, 2); }
+    toJavaScript(name = 'QUESTIONS') {
+        return `const ${name} = ${JSON.stringify(this.questions, null, 2)};\nif (typeof module !== 'undefined') module.exports = ${name};\n`;
+    }
+
     getStats() {
         return {
-            total: this.questions.length,
-            subjects: [...new Set(this.questions.map(q => q.subject))],
+            total:            this.questions.length,
+            subjects:         [...new Set(this.questions.map(q => q.subject))],
             withExplanations: this.questions.filter(q => q.explanation).length,
-            withExceptions: this.questions.filter(q => q.exception).length,
-            optionCounts: this.questions.map(q => Object.keys(q.options).length)
+            withExceptions:   this.questions.filter(q => q.exception).length
         };
     }
-    
-    /**
-     * Validate all questions
-     * @returns {Array} Array of validation errors
-     */
+
     validate() {
         const errors = [];
-        
-        this.questions.forEach((q, index) => {
-            // Check required fields
-            if (!q.text) {
-                errors.push(`Question ${index + 1}: Missing question text`);
-            }
-            
-            // Check options
-            const optionKeys = Object.keys(q.options);
-            if (optionKeys.length < 2) {
-                errors.push(`Question ${index + 1}: Need at least 2 options`);
-            }
-            
-            // Check answer
-            if (!q.answer) {
-                errors.push(`Question ${index + 1}: Missing answer`);
-            } else if (!optionKeys.includes(q.answer)) {
-                errors.push(`Question ${index + 1}: Answer "${q.answer}" not in options [${optionKeys.join(', ')}]`);
-            }
-            
-            // Check for empty options
-            optionKeys.forEach(key => {
-                if (!q.options[key] || q.options[key].trim() === '') {
-                    errors.push(`Question ${index + 1}: Empty option ${key}`);
-                }
+        this.questions.forEach((q, i) => {
+            if (!q.text)                           errors.push(`Q${i+1}: Missing text`);
+            const keys = Object.keys(q.options);
+            if (keys.length < 2)                   errors.push(`Q${i+1}: Need ≥2 options`);
+            if (!q.answer)                         errors.push(`Q${i+1}: Missing answer`);
+            else if (!q.options[q.answer])         errors.push(`Q${i+1}: Answer "${q.answer}" not in options`);
+            keys.forEach(k => {
+                if (!q.options[k]?.trim())         errors.push(`Q${i+1}: Empty option ${k}`);
             });
         });
-        
         return errors;
     }
 }
 
-// Utility function to load all subjects
-async function loadAllSubjects() {
-    const baseUrl = 'https://raw.githubusercontent.com/artificialiman/Questt/refs/heads/main';
-    const subjects = ['Physics', 'Mathematics', 'English', 'Chemistry'];
+// ─── URL constants ─────────────────────────────────────────────────────────
+const _ARCHIVE_BASE = 'https://raw.githubusercontent.com/artificialiman/Questt-resources/refs/heads/main/archive';
+const _QUESTT_BASE  = 'https://raw.githubusercontent.com/artificialiman/Questt/refs/heads/main';
+
+// Map subject name → filename used in both repos
+const SUBJECT_FILES = {
+    Physics:     'JAMB_Physics_Q1-35.txt',
+    Mathematics: 'JAMB_Mathematics_Q1-35.txt',
+    Math:        'JAMB_Mathematics_Q1-35.txt',
+    English:     'JAMB_English_Q1-35.txt',
+    Chemistry:   'JAMB_Chemistry_Q1-35.txt',
+    Biology:     'JAMB_Biology_Q1-35.txt',
+    Literature:  'JAMB_Literature_Q1-35.txt',
+    Government:  'JAMB_Government_Q1-35.txt',
+    CRS:         'JAMB_CRS_Q1-35.txt',
+    Commerce:    'JAMB_Commerce_Q1-35.txt',
+    Accounting:  'JAMB_Accounting_Q1-35.txt',
+    Economics:   'JAMB_Economics_Q1-35.txt'
+};
+
+/** period 1 → "01-02", period 3 → "05-06" */
+function _periodToDayRange(period) {
+    const s = (period * 2) - 1;
+    return `${String(s).padStart(2,'0')}-${String(s+1).padStart(2,'0')}`;
+}
+
+/**
+ * Load a single subject — archive first, Questt live second.
+ * Returns [] silently if both fail.
+ *
+ * @param {string} subject  - Subject key matching SUBJECT_FILES
+ * @param {number} [period] - Current period number (1, 2, 3 …)
+ */
+async function loadSubjectWithFallback(subject, period) {
+    const filename = SUBJECT_FILES[subject];
+    if (!filename) { console.warn(`No filename mapping for subject: ${subject}`); return []; }
+
     const parser = new QuestionParser();
-    const allQuestions = {};
-    
-    for (const subject of subjects) {
+
+    // 1 ── Questt-resources archive (permanent, grows every period)
+    if (period && period >= 1) {
         try {
-            console.log(`Loading ${subject}...`);
-            const url = `${baseUrl}/JAMB_${subject}_Q1-35.txt`;
+            const url       = `${_ARCHIVE_BASE}/day-${_periodToDayRange(period)}/${filename}`;
             const questions = await parser.parseFromUrl(url, subject);
-            allQuestions[subject] = questions;
-            console.log(`✓ Loaded ${questions.length} ${subject} questions`);
-        } catch (error) {
-            console.error(`✗ Failed to load ${subject}:`, error);
-            allQuestions[subject] = [];
+            if (questions.length > 0) {
+                console.log(`✓ ${subject} from archive (period ${period})`);
+                return questions;
+            }
+        } catch (e) {
+            console.warn(`Archive miss [${subject}]:`, e.message);
         }
     }
-    
+
+    // 2 ── Questt live repo (only populated during active upload window)
+    try {
+        const url       = `${_QUESTT_BASE}/${filename}`;
+        const questions = await parser.parseFromUrl(url, subject);
+        if (questions.length > 0) {
+            console.log(`✓ ${subject} from Questt live`);
+            return questions;
+        }
+    } catch (e) {
+        console.warn(`Questt live miss [${subject}]:`, e.message);
+    }
+
+    console.warn(`✗ Could not load ${subject} from any source — returning []`);
+    return [];
+}
+
+/**
+ * Load multiple subjects and return a keyed object.
+ * @param {string[]} subjects  - Array of subject keys
+ * @param {number}   [period]  - Current period (skips archive step if omitted)
+ * @returns {Promise<Object>}  { Physics: [...], Mathematics: [...], … }
+ */
+async function loadAllSubjects(subjects, period) {
+    const allQuestions = {};
+    for (const subject of subjects) {
+        allQuestions[subject] = await loadSubjectWithFallback(subject, period);
+    }
     return allQuestions;
 }
 
-// Export for use in different environments
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { QuestionParser, loadAllSubjects };
+    module.exports = { QuestionParser, loadAllSubjects, loadSubjectWithFallback, SUBJECT_FILES };
 }
