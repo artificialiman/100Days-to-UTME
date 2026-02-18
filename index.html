@@ -18,15 +18,6 @@
         <div class="bg-particle" style="width: 150px; height: 150px; bottom: 20%; left: 20%; animation-delay: 4s;"></div>
     </div>
 
-    <!-- Loading Overlay (Skeleton) -->
-    <div id="loading-overlay" class="loading-overlay hidden">
-        <div class="text-center">
-            <div class="skeleton" style="width: 100px; height: 100px; border-radius: 50%; margin: 0 auto var(--space-md);"></div>
-            <div class="skeleton" style="width: 200px; height: 20px; margin: 0 auto var(--space-sm);"></div>
-            <div class="skeleton" style="width: 150px; height: 15px; margin: 0 auto;"></div>
-        </div>
-    </div>
-
     <!-- Navigation -->
     <nav class="navbar">
         <a href="#" class="navbar-brand">
@@ -34,37 +25,15 @@
         </a>
         
         <div class="navbar-menu">
-            <div class="notification-dropdown">
-                <a href="#" class="nav-link tooltip">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-badge">3</span>
-                    <div class="tooltip-content">Notifications</div>
-                </a>
-                <div class="notification-menu">
-                    <div class="notification-item unread">
-                        <div class="text-sm font-semibold">New Practice Test Available</div>
-                        <div class="text-xs text-muted">Mathematics - 15 minutes</div>
-                    </div>
-                    <div class="notification-item unread">
-                        <div class="text-sm font-semibold">Study Plan Updated</div>
-                        <div class="text-xs text-muted">Check your progress</div>
-                    </div>
-                    <div class="notification-item">
-                        <div class="text-sm font-semibold">Weekly Leaderboard</div>
-                        <div class="text-xs text-muted">You're in top 10%</div>
-                    </div>
-                </div>
-            </div>
-            
-            <a href="#" class="nav-link tooltip">
+            <a href="#" class="nav-link tooltip" data-coming-soon="Analytics">
                 <i class="fas fa-chart-line"></i>
                 <div class="tooltip-content">Analytics Dashboard</div>
             </a>
-            <a href="#" class="nav-link tooltip">
+            <a href="#" class="nav-link tooltip" data-coming-soon="Profile">
                 <i class="fas fa-user-graduate"></i>
                 <div class="tooltip-content">My Profile</div>
             </a>
-            <button class="btn btn-accent">
+            <button class="btn btn-accent" data-coming-soon="Upgrade">
                 <i class="fas fa-rocket"></i> Upgrade
             </button>
         </div>
@@ -75,7 +44,7 @@
         <div class="breadcrumbs">
             <a href="#" class="breadcrumb-item">Home</a>
             <span class="breadcrumb-separator">›</span>
-            <span class="breadcrumb-current">Choose Your Practice</span>
+            <span class="breadcrumb-current">Choose Your Stream</span>
         </div>
     </div>
 
@@ -84,24 +53,19 @@
         <div class="container">
             <h1 class="hero-title fade-in-up">Choose Your <span class="text-gradient">Academic Path</span></h1>
             <p class="hero-subtitle fade-in-up delay-200">
-                Select stream clusters for full JAMB preparation, or focus on individual subjects.
+                Select your JAMB stream to unlock personalized practice tests, adaptive learning, 
+                and intelligent performance tracking. Each choice opens a unique path to excellence.
             </p>
             
-            <div class="text-center mt-lg">
-                <span class="badge bg-accent px-4 py-2 rounded-full text-sm font-semibold text-white">
-                    <i class="fas fa-calendar-day"></i> Day <span id="current-day-range">Loading...</span>
-                </span>
-            </div>
-
             <!-- Progress Steps -->
             <div class="progress-steps">
                 <div class="progress-step active">
                     <div class="step-number">1</div>
-                    <div class="step-label">Choose Mode</div>
+                    <div class="step-label">Choose Stream</div>
                 </div>
                 <div class="progress-step">
                     <div class="step-number">2</div>
-                    <div class="step-label">Select Quiz</div>
+                    <div class="step-label">Select Cluster</div>
                 </div>
                 <div class="progress-step">
                     <div class="step-number">3</div>
@@ -125,22 +89,19 @@
                 <div class="stat-label">Success Rate</div>
             </div>
             <div class="stat-card scale-in delay-300">
-                <div class="stat-number">60 min</div>
-                <div class="stat-label">Cluster Test</div>
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">AI Tutoring</div>
             </div>
             <div class="stat-card scale-in delay-400">
                 <div class="stat-number">15 min</div>
-                <div class="stat-label">Per Subject</div>
+                <div class="stat-label">Per Subject Test</div>
             </div>
         </div>
     </div>
 
     <!-- Stream Selection -->
     <section class="container py-3xl">
-        <h2 class="text-4xl text-center mb-2xl fade-in-up">
-            <i class="fas fa-layer-group"></i> Practice by Stream
-        </h2>
-        <p class="text-center text-muted mb-2xl">Choose your academic stream for cluster exams (140 questions, 60 minutes)</p>
+        <h2 class="text-4xl text-center mb-2xl fade-in-up">Available Streams</h2>
         
         <div class="grid grid-3">
             <!-- Science Stream -->
@@ -152,14 +113,14 @@
                     </div>
                     <h3 class="text-2xl font-bold mb-sm">Science</h3>
                     <p class="text-muted mb-lg">
-                        For aspiring doctors, engineers, and scientists. Master core STEM subjects.
+                        For aspiring doctors, engineers, and scientists. Master core STEM subjects with advanced problem-solving techniques.
                     </p>
                     <div class="mb-lg">
                         <div class="text-sm font-semibold mb-sm">Available Clusters:</div>
                         <ul class="space-y-1">
                             <li class="flex items-center gap-sm">
                                 <i class="fas fa-check text-success text-xs"></i>
-                                <span class="text-sm">Math, English, Physics, Chemistry</span>
+                                <span class="text-sm">Mathematics, English, Physics, Chemistry</span>
                             </li>
                             <li class="flex items-center gap-sm">
                                 <i class="fas fa-check text-success text-xs"></i>
@@ -168,7 +129,7 @@
                         </ul>
                     </div>
                     <button class="btn btn-science w-full">
-                        <i class="fas fa-flask"></i> Science Clusters
+                        <i class="fas fa-flask"></i> Choose Science
                     </button>
                 </div>
             </div>
@@ -182,7 +143,7 @@
                     </div>
                     <h3 class="text-2xl font-bold mb-sm">Arts & Humanities</h3>
                     <p class="text-muted mb-lg">
-                        For future lawyers, writers, historians. Develop critical thinking skills.
+                        For future lawyers, writers, historians, and artists. Develop critical thinking and analytical skills.
                     </p>
                     <div class="mb-lg">
                         <div class="text-sm font-semibold mb-sm">Available Clusters:</div>
@@ -191,10 +152,14 @@
                                 <i class="fas fa-check text-success text-xs"></i>
                                 <span class="text-sm">English, Literature, Government, CRS</span>
                             </li>
+                            <li class="flex items-center gap-sm">
+                                <i class="fas fa-spinner text-warning text-xs"></i>
+                                <span class="text-sm">More clusters coming soon</span>
+                            </li>
                         </ul>
                     </div>
                     <button class="btn btn-art w-full">
-                        <i class="fas fa-palette"></i> Arts Clusters
+                        <i class="fas fa-palette"></i> Choose Arts
                     </button>
                 </div>
             </div>
@@ -208,7 +173,7 @@
                     </div>
                     <h3 class="text-2xl font-bold mb-sm">Commercial</h3>
                     <p class="text-muted mb-lg">
-                        For future accountants, economists. Master commerce and finance principles.
+                        For future accountants, economists, and business leaders. Master commerce, finance, and management principles.
                     </p>
                     <div class="mb-lg">
                         <div class="text-sm font-semibold mb-sm">Available Clusters:</div>
@@ -217,254 +182,39 @@
                                 <i class="fas fa-check text-success text-xs"></i>
                                 <span class="text-sm">English, Accounting, Commerce, Economics</span>
                             </li>
+                            <li class="flex items-center gap-sm">
+                                <i class="fas fa-check text-success text-xs"></i>
+                                <span class="text-sm">English, Mathematics, Economics, Government</span>
+                            </li>
+                            <li class="flex items-center gap-sm">
+                                <i class="fas fa-check text-success text-xs"></i>
+                                <span class="text-sm">English, Economics, Government, Commerce</span>
+                            </li>
                         </ul>
                     </div>
                     <button class="btn btn-commerce w-full">
-                        <i class="fas fa-chart-line"></i> Commercial Clusters
+                        <i class="fas fa-chart-line"></i> Choose Commercial
                     </button>
                 </div>
             </div>
         </div>
-    </section>
 
-    <!-- Divider -->
-    <div class="container">
-        <div class="flex items-center gap-md my-3xl">
-            <div class="flex-1 border-t border-neutral-300"></div>
-            <span class="text-muted font-semibold text-lg">OR</span>
-            <div class="flex-1 border-t border-neutral-300"></div>
-        </div>
-    </div>
-
-    <!-- Individual Subjects -->
-    <section class="container py-xl">
-        <h2 class="text-4xl text-center mb-2xl fade-in-up">
-            <i class="fas fa-book"></i> Practice Individual Subjects
-        </h2>
-        <p class="text-center text-muted mb-2xl">Quick focused practice (35 questions, 15 minutes per subject)</p>
-        
-        <div class="grid grid-4 gap-lg">
-            <!-- Core Subjects -->
-            <div class="card scale-in delay-100">
-                <div class="card-body text-center">
-                    <div class="text-5xl mb-md">📖</div>
-                    <h3 class="text-lg font-semibold mb-sm">English Language</h3>
-                    <div class="flex justify-center gap-sm mb-lg text-sm text-muted">
-                        <div class="flex items-center gap-xs">
-                            <i class="fas fa-list-ol"></i>
-                            <span>35 Q</span>
-                        </div>
-                        <div class="flex items-center gap-xs">
-                            <i class="fas fa-clock"></i>
-                            <span>15 min</span>
-                        </div>
+        <!-- Quick Stats -->
+        <div class="card mt-3xl">
+            <div class="card-body">
+                <div class="grid grid-3">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-gradient">2,500+</div>
+                        <div class="text-sm text-muted">Science Students Active</div>
                     </div>
-                    <button class="btn btn-primary w-full btn-sm" onclick="launchQuiz('english')">
-                        <i class="fas fa-play"></i> Start
-                    </button>
-                </div>
-            </div>
-
-            <div class="card scale-in delay-150">
-                <div class="card-body text-center">
-                    <div class="text-5xl mb-md">🔢</div>
-                    <h3 class="text-lg font-semibold mb-sm">Mathematics</h3>
-                    <div class="flex justify-center gap-sm mb-lg text-sm text-muted">
-                        <div class="flex items-center gap-xs">
-                            <i class="fas fa-list-ol"></i>
-                            <span>35 Q</span>
-                        </div>
-                        <div class="flex items-center gap-xs">
-                            <i class="fas fa-clock"></i>
-                            <span>15 min</span>
-                        </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-gradient">1,800+</div>
+                        <div class="text-sm text-muted">Arts Students Active</div>
                     </div>
-                    <button class="btn btn-primary w-full btn-sm" onclick="launchQuiz('mathematics')">
-                        <i class="fas fa-play"></i> Start
-                    </button>
-                </div>
-            </div>
-
-            <!-- Science Subjects -->
-            <div class="card scale-in delay-200">
-                <div class="card-body text-center">
-                    <div class="text-5xl mb-md">⚛️</div>
-                    <h3 class="text-lg font-semibold mb-sm">Physics</h3>
-                    <div class="flex justify-center gap-sm mb-lg text-sm text-muted">
-                        <div class="flex items-center gap-xs">
-                            <i class="fas fa-list-ol"></i>
-                            <span>35 Q</span>
-                        </div>
-                        <div class="flex items-center gap-xs">
-                            <i class="fas fa-clock"></i>
-                            <span>15 min</span>
-                        </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-gradient">2,100+</div>
+                        <div class="text-sm text-muted">Commercial Students Active</div>
                     </div>
-                    <button class="btn btn-primary w-full btn-sm" onclick="launchQuiz('physics')">
-                        <i class="fas fa-play"></i> Start
-                    </button>
-                </div>
-            </div>
-
-            <div class="card scale-in delay-250">
-                <div class="card-body text-center">
-                    <div class="text-5xl mb-md">🧪</div>
-                    <h3 class="text-lg font-semibold mb-sm">Chemistry</h3>
-                    <div class="flex justify-center gap-sm mb-lg text-sm text-muted">
-                        <div class="flex items-center gap-xs">
-                            <i class="fas fa-list-ol"></i>
-                            <span>35 Q</span>
-                        </div>
-                        <div class="flex items-center gap-xs">
-                            <i class="fas fa-clock"></i>
-                            <span>15 min</span>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary w-full btn-sm" onclick="launchQuiz('chemistry')">
-                        <i class="fas fa-play"></i> Start
-                    </button>
-                </div>
-            </div>
-
-            <div class="card scale-in delay-300">
-                <div class="card-body text-center">
-                    <div class="text-5xl mb-md">🧬</div>
-                    <h3 class="text-lg font-semibold mb-sm">Biology</h3>
-                    <div class="flex justify-center gap-sm mb-lg text-sm text-muted">
-                        <div class="flex items-center gap-xs">
-                            <i class="fas fa-list-ol"></i>
-                            <span>35 Q</span>
-                        </div>
-                        <div class="flex items-center gap-xs">
-                            <i class="fas fa-clock"></i>
-                            <span>15 min</span>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary w-full btn-sm" onclick="launchQuiz('biology')">
-                        <i class="fas fa-play"></i> Start
-                    </button>
-                </div>
-            </div>
-
-            <!-- Arts Subjects -->
-            <div class="card scale-in delay-350">
-                <div class="card-body text-center">
-                    <div class="text-5xl mb-md">📚</div>
-                    <h3 class="text-lg font-semibold mb-sm">Literature</h3>
-                    <div class="flex justify-center gap-sm mb-lg text-sm text-muted">
-                        <div class="flex items-center gap-xs">
-                            <i class="fas fa-list-ol"></i>
-                            <span>35 Q</span>
-                        </div>
-                        <div class="flex items-center gap-xs">
-                            <i class="fas fa-clock"></i>
-                            <span>15 min</span>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary w-full btn-sm" onclick="launchQuiz('literature')">
-                        <i class="fas fa-play"></i> Start
-                    </button>
-                </div>
-            </div>
-
-            <div class="card scale-in delay-400">
-                <div class="card-body text-center">
-                    <div class="text-5xl mb-md">🏛️</div>
-                    <h3 class="text-lg font-semibold mb-sm">Government</h3>
-                    <div class="flex justify-center gap-sm mb-lg text-sm text-muted">
-                        <div class="flex items-center gap-xs">
-                            <i class="fas fa-list-ol"></i>
-                            <span>35 Q</span>
-                        </div>
-                        <div class="flex items-center gap-xs">
-                            <i class="fas fa-clock"></i>
-                            <span>15 min</span>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary w-full btn-sm" onclick="launchQuiz('government')">
-                        <i class="fas fa-play"></i> Start
-                    </button>
-                </div>
-            </div>
-
-            <div class="card scale-in delay-450">
-                <div class="card-body text-center">
-                    <div class="text-5xl mb-md">✝️</div>
-                    <h3 class="text-lg font-semibold mb-sm">CRS</h3>
-                    <div class="flex justify-center gap-sm mb-lg text-sm text-muted">
-                        <div class="flex items-center gap-xs">
-                            <i class="fas fa-list-ol"></i>
-                            <span>35 Q</span>
-                        </div>
-                        <div class="flex items-center gap-xs">
-                            <i class="fas fa-clock"></i>
-                            <span>15 min</span>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary w-full btn-sm" onclick="launchQuiz('crs')">
-                        <i class="fas fa-play"></i> Start
-                    </button>
-                </div>
-            </div>
-
-            <!-- Commercial Subjects -->
-            <div class="card scale-in delay-500">
-                <div class="card-body text-center">
-                    <div class="text-5xl mb-md">📊</div>
-                    <h3 class="text-lg font-semibold mb-sm">Accounting</h3>
-                    <div class="flex justify-center gap-sm mb-lg text-sm text-muted">
-                        <div class="flex items-center gap-xs">
-                            <i class="fas fa-list-ol"></i>
-                            <span>35 Q</span>
-                        </div>
-                        <div class="flex items-center gap-xs">
-                            <i class="fas fa-clock"></i>
-                            <span>15 min</span>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary w-full btn-sm" onclick="launchQuiz('accounting')">
-                        <i class="fas fa-play"></i> Start
-                    </button>
-                </div>
-            </div>
-
-            <div class="card scale-in delay-550">
-                <div class="card-body text-center">
-                    <div class="text-5xl mb-md">💼</div>
-                    <h3 class="text-lg font-semibold mb-sm">Commerce</h3>
-                    <div class="flex justify-center gap-sm mb-lg text-sm text-muted">
-                        <div class="flex items-center gap-xs">
-                            <i class="fas fa-list-ol"></i>
-                            <span>35 Q</span>
-                        </div>
-                        <div class="flex items-center gap-xs">
-                            <i class="fas fa-clock"></i>
-                            <span>15 min</span>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary w-full btn-sm" onclick="launchQuiz('commerce')">
-                        <i class="fas fa-play"></i> Start
-                    </button>
-                </div>
-            </div>
-
-            <div class="card scale-in delay-600">
-                <div class="card-body text-center">
-                    <div class="text-5xl mb-md">💰</div>
-                    <h3 class="text-lg font-semibold mb-sm">Economics</h3>
-                    <div class="flex justify-center gap-sm mb-lg text-sm text-muted">
-                        <div class="flex items-center gap-xs">
-                            <i class="fas fa-list-ol"></i>
-                            <span>35 Q</span>
-                        </div>
-                        <div class="flex items-center gap-xs">
-                            <i class="fas fa-clock"></i>
-                            <span>15 min</span>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary w-full btn-sm" onclick="launchQuiz('economics')">
-                        <i class="fas fa-play"></i> Start
-                    </button>
                 </div>
             </div>
         </div>
@@ -474,7 +224,7 @@
     <div class="timer-container">
         <div class="timer-widget">
             <div class="timer-display">15:00</div>
-            <div class="timer-label">Practice Test</div>
+            <div class="timer-label">Practice Test Duration</div>
             <div class="timer-progress">
                 <div class="timer-progress-bar"></div>
             </div>
@@ -482,115 +232,139 @@
     </div>
 
     <!-- Footer -->
-    <footer class="py-2xl bg-neutral-900 text-white mt-3xl">
+    <footer class="site-footer">
         <div class="container">
-            <div class="grid grid-3">
-                <div>
-                    <h4 class="text-lg font-bold mb-md">GrantApp AI</h4>
-                    <p class="text-sm text-neutral-400">
-                        Intelligent exam preparation platform for Nigerian students.
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>GrantApp AI</h4>
+                    <p class="text-sm">Intelligent exam preparation platform for Nigerian students.</p>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <a href="https://wa.me/2348000000000" class="footer-contact" target="_blank" rel="noopener">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>WhatsApp Support</span>
+                    </a>
+                    <a href="mailto:support@grantapp.ai" class="footer-contact">
+                        <i class="fas fa-envelope"></i>
+                        <span>support@grantapp.ai</span>
+                    </a>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Office</h4>
+                    <p class="text-sm">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Lagos, Nigeria
                     </p>
                 </div>
-                <div>
-                    <h4 class="text-lg font-bold mb-md">Quick Links</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-sm text-neutral-400 hover:text-accent transition">About Us</a></li>
-                        <li><a href="#" class="text-sm text-neutral-400 hover:text-accent transition">Contact</a></li>
-                        <li><a href="#" class="text-sm text-neutral-400 hover:text-accent transition">Privacy Policy</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-lg font-bold mb-md">Need Help?</h4>
-                    <button class="btn btn-accent btn-sm">
-                        <i class="fas fa-headset"></i> Live Support
-                    </button>
+
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="footer-social">
+                        <a href="#" aria-label="LinkedIn" class="tooltip">
+                            <i class="fab fa-linkedin"></i>
+                            <span class="tooltip-content">LinkedIn</span>
+                        </a>
+                        <a href="#" aria-label="Twitter" class="tooltip">
+                            <i class="fab fa-twitter"></i>
+                            <span class="tooltip-content">Twitter</span>
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="text-center text-sm text-neutral-500 mt-2xl">
-                © 2024 GrantApp AI. All rights reserved.
+
+            <div class="footer-bottom">
+                <p>© 2024 GrantApp AI. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
+    <!-- JavaScript -->
     <script src="app.js"></script>
     <script>
-        // Configuration
-        const START_DATE = new Date('2026-02-18');
-
-        // Calculate current period
-        function calculateCurrentPeriod() {
-            const now = new Date();
-            const diffTime = Math.abs(now - START_DATE);
-            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-            const period = Math.floor(diffDays / 2) + 1;
-            const dayStart = (period * 2) - 1;
-            const dayEnd = period * 2;
-            
-            return {
-                period: period,
-                dayRange: `${dayStart}-${dayEnd}`
-            };
-        }
-
-        // Check if quiz file exists
-        async function checkQuizAvailability(quizName) {
-            try {
-                const response = await fetch(`quiz-${quizName}.html`, { method: 'HEAD' });
-                return response.ok;
-            } catch (error) {
-                return false;
+        // Initialize animated background particles
+        function initParticles() {
+            const bg = document.querySelector('.animated-bg');
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'bg-particle';
+                const size = Math.random() * 100 + 50;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.animationDelay = `${Math.random() * 10}s`;
+                particle.style.opacity = Math.random() * 0.1 + 0.05;
+                bg.appendChild(particle);
             }
         }
 
-        // Launch quiz with silent fallback
-        async function launchQuiz(quizName) {
-            // Show loading skeleton
-            document.getElementById('loading-overlay').classList.remove('hidden');
+        // Timer animation
+        function animateTimer() {
+            const timerDisplay = document.querySelector('.timer-display');
+            const progressBar = document.querySelector('.timer-progress-bar');
+            let timeLeft = 15 * 60; // 15 minutes in seconds
             
-            const isAvailable = await checkQuizAvailability(quizName);
-            
-            document.getElementById('loading-overlay').classList.add('hidden');
-            
-            if (isAvailable) {
-                window.location.href = `quiz-${quizName}.html`;
-            } else {
-                // Silent fallback with subject parameter
-                window.location.href = `quiz.html?subject=${quizName}`;
-            }
+            const timer = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    timerDisplay.textContent = '00:00';
+                    progressBar.style.width = '0%';
+                    return;
+                }
+                
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                const progress = (timeLeft / (15 * 60)) * 100;
+                progressBar.style.width = `${progress}%`;
+                
+                // Change color when less than 5 minutes
+                if (minutes < 5) {
+                    timerDisplay.style.color = 'var(--error)';
+                    timerDisplay.style.textShadow = '0 0 10px rgba(239, 68, 68, 0.5)';
+                }
+            }, 1000);
         }
 
         // Stream selection
         function selectStream(stream) {
-            document.getElementById('loading-overlay').classList.remove('hidden');
+            // Show loading skeleton
+            document.body.innerHTML = `
+                <div class="container py-3xl">
+                    <div class="skeleton skeleton-card mb-lg"></div>
+                    <div class="skeleton skeleton-text"></div>
+                    <div class="skeleton skeleton-text"></div>
+                    <div class="skeleton skeleton-button mt-lg"></div>
+                </div>
+            `;
+            
+            // Simulate loading delay
             setTimeout(() => {
                 window.location.href = `${stream}_clusters.html`;
-            }, 500);
+            }, 1500);
         }
 
-        // Initialize
+        // Initialize on load
         document.addEventListener('DOMContentLoaded', () => {
-            // Update day range
-            const periodInfo = calculateCurrentPeriod();
-            document.getElementById('current-day-range').textContent = periodInfo.dayRange;
-            
-            // Initialize particles
-            function initParticles() {
-                const bg = document.querySelector('.animated-bg');
-                for (let i = 0; i < 15; i++) {
-                    const particle = document.createElement('div');
-                    particle.className = 'bg-particle';
-                    const size = Math.random() * 100 + 50;
-                    particle.style.width = `${size}px`;
-                    particle.style.height = `${size}px`;
-                    particle.style.top = `${Math.random() * 100}%`;
-                    particle.style.left = `${Math.random() * 100}%`;
-                    particle.style.animationDelay = `${Math.random() * 10}s`;
-                    particle.style.opacity = Math.random() * 0.1 + 0.05;
-                    bg.appendChild(particle);
-                }
-            }
-            
             initParticles();
+            animateTimer();
+            
+            // Add hover effects to cards
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-8px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0) scale(1)';
+                });
+            });
         });
     </script>
 </body>

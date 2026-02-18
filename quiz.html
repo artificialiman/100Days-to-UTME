@@ -24,7 +24,7 @@
                 </button>
                 <div class="subject-info">
                     <div class="subject-name" id="subjectName">Physics</div>
-                    <div class="subject-meta">Question <span id="currentQuestionNum">1</span> of <span id="totalQuestions">35</span></div>
+                    <div class="subject-meta">Question <span id="currentQuestionNum">1</span> of <span id="totalQuestions">2</span></div>
                 </div>
             </div>
 
@@ -50,6 +50,7 @@
         </div>
     </header>
 
+    <!-- Main Quiz Container -->
     <div class="quiz-container">
 
         <aside class="quiz-sidebar" id="quizSidebar">
@@ -60,9 +61,18 @@
                 </button>
             </div>
             <div class="sidebar-stats">
-                <div class="stat-item"><div class="stat-value" id="answeredCount">0</div><div class="stat-label">Answered</div></div>
-                <div class="stat-item"><div class="stat-value" id="unansweredCount">35</div><div class="stat-label">Unanswered</div></div>
-                <div class="stat-item"><div class="stat-value" id="flaggedCount">0</div><div class="stat-label">Flagged</div></div>
+                <div class="stat-item">
+                    <div class="stat-value" id="answeredCount">0</div>
+                    <div class="stat-label">Answered</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="unansweredCount">2</div>
+                    <div class="stat-label">Unanswered</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="flaggedCount">0</div>
+                    <div class="stat-label">Flagged</div>
+                </div>
             </div>
             <div class="question-palette" id="questionPalette"></div>
             <div class="sidebar-legend">
@@ -118,10 +128,22 @@
             </div>
             <div class="modal-body">
                 <div class="submit-summary">
-                    <div class="summary-item"><span class="summary-label">Total Questions:</span><span class="summary-value" id="modalTotalQuestions">35</span></div>
-                    <div class="summary-item"><span class="summary-label">Answered:</span><span class="summary-value answered-text" id="modalAnsweredCount">0</span></div>
-                    <div class="summary-item"><span class="summary-label">Unanswered:</span><span class="summary-value warning-text" id="modalUnansweredCount">35</span></div>
-                    <div class="summary-item"><span class="summary-label">Time Remaining:</span><span class="summary-value" id="modalTimeRemaining">15:00</span></div>
+                    <div class="summary-item">
+                        <span class="summary-label">Total Questions:</span>
+                        <span class="summary-value" id="modalTotalQuestions">2</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Answered:</span>
+                        <span class="summary-value answered-text" id="modalAnsweredCount">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Unanswered:</span>
+                        <span class="summary-value warning-text" id="modalUnansweredCount">2</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Time Remaining:</span>
+                        <span class="summary-value" id="modalTimeRemaining">15:00</span>
+                    </div>
                 </div>
                 <div class="warning-message">
                     <i class="fas fa-exclamation-triangle"></i>
@@ -130,7 +152,9 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" id="cancelSubmitBtn">Cancel</button>
-                <button class="btn btn-danger" id="confirmSubmitBtn"><i class="fas fa-check"></i> Submit Test</button>
+                <button class="btn btn-danger" id="confirmSubmitBtn">
+                    <i class="fas fa-check"></i> Submit Test
+                </button>
             </div>
         </div>
     </div>
@@ -161,8 +185,8 @@
                         <button class="calc-btn" data-value="1">1</button>
                         <button class="calc-btn" data-value="2">2</button>
                         <button class="calc-btn" data-value="3">3</button>
-                        <button class="calc-btn calc-equals" data-action="equals" style="grid-row:span 2">=</button>
-                        <button class="calc-btn" data-value="0" style="grid-column:span 2">0</button>
+                        <button class="calc-btn calc-equals" data-action="equals" style="grid-row:span 2;">=</button>
+                        <button class="calc-btn" data-value="0" style="grid-column:span 2;">0</button>
                         <button class="calc-btn" data-value=".">.</button>
                     </div>
                 </div>
@@ -186,25 +210,78 @@
         </div>
     </div>
 
-    <!--
-        quiz.html is the individual-subject entry point (no embedded data).
-        quiz-launcher.js will fetch from the archive chain or fall back to sampleQuestions.
-        No error screen is ever shown.
-    -->
+    <!-- Sample quiz data for dev/preview — same optionA/B/C/D format as parser.py output -->
     <script>
-        // Seed empty arrays so quiz-launcher.js never trips on undefined
-        window.quizData         = [];
-        window.previousQuizData = [];
-        window.quizMetadata     = {
-            period:       null,   // launcher calculates from today's date
-            timerMinutes: 15,
-            subject:      new URLSearchParams(window.location.search).get('subject') || 'Practice'
+        window.quizMetadata = {
+            period:           1,
+            days:             "preview",
+            subject:          "Physics",
+            generatedDate:    new Date().toISOString().slice(0,10),
+            validationStatus: "PREVIEW",
+            totalQuestions:   2,
+            timerMinutes:     15
         };
+
+        window.quizData = [
+            {
+                id: 1,
+                subject: "Physics",
+                text: "A body moving with constant velocity has:",
+                optionA: "Zero acceleration",
+                optionB: "Constant acceleration",
+                optionC: "Increasing acceleration",
+                optionD: "Decreasing acceleration",
+                answer: "A",
+                explanation: "Constant velocity means no change in speed or direction, so acceleration a = Δv/Δt = 0.",
+                exception: "Many confuse velocity with speed — circular motion has constant speed but changing direction, so acceleration is NOT zero there."
+            },
+            {
+                id: 2,
+                subject: "Physics",
+                text: "An object is thrown vertically upward. At its highest point:",
+                optionA: "Velocity = 0, acceleration = 0",
+                optionB: "Velocity = 0, acceleration = g (downward)",
+                optionC: "Velocity = g, acceleration = 0",
+                optionD: "Both velocity and acceleration are maximum",
+                answer: "B",
+                explanation: "At the peak, instantaneous velocity is 0, but gravity (9.8 m/s² downward) still acts continuously — it never switches off.",
+                exception: "Acceleration is NOT zero at the highest point. This is one of the most common JAMB misconceptions."
+            }
+        ];
     </script>
 
-    <!-- Load in correct order -->
+    <!-- Validation + boot (matches quiz-template.html pattern exactly) -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            if (!window.quizData || !Array.isArray(window.quizData) || window.quizData.length === 0) {
+                console.error('quiz.html: quizData missing or empty'); return;
+            }
+
+            const validQuestions = window.quizData.filter(q =>
+                q && q.text &&
+                (q.optionA || (q.options && q.options['A'])) &&
+                (q.optionB || (q.options && q.options['B'])) &&
+                (q.optionC || (q.options && q.options['C'])) &&
+                (q.optionD || (q.options && q.options['D'])) &&
+                q.answer && ['A','B','C','D'].includes(q.answer)
+            );
+
+            if (validQuestions.length === 0) { console.error('quiz.html: no valid questions'); return; }
+
+            window.quizData = validQuestions;
+            window.quizMetadata.totalQuestions = validQuestions.length;
+
+            initializeQuiz();
+        });
+
+        function initializeQuiz() {
+            bootQuiz(window.quizData, window.quizMetadata);
+        }
+    </script>
+
+    <!-- Scripts: question-parser first, jsPDF for results PDF, quiz-app last -->
     <script src="question-parser.js"></script>
-    <script src="quiz-launcher.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="quiz-app.js"></script>
 </body>
 </html>
