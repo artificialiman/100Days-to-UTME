@@ -71,7 +71,12 @@ jobs:
         run: |
           cd main-repo
           PERIOD=${{ steps.calc-period.outputs.period }}
-          if grep -q "Period $PERIOD," quiz-*.html 2>/dev/null; then
+          FORCE="${{ github.event.inputs.force_run }}"
+
+          if [ "$FORCE" = "true" ]; then
+            echo "already_generated=false" >> $GITHUB_OUTPUT
+            echo "🔁 Force run requested. Regenerating Period $PERIOD."
+          elif grep -q "Period $PERIOD," quiz-*.html 2>/dev/null; then
             echo "already_generated=true" >> $GITHUB_OUTPUT
             echo "⚠️ Period $PERIOD already generated. Skipping."
           else
